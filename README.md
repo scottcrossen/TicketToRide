@@ -12,7 +12,7 @@ There are two major components to this project. The frontend -- composed for the
 #### Server Instructions
 
 To start your *Ticket To Ride* server:
-1. Make sure that the program 'docker-compose' is installed on your linux machine.
+1. Make sure that the program 'docker-compose' is installed on your machine.
 2. Clone this repository
 3. Navigate to the 'Docker' Folder
 4. Use the command ```docker-compose up``` to start the cluster

@@ -10,3 +10,17 @@ services:
       - "MYSQL_ALLOW_EMPTY_PASSWORD=yes" # easier to use for development cluster
     ports:
       - "3306:3306"
+
+  game-api:
+    build:
+      context: jvm/
+    volumes:
+      - ../project:/app
+    environment:
+      - JAR_NAME=app/target/game.jar
+
+  maven:
+    build:
+      context: maven/
+    volumes:
+      - ../project:/app

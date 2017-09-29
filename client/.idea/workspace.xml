@@ -10,14 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="005fcb32-f54e-413f-9f64-70cdedeb937e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/Activity/CreateGameActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/Activity/GameListActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/Activity/GameLobby.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/Activity/LoginActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/Activity/LoginActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_game_list.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_join_game.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_join_game.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" />
     </list>
     <ignored path="client.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -2586,7 +2579,13 @@
       <option name="project" value="LOCAL" />
       <updated>1506712407906</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added Activity Files&#10;">
+      <created>1506713365085</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1506713365085</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2648,7 +2647,8 @@
     <MESSAGE value="created model Singleton" />
     <MESSAGE value="added Fragment folder" />
     <MESSAGE value="Added Folders" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Folders" />
+    <MESSAGE value="Added Activity Files&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Activity Files&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

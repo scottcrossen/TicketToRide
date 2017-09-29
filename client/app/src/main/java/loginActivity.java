@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by Seth on 9/29/2017.
  */
-public class loginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private LoginFragment loginFragment;
 

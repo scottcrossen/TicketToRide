@@ -28,5 +28,8 @@ public class LoginActivity extends AppCompatActivity {
                     .add(R.id.personFragment, new LoginFragment())//.newInstance(p))
                     .commit();
         }
+        //if the user is found in the database and login is pressed, go to GameListActivity
+        //if user not found in database and login pressed, toast saying no user found
+        //if register pressed, make new user in database
     }
 }

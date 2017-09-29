@@ -42,7 +42,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private RadioGroup genderIn;
     private String gender;
 
-    private Set<Event> eventSet = new HashSet<>();
     private static String userName;
     private static String password;
     private static String serverHost;
@@ -395,7 +394,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String firstN = firstNameTextIn.getText().toString();
         String lastN = lastNameTextIn.getText().toString();
         String emaiL = emailTextIn.getText().toString();
-        new registerUserTask().execute(userN, passW, serverH, serverP, firstN, lastN, emaiL);
+        //new registerUserTask().execute(userN, passW, serverH, serverP, firstN, lastN, emaiL);
     }
 
     public void onSignInPressed() {
@@ -403,9 +402,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String passW = passwordTextIn.getText().toString();
         String serverH = serverHostTextIn.getText().toString();
         String serverP = serverPortTextIn.getText().toString();
-        new validateUserTask().execute(userN, passW, serverH, serverP);
+        //new validateUserTask().execute(userN, passW, serverH, serverP);
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
+/*
     private JSONObject sendRequestToUrl(String url, String requestParams, String authToken) throws IOException {
         try {
             URL urlObj = new URL(url);
@@ -715,5 +719,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 new getUserEventsTask().execute(this.host, this.port, this.authorization);
             }
         }
-    }
+    }*/
 }

@@ -68,7 +68,7 @@
 								<transformers>
 									<transformer
 										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-										<mainClass>teamseth.cs340.server.game.main.Main</mainClass>
+										<mainClass>teamseth.cs340.server.main.Main</mainClass>
 									</transformer>
 								</transformers>
 								<finalName>game</finalName>

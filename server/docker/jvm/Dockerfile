@@ -9,7 +9,7 @@ RUN apt-get update \
   && add-apt-repository -y ppa:webupd8team/java \
   && apt-get update \
   && echo 'yes' | apt-get install -y oracle-java8-installer \
-  && apt-get install -y inotify-tools \
+  && apt-get install -y inotify-tools sockstat \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /var/cache/oracle-jdk8-installer
 

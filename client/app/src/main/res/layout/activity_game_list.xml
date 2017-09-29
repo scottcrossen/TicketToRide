@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.GameListActivity">
+    tools:context="Activity.GameListActivity">
 
     <ScrollView
         android:id="@+id/game_list_fragment_container"

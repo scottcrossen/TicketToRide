@@ -15,7 +15,7 @@ public class Main {
         try {
             System.out.println("Starting server from monitor.");
             ServerCommunicator server = new ServerCommunicator();
-            String[] inputArgs = {"80"};
+            String[] inputArgs = {"8080"};
             server.main(inputArgs);
             fail=true;
         } catch (Exception e) {

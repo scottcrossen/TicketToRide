@@ -1,6 +1,10 @@
+package Activity;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import Fragment.LoginFragment;
 
 /**
  * Created by Seth on 9/29/2017.
@@ -8,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginFragment loginFragment;
-
-    private MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

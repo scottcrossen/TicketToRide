@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/loginFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="Server Host:"
+            android:id="@+id/hostTextView"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/hostEditText"
+            android:inputType="textAutoComplete"
+            android:layout_toRightOf="@id/hostTextView"
+            android:layout_alignParentEnd="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="Server Port:"
+            android:id="@+id/portTextView"
+            android:layout_below="@id/hostTextView"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/portEditText"
+            android:inputType="number"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/hostTextView"
+            android:layout_toRightOf="@id/portTextView"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="User Name:"
+            android:id="@+id/userNameTextView"
+            android:layout_below="@id/portTextView"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userNameEditText"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/hostTextView"
+            android:layout_toRightOf="@id/portEditText"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:text="Password:"
+            android:id="@+id/passwordTextView"
+            android:layout_below="@id/userNameTextView"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/passwordEditText"
+            android:inputType="textPassword"
+            android:layout_toRightOf="@id/passwordTextView"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/userNameEditText"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="@dimen/activity_vertical_margin">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign in"
+            android:id="@+id/signInButton"
+            android:layout_below="@id/radio"
+            android:onClick="LoginFragment.onSignInPressed"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:id="@+id/registerButton"
+            android:layout_below="@id/radio"
+            android:layout_toRightOf="@id/signInButton"
+            android:onClick="onRegisterPressed"/>
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50000dp"/>
+</LinearLayout>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="media_names">
+        <item>Green</item>
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Blue</item>
+        <item>Purple</item>
+    </string-array>
+</resources>

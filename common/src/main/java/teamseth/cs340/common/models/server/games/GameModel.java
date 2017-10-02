@@ -8,9 +8,9 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.server.authentication.AuthToken;
+import teamseth.cs340.common.util.auth.AuthToken;
 import teamseth.cs340.common.models.IModel;
-import teamseth.cs340.common.util.AuthAction;
+import teamseth.cs340.common.util.auth.AuthAction;
 
 /**
  * @author Scott Leland Crossen
@@ -36,8 +36,9 @@ public class GameModel extends AuthAction implements IModel<Game> {
         games.add(game);
     }
 
-    public void addPlayer(UUID gameId, UUID userId, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
+    public void join(UUID gameId, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
         AuthAction.user(token);
+        UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
         this.get(gameId).addPlayer(userId);
     }
@@ -45,7 +46,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
     public void start(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
         AuthAction.user(token);
         Game game = this.get(gameId);
-        if (!game.hasPlayer(token.userId)) throw new ModelActionException();
+        if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
         if (game.getState() != GameState.PREGAME) throw new ModelActionException();
         game.setState(GameState.START);
     }

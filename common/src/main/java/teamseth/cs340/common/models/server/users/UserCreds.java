@@ -1,4 +1,4 @@
-package teamseth.cs340.common.models.server.authentication;
+package teamseth.cs340.common.models.server.users;
 
 /**
  * @author Scott Leland Crossen

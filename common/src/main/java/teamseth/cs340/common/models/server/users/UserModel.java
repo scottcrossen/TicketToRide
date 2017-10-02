@@ -1,4 +1,4 @@
-package teamseth.cs340.common.models.server.authentication;
+package teamseth.cs340.common.models.server.users;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.util.auth.AuthToken;
 
 /**
  * @author Scott Leland Crossen
@@ -31,8 +32,6 @@ public class UserModel implements IModel<User> {
         if (user.credentials != credentials) throw new UnauthorizedException();
         // Generate auth token
         AuthToken token = new AuthToken(user);
-        // Add auth token to list of model
-        AuthTokenModel.getInstance().upsert(token);
         // Return the token
         return token;
     }
@@ -41,13 +40,11 @@ public class UserModel implements IModel<User> {
         try {
             User user = getByName(credentials);
             AuthToken token = new AuthToken(user);
-            AuthTokenModel.getInstance().upsert(token);
             return token;
         } catch (ResourceNotFoundException e){
             User user = new User(credentials);
             users.add(user);
             AuthToken token = new AuthToken(user);
-            AuthTokenModel.getInstance().upsert(token);
             return token;
         }
     }

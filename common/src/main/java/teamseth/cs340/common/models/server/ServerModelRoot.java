@@ -1,6 +1,6 @@
 package teamseth.cs340.common.models.server;
 
-import teamseth.cs340.common.models.server.authentication.UserModel;
+import teamseth.cs340.common.models.server.users.UserModel;
 import teamseth.cs340.common.models.server.games.GameModel;
 
 /**

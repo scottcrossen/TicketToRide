@@ -1,6 +1,8 @@
-package teamseth.cs340.common.models.server.authentication;
+package teamseth.cs340.common.models.server.users;
 
 import java.util.UUID;
+
+import teamseth.cs340.common.util.auth.AuthType;
 
 /**
  * @author Scott Leland Crossen

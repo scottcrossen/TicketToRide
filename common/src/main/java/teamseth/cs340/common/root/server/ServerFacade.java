@@ -6,8 +6,8 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.server.authentication.AuthToken;
-import teamseth.cs340.common.models.server.authentication.UserCreds;
+import teamseth.cs340.common.util.auth.AuthToken;
+import teamseth.cs340.common.models.server.users.UserCreds;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.models.server.ServerModelRoot;
 
@@ -32,8 +32,8 @@ public final class ServerFacade implements IServer {
     public Set<Game> listGames() {
         return model.games.getAll();
     }
-    public void joinGame(UUID gameId, UUID userId, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
-        model.games.addPlayer(gameId, userId, token);
+    public void joinGame(UUID gameId, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
+        model.games.join(gameId, token);
     }
     public void startGame(UUID gameId, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         model.games.start(gameId, token);

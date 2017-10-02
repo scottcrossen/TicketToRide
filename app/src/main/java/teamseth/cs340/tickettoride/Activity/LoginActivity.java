@@ -1,4 +1,4 @@
-package Activity;
+package teamseth.cs340.tickettoride.Activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;

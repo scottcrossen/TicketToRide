@@ -1,16 +1,11 @@
-package Model;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+package teamseth.cs340.tickettoride.Model;
 
 /**
  * Created by Seth on 9/29/2017.
  */
 public class GameModel {
     public static final GameModel SINGLETON = new GameModel();
-
+/*
     public static void start(MainActivity ma) {
         mainActivity = ma;
         currentPerson = new Person();
@@ -265,4 +260,5 @@ public class GameModel {
         ModelApp.SINGLETON.setLoggedIn(false);
         ModelApp.SINGLETON.setCurrentUser(null);
     }
+    */
 }

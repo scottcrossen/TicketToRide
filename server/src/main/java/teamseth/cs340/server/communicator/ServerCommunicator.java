@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.util.Config;
 import teamseth.cs340.server.communicator.controllers.CommandHandler;
 
 /**
@@ -36,9 +37,10 @@ public class ServerCommunicator {
 
         server.setExecutor(null);
 
-        System.out.println("Creating models");
+        System.out.println("Creating models and globals");
 
-        ServerModelRoot serverFacade = new ServerModelRoot();
+        ServerModelRoot serverFacade = ServerModelRoot.getInstance();
+        Config config = Config.getInstance();
 
         System.out.println("Creating contexts");
 

@@ -30,18 +30,4 @@ public class Serializer {
         in.close();
         return object;
     }
-
-    public static String readString(InputStream is) throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(is);
-        String object = (String) in.readObject();
-        in.close();
-        return object;
-    }
-
-    public static Integer readInteger(InputStream is) throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(is);
-        Integer object = (Integer) in.readObject();
-        in.close();
-        return object;
-    }
 }

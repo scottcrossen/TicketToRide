@@ -1,7 +1,8 @@
 package teamseth.cs340.server.main;
 
-import teamseth.cs340.server.communicator.ServerCommunicator;
 import java.util.concurrent.TimeUnit;
+
+import teamseth.cs340.server.communicator.ServerCommunicator;
 
 /**
  * @author Scott Leland Crossen

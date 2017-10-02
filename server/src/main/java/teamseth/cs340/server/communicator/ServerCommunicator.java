@@ -1,9 +1,12 @@
 package teamseth.cs340.server.communicator;
 
-import java.io.*;
-import java.net.*;
-import com.sun.net.httpserver.*;
-import teamseth.cs340.server.communicator.controllers.*;
+import com.sun.net.httpserver.HttpServer;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+
+import teamseth.cs340.common.root.server.models.ServerModelFacade;
+import teamseth.cs340.server.communicator.controllers.CommandHandler;
 
 /**
  * @author Scott Leland Crossen
@@ -32,6 +35,10 @@ public class ServerCommunicator {
         }
 
         server.setExecutor(null);
+
+        System.out.println("Creating models");
+
+        ServerModelFacade serverFacade = new ServerModelFacade();
 
         System.out.println("Creating contexts");
 

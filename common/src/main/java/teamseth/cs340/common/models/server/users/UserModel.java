@@ -1,6 +1,5 @@
 package teamseth.cs340.common.models.server.users;
 
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -29,7 +28,7 @@ public class UserModel implements IModel<User> {
         // Check if user exists
         User user = getByName(credentials);
         // Check if user is authorized
-        if (user.credentials != credentials) throw new UnauthorizedException();
+        if (user.getUserCreds() != credentials) throw new UnauthorizedException();
         // Generate auth token
         AuthToken token = new AuthToken(user);
         // Return the token
@@ -50,13 +49,6 @@ public class UserModel implements IModel<User> {
     }
 
     private User getByName(UserCreds creds) throws ResourceNotFoundException {
-        Iterator<User> iterator = users.iterator();
-        while (iterator.hasNext()) {
-            User currentUser = iterator.next();
-            if (creds.username == currentUser.credentials.username) {
-                return currentUser;
-            }
-        }
-        throw new ResourceNotFoundException();
+        return users.stream().filter((user) -> user.getUserCreds().getUsername() == creds.getUsername()).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 }

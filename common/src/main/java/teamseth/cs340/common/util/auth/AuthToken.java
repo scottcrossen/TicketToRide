@@ -40,7 +40,7 @@ public class AuthToken implements Serializable {
         r.nextBytes(iv);
         this.ivSpec = new IvParameterSpec(iv);
         try {
-            tokenData = encryptData(new TokenData(user.privilege, Instant.now(), user.id));
+            tokenData = encryptData(new TokenData(user.getAuthType(), Instant.now(), user.getId()));
         } catch (Exception e) {
             this.tokenData = null;
         }

@@ -9,9 +9,9 @@ import teamseth.cs340.common.util.auth.AuthType;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class User {
-    public UserCreds credentials;
-    public AuthType privilege = AuthType.user;
-    public UUID id;
+    private UserCreds credentials;
+    private AuthType privilege = AuthType.user;
+    private UUID id;
 
     public User(UserCreds credentials) {
         this.credentials = credentials;
@@ -31,4 +31,7 @@ public class User {
     public int hashCode() {
         return id.hashCode();
     }
+    public UUID getId() { return this.id;}
+    public UserCreds getUserCreds() { return this.credentials; }
+    public AuthType getAuthType() { return this.privilege; }
 }

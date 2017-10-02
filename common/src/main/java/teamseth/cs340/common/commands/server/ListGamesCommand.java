@@ -4,7 +4,7 @@ import java.util.Set;
 
 import teamseth.cs340.common.commands.ICommand;
 import teamseth.cs340.common.root.server.ServerFacade;
-import teamseth.cs340.common.root.server.models.games.Game;
+import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.util.Result;
 
 /**

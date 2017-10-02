@@ -1,4 +1,4 @@
-package teamseth.cs340.common.root.server.models.authentication;
+package teamseth.cs340.common.models.server.authentication;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.TreeSet;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.root.server.models.IModel;
+import teamseth.cs340.common.models.IModel;
 
 /**
  * @author Scott Leland Crossen

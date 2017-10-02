@@ -1,4 +1,4 @@
-package teamseth.cs340.common.root.server.models;
+package teamseth.cs340.common.models;
 
 /**
  * @author Scott Leland Crossen

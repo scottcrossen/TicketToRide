@@ -1,9 +1,9 @@
 package teamseth.cs340.common.util;
 
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.root.server.models.authentication.AuthToken;
-import teamseth.cs340.common.root.server.models.authentication.AuthTokenModel;
-import teamseth.cs340.common.root.server.models.authentication.AuthType;
+import teamseth.cs340.common.models.server.authentication.AuthToken;
+import teamseth.cs340.common.models.server.authentication.AuthTokenModel;
+import teamseth.cs340.common.models.server.authentication.AuthType;
 
 /**
  * @author Scott Leland Crossen

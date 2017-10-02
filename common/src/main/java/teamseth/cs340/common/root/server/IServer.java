@@ -3,9 +3,9 @@ package teamseth.cs340.common.root.server;
 import java.util.Set;
 import java.util.UUID;
 
-import teamseth.cs340.common.root.server.models.authentication.AuthToken;
-import teamseth.cs340.common.root.server.models.authentication.UserCreds;
-import teamseth.cs340.common.root.server.models.games.Game;
+import teamseth.cs340.common.models.server.authentication.AuthToken;
+import teamseth.cs340.common.models.server.authentication.UserCreds;
+import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.exceptions.*;
 
 /**

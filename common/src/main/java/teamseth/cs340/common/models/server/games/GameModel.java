@@ -1,4 +1,4 @@
-package teamseth.cs340.common.root.server.models.games;
+package teamseth.cs340.common.models.server.games;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -8,8 +8,8 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.root.server.models.authentication.AuthToken;
-import teamseth.cs340.common.root.server.models.IModel;
+import teamseth.cs340.common.models.server.authentication.AuthToken;
+import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.util.AuthAction;
 
 /**

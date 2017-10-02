@@ -6,10 +6,10 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.root.server.models.authentication.AuthToken;
-import teamseth.cs340.common.root.server.models.authentication.UserCreds;
-import teamseth.cs340.common.root.server.models.games.Game;
-import teamseth.cs340.common.root.server.models.ServerModelFacade;
+import teamseth.cs340.common.models.server.authentication.AuthToken;
+import teamseth.cs340.common.models.server.authentication.UserCreds;
+import teamseth.cs340.common.models.server.games.Game;
+import teamseth.cs340.common.models.server.ServerModelRoot;
 
 /**
  * @author Scott Leland Crossen
@@ -23,7 +23,7 @@ public final class ServerFacade implements IServer {
         }
         return instance;
     }
-    private ServerModelFacade model = ServerModelFacade.getInstance();
+    private ServerModelRoot model = ServerModelRoot.getInstance();
 
     // Game model methods
     public void createGame(UUID userId, AuthToken token) throws ModelActionException, UnauthorizedException {

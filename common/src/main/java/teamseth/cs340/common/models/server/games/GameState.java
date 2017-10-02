@@ -1,4 +1,4 @@
-package teamseth.cs340.common.root.server.models.games;
+package teamseth.cs340.common.models.server.games;
 
 /**
  * @author Scott Leland Crossen

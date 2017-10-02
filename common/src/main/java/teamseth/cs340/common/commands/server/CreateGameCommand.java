@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import teamseth.cs340.common.commands.ICommand;
 import teamseth.cs340.common.root.server.ServerFacade;
-import teamseth.cs340.common.root.server.models.authentication.AuthToken;
+import teamseth.cs340.common.models.server.authentication.AuthToken;
 import teamseth.cs340.common.util.Result;
 
 /**

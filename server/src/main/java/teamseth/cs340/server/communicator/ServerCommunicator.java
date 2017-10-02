@@ -5,7 +5,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import teamseth.cs340.common.root.server.models.ServerModelFacade;
+import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.server.communicator.controllers.CommandHandler;
 
 /**
@@ -38,7 +38,7 @@ public class ServerCommunicator {
 
         System.out.println("Creating models");
 
-        ServerModelFacade serverFacade = new ServerModelFacade();
+        ServerModelRoot serverFacade = new ServerModelRoot();
 
         System.out.println("Creating contexts");
 

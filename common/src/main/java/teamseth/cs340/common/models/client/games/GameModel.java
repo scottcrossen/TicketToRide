@@ -1,6 +1,7 @@
 package teamseth.cs340.common.models.client.games;
 
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,7 +12,7 @@ import teamseth.cs340.common.models.server.games.Game;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class GameModel implements IModel<Game> {
+public class GameModel extends Observable implements IModel<Game> {
     private static GameModel instance;
 
     public static GameModel getInstance() {
@@ -39,5 +40,7 @@ public class GameModel implements IModel<Game> {
         }
         // Add all the remaining.
         games.addAll(newGames);
+        setChanged();
+        notifyObservers();
     }
 }

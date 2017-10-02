@@ -1,5 +1,6 @@
 package teamseth.cs340.common.root.client;
 
+import java.util.Observer;
 import java.util.Set;
 
 import teamseth.cs340.common.models.client.ClientModelRoot;
@@ -24,4 +25,7 @@ public class ClientFacade implements IClient {
     public void addGames(Set<Game> newGames) {
         model.games.upsert(newGames);
     }
+
+    // Attach an observer to the game model
+    public void watchGames(Observer observer) { model.games.addObserver(observer);}
 }

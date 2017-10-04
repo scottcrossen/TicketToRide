@@ -3,7 +3,6 @@ package teamseth.cs340.tickettoride.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import teamseth.cs340.tickettoride.Fragment.LoginFragment;
 import teamseth.cs340.tickettoride.R;

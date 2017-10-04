@@ -20,7 +20,6 @@
                 android:value=".Activity.LoginActivity" />
         </activity>
 
-
     </application>
 
 </manifest>

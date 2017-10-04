@@ -123,7 +123,6 @@
         android:layout_toRightOf="@id/signInButton"
         android:onClick="onRegisterPressed"/>
 
-
 </LinearLayout>
     <TextView
     android:layout_width="match_parent"

@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import Model.*;
-import Fragment.LoginFragment;
+import teamseth.cs340.tickettoride.Fragment.LoginFragment;
+import teamseth.cs340.tickettoride.R;
 
 /**
  * Created by Seth on 9/29/2017.
@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (loginFragment == null) {
             fm.beginTransaction()
-                    .add(R.id.personFragment, new LoginFragment())//.newInstance(p))
+                    .add(R.id.loginFragment, new LoginFragment())//.newInstance(p))
                     .commit();
         }
         //if the user is found in the database and login is pressed, go to GameListActivity

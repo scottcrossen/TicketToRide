@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import teamseth.cs340.tickettoride.Fragment.GameListFragment;
-import teamseth.cs340.tickettoride.Interfaces.*;
+import teamseth.cs340.tickettoride.Interface.*;
 import teamseth.cs340.tickettoride.R;
 /**
  * Created by Seth on 9/29/2017.

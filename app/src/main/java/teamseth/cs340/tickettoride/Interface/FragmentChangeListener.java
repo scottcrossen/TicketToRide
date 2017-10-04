@@ -1,4 +1,4 @@
-package teamseth.cs340.tickettoride.Interfaces;
+package teamseth.cs340.tickettoride.Interface;
 
 import android.support.v4.app.Fragment;
 

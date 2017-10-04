@@ -1,6 +1,6 @@
 package teamseth.cs340.tickettoride.Fragment;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -10,23 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
-
+import teamseth.cs340.tickettoride.Activity.GameListActivity;
 import teamseth.cs340.tickettoride.R;
 
 /**
@@ -38,20 +23,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText passwordTextIn;
     private EditText serverHostTextIn;
     private EditText serverPortTextIn;
-    private EditText firstNameTextIn;
-    private EditText lastNameTextIn;
-    private EditText emailTextIn;
-    private RadioGroup genderIn;
-    private String gender;
 
     private static String userName;
     private static String password;
     private static String serverHost;
     private static String serverPort;
 
-    public String userId;
-
-    private static Login login;
     private Button signInBtn;
     private Button registerBtn;
 
@@ -68,12 +45,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
-        if (login != null) {
+        /*if (login != null) {
             args.putString(userName, login.getUserName());
             args.putString(password, login.getPassword());
             args.putString(serverHost, login.getHost());
             args.putString(serverPort, login.getPort());
-        }
+        }*/
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,13 +58,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             login = new Login();
             login.setUserName(getArguments().getString(String.valueOf(userName)));
             login.setPassword(getArguments().getString(String.valueOf(password)));
             login.setHost(getArguments().getString(String.valueOf(serverHost)));
             login.setPort(getArguments().getString(String.valueOf(serverPort)));
-        }
+        }*/
     }
 
     @Override
@@ -121,25 +98,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         final boolean[] textFields = {false, false, false, false, false, false, false};
 
-        firstNameTextIn = (EditText) v.findViewById(R.id.firstNameEditText);
-        lastNameTextIn = (EditText) v.findViewById(R.id.lastNameEditText);
-        emailTextIn = (EditText) v.findViewById(R.id.emailEditText);
         userNameTextIn = (EditText) v.findViewById(R.id.userNameEditText);
         passwordTextIn = (EditText) v.findViewById(R.id.passwordEditText);
         serverHostTextIn = (EditText) v.findViewById(R.id.hostEditText);
         serverPortTextIn = (EditText) v.findViewById(R.id.portEditText);
-        genderIn = (RadioGroup) v.findViewById(R.id.genderRadio);
-        final String genderTakeIn = ((RadioButton) v.findViewById(genderIn.getCheckedRadioButtonId())).getText().toString();
-        if (genderTakeIn.equals("Female")) {
-            gender = "f";
-        } else {
-            gender = "m";
-        }
 
         userNameTextIn.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -264,126 +230,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-        emailTextIn.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    textFields[4] = true;
-                } else {
-                    textFields[4] = false;
-                }
-                if (textFields[0] && textFields[1] && textFields[2] && textFields[3]) {
-                    signInBtn.setEnabled(true);
-                } else {
-                    signInBtn.setEnabled(false);
-                }
-
-                if (textFields[0] && textFields[1] && textFields[2] && textFields[3] && textFields[4]
-                        && textFields[5] && textFields[6]) {
-                    registerBtn.setEnabled(true);
-                } else {
-                    registerBtn.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        firstNameTextIn.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    textFields[5] = true;
-                } else {
-                    textFields[5] = false;
-                }
-                if (textFields[0] && textFields[1] && textFields[2] && textFields[3]) {
-                    signInBtn.setEnabled(true);
-                } else {
-                    signInBtn.setEnabled(false);
-                }
-
-                if (textFields[0] && textFields[1] && textFields[2] && textFields[3] && textFields[4]
-                        && textFields[5] && textFields[6]) {
-                    registerBtn.setEnabled(true);
-                } else {
-                    registerBtn.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        lastNameTextIn.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    textFields[6] = true;
-                } else {
-                    textFields[6] = false;
-                }
-                if (textFields[0] && textFields[1] && textFields[2] && textFields[3]) {
-                    signInBtn.setEnabled(true);
-                } else {
-                    signInBtn.setEnabled(false);
-                }
-
-                if (textFields[0] && textFields[1] && textFields[2] && textFields[3] && textFields[4]
-                        && textFields[5] && textFields[6]) {
-                    registerBtn.setEnabled(true);
-                } else {
-                    registerBtn.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        genderIn.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                final String genderTakeIn = ((RadioButton) getActivity().findViewById(genderIn.getCheckedRadioButtonId())).getText().toString();
-                if (genderTakeIn.equals("Female")) {
-                    gender = "f";
-                } else {
-                    gender = "m";
-                }
-            }
-        });
-
-        if (textFields[0] && textFields[1] && textFields[2] && textFields[3]) {
-            signInBtn.setEnabled(true);
-        } else {
-            signInBtn.setEnabled(false);
-        }
-
-        if (textFields[0] && textFields[1] && textFields[2] && textFields[3] && textFields[4]
-                && textFields[5] && textFields[6]) {
-            registerBtn.setEnabled(true);
-        } else {
-            registerBtn.setEnabled(false);
-        }
 
         return v;
     }
@@ -393,10 +239,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String passW = passwordTextIn.getText().toString();
         String serverH = serverHostTextIn.getText().toString();
         String serverP = serverPortTextIn.getText().toString();
-        String firstN = firstNameTextIn.getText().toString();
-        String lastN = lastNameTextIn.getText().toString();
-        String emaiL = emailTextIn.getText().toString();
         //new registerUserTask().execute(userN, passW, serverH, serverP, firstN, lastN, emaiL);
+        startActivity(new Intent(getActivity(), GameListActivity.class));
+
     }
 
     public void onSignInPressed() {
@@ -405,6 +250,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String serverH = serverHostTextIn.getText().toString();
         String serverP = serverPortTextIn.getText().toString();
         //new validateUserTask().execute(userN, passW, serverH, serverP);
+        startActivity(new Intent(getActivity(), GameListActivity.class));
+
     }
 
     @Override

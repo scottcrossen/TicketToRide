@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="Activity.GameLobby">
+    android:layout_height="match_parent">
 
     <Spinner
         android:id="@+id/spinner2"
@@ -36,7 +35,7 @@
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button2"
-        android:layout_marginLeft="47dp"
+        android:layout_marginLeft="-157dp"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button

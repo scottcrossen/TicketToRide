@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import teamseth.cs340.tickettoride.Adapter.GameListAdapter;
-import teamseth.cs340.tickettoride.Model.GameModel;
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.tickettoride.R;
 
 /**

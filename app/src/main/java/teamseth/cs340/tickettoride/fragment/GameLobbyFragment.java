@@ -88,13 +88,16 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
             if (players.length > 0) {
                 player1Name.setText(playerNames.get(players[0]));
                 player1Status.setText("Ready");
+                startBtn.setEnabled(false);
             } else {
                 player1Name.setText("Player 1");
                 player1Status.setText("Waiting on Player 1");
+                startBtn.setEnabled(false);
             }
             if (players.length > 1) {
                 player2Name.setText(playerNames.get(players[1]));
                 player2Status.setText("Ready");
+                startBtn.setEnabled(true);
             } else {
                 player2Name.setText("Player 2");
                 player2Status.setText("Waiting on Player 2");
@@ -136,6 +139,7 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
     }
 
     public void onStartPressed() {
+
         try {
             new CommandTask(this.getContext()).execute(new StartGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
         } catch (ResourceNotFoundException e) {

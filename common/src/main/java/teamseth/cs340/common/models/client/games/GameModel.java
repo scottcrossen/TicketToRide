@@ -32,10 +32,10 @@ public class GameModel extends Observable implements IModel<Game> {
         Iterator<Game> iterator1 = games.iterator();
         while (iterator1.hasNext()) {
             Game currentGame1 = iterator1.next();
-            Iterator<Game> iterator2 = games.iterator();
+            Iterator<Game> iterator2 = newGames.iterator();
             while (iterator2.hasNext()) {
                 Game currentGame2 = iterator2.next();
-                if (currentGame1.getId() == currentGame2.getId()) {
+                if (currentGame1.getId().equals(currentGame2.getId())) {
                     currentGame1 = currentGame2;
                     iterator2.remove();
                 }
@@ -52,11 +52,9 @@ public class GameModel extends Observable implements IModel<Game> {
     }
 
     public Game getGame(String gameName) {
-        if(games.contains(gameName)) {
-            for (Game game : games) {
-                if(game.name().contentEquals(gameName)) {
-                    return game;
-                }
+        for (Game game : games) {
+            if(game.name().contentEquals(gameName)) {
+                return game;
             }
         }
         return null;

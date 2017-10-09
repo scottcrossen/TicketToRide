@@ -40,7 +40,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     Context context;
 
     public GameListAdapter(Context context) {
-        this.gameList = gameList;
         this.context = context;
         ClientModelRoot.getInstance().games.addObserver(this);
     }

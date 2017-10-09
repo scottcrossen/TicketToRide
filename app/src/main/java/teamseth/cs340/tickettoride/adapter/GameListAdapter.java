@@ -16,7 +16,7 @@ import java.util.Observer;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import teamseth.cs340.common.commands.server.JoinGameCommand;
+import teamseth.cs340.common.commands.server.CreateGameCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.client.games.GameModel;
 import teamseth.cs340.common.models.server.games.Game;
@@ -68,7 +68,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             Game clickedGame = GameModel.getInstance().getGame(gameNameText);
             UUID gameId = clickedGame.getId();
             Activity activity = (Activity)view.getContext();
-            new CommandTask(context).execute(new JoinGameCommand(gameId));
+            //new CommandTask(context).execute(new JoinGameCommand(gameId));
+            new CommandTask(context).execute(new CreateGameCommand());
         }
     }
 

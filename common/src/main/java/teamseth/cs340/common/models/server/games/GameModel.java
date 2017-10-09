@@ -9,6 +9,8 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -28,12 +30,13 @@ public class GameModel extends AuthAction implements IModel<Game> {
 
     private HashSet<Game> games = new HashSet<Game>();
 
-    public Game create(AuthToken token) throws ModelActionException, UnauthorizedException {
+    public Game create(AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);
         UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
         Game game = new Game();
-        game.addPlayer(userId);
+        User user = ServerModelRoot.getInstance().users.getById(userId);
+        game.addPlayer(user);
         games.add(game);
         return game;
     }
@@ -42,7 +45,8 @@ public class GameModel extends AuthAction implements IModel<Game> {
         AuthAction.user(token);
         UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
-        this.get(gameId).addPlayer(userId);
+        User user = ServerModelRoot.getInstance().users.getById(userId);
+        this.get(gameId).addPlayer(user);
     }
 
     public void start(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {

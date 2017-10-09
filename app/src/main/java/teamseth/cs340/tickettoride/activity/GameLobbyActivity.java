@@ -12,12 +12,13 @@ import java.util.Observer;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.GameState;
-import teamseth.cs340.tickettoride.fragment.GameLobbyFragment;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
+import teamseth.cs340.tickettoride.fragment.GameLobbyFragment;
 
 /**
- * Created by Seth on 9/29/2017.
+ * @author Scott Leland Crossen
+ * @Copyright 2017 Scott Leland Crossen
  */
 public class GameLobbyActivity extends AppCompatActivity implements Observer {
 
@@ -25,8 +26,14 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
-
         ClientModelRoot.getInstance().games.addObserver(this);
+
+        try {
+            //TODO: Uncomment this.
+            //Poller.getInstance(this.getApplicationContext()).addToJobs(new getGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
+        } catch (Exception e) {
+            startActivity(new Intent(this, GameListActivity.class));
+        }
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.LobbyFragment);
@@ -38,7 +45,6 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
                     .commit();
         }
     }
-
 
     @Override
     public void update(Observable o, Object arg) {

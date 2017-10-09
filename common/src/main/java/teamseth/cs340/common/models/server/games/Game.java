@@ -2,10 +2,12 @@ package teamseth.cs340.common.models.server.games;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
+import teamseth.cs340.common.models.server.users.User;
 
 /**
  * @author Scott Leland Crossen
@@ -17,14 +19,15 @@ public class Game implements Serializable, Comparable<Game> {
     private HashSet<UUID> users= new HashSet<UUID>();
     private GameState state = GameState.PREGAME;
     private Instant lastUpdate = Instant.now();
-
+    private HashMap<UUID, String> playerNames = new HashMap<>();
     private void updateTime() {
         this.lastUpdate = Instant.now();
     }
 
-    public void addPlayer(UUID userId) throws ModelActionException {
+    public void addPlayer(User user) throws ModelActionException {
         if (users.size() <= 5) {
-            this.users.add(userId);
+            this.users.add(user.getId());
+            this.playerNames.put(user.getId(), user.getUserCreds().getUsername());
             updateTime();
         } else {
             throw new ModelActionException();
@@ -32,6 +35,7 @@ public class Game implements Serializable, Comparable<Game> {
     }
     public void removePlayer(UUID userId) {
         users.remove(userId);
+        playerNames.remove(userId);
         updateTime();
     }
 
@@ -54,6 +58,8 @@ public class Game implements Serializable, Comparable<Game> {
         return this.id;
     }
     public String name() { return "Game " + hashCode(); }
+    public HashMap<UUID, String> getPlayerNames() {return playerNames; }
+    public HashSet<UUID> getPlayers() {return users; }
 
     @Override
     public int compareTo(Game game) {

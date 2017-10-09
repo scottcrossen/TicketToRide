@@ -18,7 +18,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
 public interface IServer {
 
     // Game model methods
-    public Game createGame(AuthToken token) throws ModelActionException, UnauthorizedException;
+    public Game createGame(AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException;
     public HashSet<Game> listGames();
     public HashSet<Game> listGamesAfter(Instant instant);
     public void joinGame(UUID gameId, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException;

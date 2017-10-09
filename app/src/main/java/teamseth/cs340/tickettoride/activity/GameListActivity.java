@@ -18,7 +18,8 @@ import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 
 /**
- * Created by Seth on 9/29/2017.
+ * @author Scott Leland Crossen
+ * @Copyright 2017 Scott Leland Crossen
  */
 public class GameListActivity extends AppCompatActivity implements FragmentChangeListener, Observer {
     @Override
@@ -29,7 +30,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
 
         ClientModelRoot.getInstance().games.addObserver(this);
         //TODO: Uncomment this.
-        //Poller.getInstance().addToJobs(new ListGamesAfterCommand(Instant.now()));
+        //Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.game_list_fragment_container);
 

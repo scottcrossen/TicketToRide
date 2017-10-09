@@ -13,7 +13,8 @@ import teamseth.cs340.tickettoride.fragment.LoginFragment;
 import teamseth.cs340.tickettoride.R;
 
 /**
- * Created by Seth on 9/29/2017.
+ * @author Scott Leland Crossen
+ * @Copyright 2017 Scott Leland Crossen
  */
 public class LoginActivity extends FragmentActivity implements Observer {
 

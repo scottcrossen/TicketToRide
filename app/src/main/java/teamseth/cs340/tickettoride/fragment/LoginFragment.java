@@ -18,7 +18,8 @@ import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
- * Created by Seth on 9/29/2017.
+ * @author Scott Leland Crossen
+ * @Copyright 2017 Scott Leland Crossen
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 

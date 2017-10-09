@@ -1,6 +1,7 @@
 package teamseth.cs340.common.models.server.users;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -49,5 +50,9 @@ public class UserModel implements IModel<User> {
 
     private User getByName(UserCreds creds) throws ResourceNotFoundException {
         return users.stream().filter((user) -> user.getUserCreds().getUsername().equals(creds.getUsername())).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+    }
+
+    public User getById(UUID id) throws ResourceNotFoundException {
+        return users.stream().filter((user) -> user.getId().equals(id)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 }

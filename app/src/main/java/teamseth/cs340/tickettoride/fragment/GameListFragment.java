@@ -49,15 +49,6 @@ public class GameListFragment extends Fragment implements View.OnClickListener
         {
             mGameList.add(game.name());
         }
-        // TODO: 10/4/17 refactor
-//        for(String eventType : GameModel.SINGLETON.getAllEventTypes())
-//        {
-//            mGameList.add(eventType);
-//        }
-//        mGameList.add("Mother's Side");
-//        mGameList.add("Father's Side");
-//        mGameList.add("Male");
-//        mGameList.add("Female");
     }
 
     @Override

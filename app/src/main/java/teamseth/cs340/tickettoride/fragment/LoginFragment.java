@@ -64,6 +64,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableButtons();
         if (getArguments() != null) {
             if (getArguments().getString(String.valueOf(userName)) != null)
                 Login.getInstance().setUsername(getArguments().getString(String.valueOf(userName)));

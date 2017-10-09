@@ -26,6 +26,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Create New Game"
+        android:layout_below="@id/game_list_recycler_view"
         android:gravity="center|bottom"
         android:layout_alignParentBottom="true"/>
 

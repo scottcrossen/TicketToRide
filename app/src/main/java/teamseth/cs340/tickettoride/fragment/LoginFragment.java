@@ -74,7 +74,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             if (getArguments().getString(String.valueOf(serverPort)) != null)
                 Login.getInstance().setServerPort(getArguments().getString(String.valueOf(serverPort)));
         }
-        enableButtons();
     }
 
     private void enableButtons() {
@@ -115,6 +114,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         serverPortTextIn = v.findViewById(R.id.portEditText);
         serverPortTextIn.setText(Login.getInstance().getServerPort());
 
+        enableButtons();
 
         userNameTextIn.addTextChangedListener(new TextWatcher() {
             @Override

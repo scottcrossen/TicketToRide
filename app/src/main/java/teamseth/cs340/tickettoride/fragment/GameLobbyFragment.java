@@ -57,6 +57,9 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
 
         player1Name = v.findViewById(R.id.textView1);
         player1Status = v.findViewById(R.id.textView2);
+        TextView gameNum = v.findViewById(R.id.lobby_game_name);
+        String nameGame = player1Name.getText() + "\'s Game";
+        gameNum.setText(nameGame);
         player2Name = v.findViewById(R.id.textView3);
         player2Status = v.findViewById(R.id.textView4);
         player3Name = v.findViewById(R.id.textView5);
@@ -68,6 +71,13 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
 
         startBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
+
+        try {
+            setFields(ClientModelRoot.getInstance().games.getActive());
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+
         return v;
     }
 

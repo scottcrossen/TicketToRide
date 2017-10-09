@@ -21,7 +21,9 @@ public class ListGamesAfterCommand implements IServerCommand, IUpdateCommand {
     }
 
     public Result<UpdateGamesCommand> call() {
-        return new Result<UpdateGamesCommand>(() -> new UpdateGamesCommand(ServerFacade.getInstance().listGamesAfter(instant)));
+        return new Result<UpdateGamesCommand>(() -> {
+            return new UpdateGamesCommand(ServerFacade.getInstance().listGamesAfter(instant));
+        });
     }
 
     public void setLastUpdateTime(Instant time) {

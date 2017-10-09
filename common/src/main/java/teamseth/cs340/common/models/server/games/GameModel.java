@@ -85,4 +85,15 @@ public class GameModel extends AuthAction implements IModel<Game> {
     private boolean playerInGame(UUID userId) {
         return games.stream().anyMatch(game -> game.hasPlayer(userId));
     }
+
+    public Game getGame(String gameName) {
+        if(games.contains(gameName)) {
+            for (Game game : games) {
+                if(game.name().contentEquals(gameName)) {
+                    return game;
+                }
+            }
+        }
+        return null;
+    }
 }

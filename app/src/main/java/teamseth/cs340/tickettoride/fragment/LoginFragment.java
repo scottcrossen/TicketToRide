@@ -78,12 +78,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void enableButtons() {
-        if (userNameTextIn.getText().toString().trim().length() != 0 &&
-                passwordTextIn.getText().toString().trim().length() != 0 &&
-                serverHostTextIn.getText().toString().trim().length() != 0 &&
-                serverPortTextIn.getText().toString().trim().length() != 0) {
-            signInBtn.setEnabled(true);
-            registerBtn.setEnabled(true);
+        if(userNameTextIn != null && passwordTextIn != null && serverHostTextIn != null && serverPortTextIn != null) {
+            if (userNameTextIn.getText().toString().trim().length() != 0 &&
+                    passwordTextIn.getText().toString().trim().length() != 0 &&
+                    serverHostTextIn.getText().toString().trim().length() != 0 &&
+                    serverPortTextIn.getText().toString().trim().length() != 0) {
+                signInBtn.setEnabled(true);
+                registerBtn.setEnabled(true);
+            } else {
+                signInBtn.setEnabled(false);
+                registerBtn.setEnabled(false);
+            }
         } else {
             signInBtn.setEnabled(false);
             registerBtn.setEnabled(false);

@@ -18,7 +18,8 @@ public class Toaster {
     }
 
     public void makeToast(Context context, String message) {
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-        toast.show();
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
     }
 }

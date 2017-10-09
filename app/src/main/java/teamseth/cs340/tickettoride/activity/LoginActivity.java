@@ -44,6 +44,9 @@ public class LoginActivity extends FragmentActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        if (Login.getInstance().getToken() != null) startActivity(new Intent(this, GameListActivity.class));
+        this.runOnUiThread(() -> {
+            if (Login.getInstance().getToken() != null)
+                startActivity(new Intent(this, GameListActivity.class));
+        });
     }
 }

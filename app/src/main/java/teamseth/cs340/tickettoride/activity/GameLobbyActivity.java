@@ -1,5 +1,6 @@
 package teamseth.cs340.tickettoride.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,13 +16,15 @@ import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.GameLobbyFragment;
-import teamseth.cs340.common.commands.server.GetGameCommand;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
 public class GameLobbyActivity extends AppCompatActivity implements Observer {
+
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +33,13 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
         ClientModelRoot.getInstance().games.addObserver(this);
 
         try {
-            Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
+            //Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
         } catch (Exception e) {
             startActivity(new Intent(this, GameListActivity.class));
         }
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.LobbyFragment);
+        fragment = fm.findFragmentById(R.id.LobbyFragment);
 
         if (fragment == null) {
             fragment = new GameLobbyFragment();
@@ -48,15 +51,18 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        try {
-            if (!ClientModelRoot.getInstance().games.hasActive()) {
-                Poller.getInstance(this.getApplicationContext()).reset();
-                startActivity(new Intent(this, GameListActivity.class));
-            } else if (ClientModelRoot.getInstance().games.hasActive() && ClientModelRoot.getInstance().games.getActive().getState().equals(GameState.START)) {
-                Poller.getInstance(this.getApplicationContext()).reset();
-                startActivity(new Intent(this, GameActivity.class));
+            try {
+                if (!ClientModelRoot.getInstance().games.hasActive()) {
+                    Poller.getInstance(this.getApplicationContext()).reset();
+                    startActivity(new Intent(this, GameListActivity.class));
+                } else if (ClientModelRoot.getInstance().games.hasActive() && ClientModelRoot.getInstance().games.getActive().getState().equals(GameState.START)) {
+                    Poller.getInstance(this.getApplicationContext()).reset();
+                    Context context = this.getApplicationContext();
+                    this.runOnUiThread(() -> Toaster.getInstance().makeToast(context, "New game started."));
+                } else {
+                    this.runOnUiThread(() -> ((GameLobbyFragment) fragment).updateGame());
+                }
+            } catch (ResourceNotFoundException e) {
             }
-        } catch (ResourceNotFoundException e) {
-        }
     }
 }

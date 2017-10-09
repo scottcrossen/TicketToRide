@@ -2,6 +2,7 @@ package teamseth.cs340.common.root.server;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -44,6 +45,7 @@ public final class ServerFacade implements IServer {
     }
     public Game getGame(UUID gameId) throws ResourceNotFoundException {return model.games.get(gameId);}
     public void leaveGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {model.games.leave(gameId, token);}
+    public Optional<Game> getGameAfter(UUID gameId, Instant instant) throws ResourceNotFoundException {return model.games.getAfter(gameId, instant);}
 
     // User model methods
     public AuthToken login(UserCreds creds) throws ResourceNotFoundException, UnauthorizedException {

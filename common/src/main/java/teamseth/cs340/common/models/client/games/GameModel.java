@@ -51,6 +51,17 @@ public class GameModel extends Observable implements IModel<Game> {
         return games;
     }
 
+    public Game getGame(String gameName) {
+        if(games.contains(gameName)) {
+            for (Game game : games) {
+                if(game.name().contentEquals(gameName)) {
+                    return game;
+                }
+            }
+        }
+        return null;
+    }
+
     public void setActive(Game current) {
         HashSet<Game> toAdd = new HashSet<Game>();
         toAdd.add(current);

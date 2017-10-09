@@ -72,6 +72,8 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
         startBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
 
+        startBtn.
+
         try {
             setFields(ClientModelRoot.getInstance().games.getActive());
         } catch (ResourceNotFoundException e) {
@@ -85,6 +87,7 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
         if (activeGame != null) {
             HashMap<UUID, String> playerNames = activeGame.getPlayerNames();
             UUID[] players = activeGame.getPlayers().toArray(new UUID[activeGame.getPlayers().size()]);
+
             if (players.length > 0) {
                 player1Name.setText(playerNames.get(players[0]));
                 player1Status.setText("Ready");

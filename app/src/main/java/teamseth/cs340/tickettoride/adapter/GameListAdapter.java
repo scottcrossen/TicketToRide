@@ -32,15 +32,19 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     @Override
     public void update(Observable observable, Object o) {
+        int oldSize = gameList.size();
         List<Game> gameNames = ClientFacade.getInstance().getGames().stream().filter((game) -> game.getState().equals(GameState.PREGAME)).collect(Collectors.toList());
         gameList = (ArrayList<Game>) gameNames;
+        if (oldSize != gameList.size()) activity.runOnUiThread(() -> notifyDataSetChanged());
     }
 
     private ArrayList<Game> gameList = new ArrayList<>();
     Context context;
+    Activity activity;
 
-    public GameListAdapter(Context context) {
+    public GameListAdapter(Context context, Activity activity) {
         this.context = context;
+        this.activity = activity;
         ClientModelRoot.getInstance().games.addObserver(this);
     }
 

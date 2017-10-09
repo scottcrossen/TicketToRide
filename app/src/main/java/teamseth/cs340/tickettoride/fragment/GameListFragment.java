@@ -32,7 +32,6 @@ public class GameListFragment extends Fragment implements View.OnClickListener
     private Button createBtn;
     private HashSet<Game> games = new HashSet<Game>();
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +59,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener
         mRecyclerView = (RecyclerView) v.findViewById(R.id.game_list_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new GameListAdapter(getContext());
+        mAdapter = new GameListAdapter(getContext(), getActivity());
         mRecyclerView.setAdapter(mAdapter);
         return v;
     }

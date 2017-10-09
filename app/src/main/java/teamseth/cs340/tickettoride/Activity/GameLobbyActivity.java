@@ -11,7 +11,7 @@ import teamseth.cs340.tickettoride.R;
 /**
  * Created by Seth on 9/29/2017.
  */
-public class GameLobby extends AppCompatActivity {
+public class GameLobbyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

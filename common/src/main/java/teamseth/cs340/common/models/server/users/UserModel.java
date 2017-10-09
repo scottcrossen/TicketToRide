@@ -1,7 +1,6 @@
 package teamseth.cs340.common.models.server.users;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -22,7 +21,7 @@ public class UserModel implements IModel<User> {
         return instance;
     }
 
-    private Set<User> users = new TreeSet<User>();
+    private HashSet<User> users = new HashSet<User>();
 
     public AuthToken login(UserCreds credentials) throws ResourceNotFoundException, UnauthorizedException {
         // Check if user exists

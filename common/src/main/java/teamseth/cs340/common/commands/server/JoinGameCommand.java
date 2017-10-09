@@ -5,7 +5,7 @@ import java.util.UUID;
 import teamseth.cs340.common.root.server.ServerFacade;
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.common.util.auth.AuthToken;
-import teamseth.cs340.common.util.client.Config;
+import teamseth.cs340.common.util.client.Login;
 
 /**
  * @author Scott Leland Crossen
@@ -15,7 +15,7 @@ public class JoinGameCommand implements IServerCommand {
     private static final long serialVersionUID = 6582928080311780721L;
 
     private UUID gameId;
-    private AuthToken token = Config.getInstance().getToken();
+    private AuthToken token = Login.getInstance().getToken();
 
     public JoinGameCommand(UUID gameId) {
         this.gameId = gameId;

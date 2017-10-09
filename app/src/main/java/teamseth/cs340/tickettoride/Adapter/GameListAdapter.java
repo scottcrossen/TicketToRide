@@ -6,12 +6,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.stream.Collectors;
 
+import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.root.client.ClientFacade;
 import teamseth.cs340.tickettoride.Activity.GameListActivity;
 import teamseth.cs340.tickettoride.R;
 
@@ -19,9 +24,15 @@ import teamseth.cs340.tickettoride.R;
  * Created by mike on 10/4/17.
  */
 
-public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
+public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> implements Observer {
 
-    private ArrayList<String> mGameLists;
+    private ArrayList<String> mGameLists = new ArrayList<String>();
+
+    @Override
+    public void update(Observable observable, Object o) {
+        List<String> gameNames = ClientFacade.getInstance().getGames().stream().map((game) -> game.name()).collect(Collectors.toList());
+        mGameLists = (ArrayList<String>) gameNames;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -107,8 +118,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
     }
 
-    public GameListAdapter(ArrayList<String> mTextViews) {
-        this.mGameLists = mTextViews;
+    public GameListAdapter() {
+        ClientModelRoot.getInstance().games.addObserver(this);
     }
     @Override
     public GameListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

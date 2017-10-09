@@ -2,7 +2,7 @@ package teamseth.cs340.common.commands.client;
 
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.common.util.auth.AuthToken;
-import teamseth.cs340.common.util.client.Config;
+import teamseth.cs340.common.util.client.Login;
 
 /**
  * @author Scott Leland Crossen
@@ -19,6 +19,7 @@ public class UpdateTokenCommand implements IClientCommand {
 
     @Override
     public Result call() {
-        return new Result(() -> {Config.getInstance().setToken(this.token); return null;});
+        return new Result(() -> {
+            Login.getInstance().setToken(this.token); return null;});
     }
 }

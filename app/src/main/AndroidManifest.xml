@@ -26,7 +26,7 @@
                 android:value=".Activity.LoginActivity" />
         </activity>
         <activity
-            android:name=".Activity.GameLobby"
+            android:name=".Activity.GameLobbyActivity"
             android:label="Game List"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".Activity.LoginActivity">

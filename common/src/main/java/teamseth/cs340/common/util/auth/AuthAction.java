@@ -9,9 +9,15 @@ import teamseth.cs340.common.exceptions.UnauthorizedException;
 public class AuthAction {
     private static final long serialVersionUID = 4606139126406410445L;
     protected static void user(AuthToken token) throws UnauthorizedException {
-        if (!token.isValid(AuthType.user) && !token.isValid(AuthType.admin)) throw new UnauthorizedException();
+        if (!token.isValid(AuthType.user) && !token.isValid(AuthType.admin)) {
+            System.out.println("Unauthorized access attempted");
+            throw new UnauthorizedException();
+        }
     }
     protected static void admin(AuthToken token) throws UnauthorizedException {
-        if (!token.isValid(AuthType.admin)) throw new UnauthorizedException();
+        if (!token.isValid(AuthType.admin)) {
+            System.out.println("Unauthorized access attempted");
+            throw new UnauthorizedException();
+        }
     }
 }

@@ -1,7 +1,7 @@
 package teamseth.cs340.common.root.server;
 
 import java.time.Instant;
-import java.util.Set;
+import java.util.HashSet;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -27,13 +27,13 @@ public final class ServerFacade implements IServer {
     private ServerModelRoot model = ServerModelRoot.getInstance();
 
     // Game model methods
-    public void createGame(AuthToken token) throws ModelActionException, UnauthorizedException {
-        model.games.create(token);
+    public Game createGame(AuthToken token) throws ModelActionException, UnauthorizedException {
+        return model.games.create(token);
     }
-    public Set<Game> listGames() {
+    public HashSet<Game> listGames() {
         return model.games.getAll();
     }
-    public Set<Game> listGamesAfter(Instant instant) {
+    public HashSet<Game> listGamesAfter(Instant instant) {
         return model.games.getAfter(instant);
     }
     public void joinGame(UUID gameId, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {

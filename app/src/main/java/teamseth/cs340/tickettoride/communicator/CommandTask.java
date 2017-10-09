@@ -25,14 +25,19 @@ public class CommandTask extends AsyncTask<ICommand, Void, Void> {
                 try {
                     Result result = new Result(() -> null);
                     if (currentObject instanceof IServerCommand) {
-                        result = ClientCommunicator.post((IServerCommand) currentObject);
+                        System.out.println("Executing server-side command: " + currentCommand.toString());
+                        result = (Result) ClientCommunicator.post((IServerCommand) currentObject);
+                        System.out.println("Successfully executed server-side command");
                     } else if (currentObject instanceof IClientCommand) {
-                        result = ((IClientCommand) currentObject).call();
+                        System.out.println("Executing client-side command: " + currentCommand.toString());
+                        result = (Result) ((IClientCommand) currentObject).call();
+                        System.out.println("Successfully executed client-side command");
                     } else {
                         System.err.println("You screwed something up");
                     }
                     currentObject = result.get();
                 } catch (Exception e) {
+                    System.out.println("An error occured while executing a command");
                     e.printStackTrace();
                     currentObject = null;
                 }

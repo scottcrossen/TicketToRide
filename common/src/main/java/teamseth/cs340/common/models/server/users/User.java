@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.users;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import teamseth.cs340.common.util.auth.AuthType;
@@ -8,7 +9,7 @@ import teamseth.cs340.common.util.auth.AuthType;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class User implements Comparable<User> {
+public class User implements Serializable, Comparable<User> {
     private UserCreds credentials;
     private AuthType privilege = AuthType.user;
     private UUID id = UUID.randomUUID();

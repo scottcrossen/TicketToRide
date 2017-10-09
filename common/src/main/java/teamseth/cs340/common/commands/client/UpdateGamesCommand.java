@@ -1,6 +1,6 @@
 package teamseth.cs340.common.commands.client;
 
-import java.util.Set;
+import java.util.HashSet;
 
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.root.client.ClientFacade;
@@ -13,9 +13,9 @@ import teamseth.cs340.common.util.Result;
 public class UpdateGamesCommand implements IClientCommand {
     private static final long serialVersionUID = 8664794899514283942L;
 
-    private Set<Game> newGames;
+    private HashSet<Game> newGames;
 
-    public UpdateGamesCommand(Set<Game> newGames) {
+    public UpdateGamesCommand(HashSet<Game> newGames) {
         this.newGames = newGames;
     }
 

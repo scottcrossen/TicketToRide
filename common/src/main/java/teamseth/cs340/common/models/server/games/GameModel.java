@@ -1,8 +1,7 @@
 package teamseth.cs340.common.models.server.games;
 
 import java.time.Instant;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,15 +26,16 @@ public class GameModel extends AuthAction implements IModel<Game> {
         return instance;
     }
 
-    private Set<Game> games = new TreeSet<Game>();
+    private HashSet<Game> games = new HashSet<Game>();
 
-    public void create(AuthToken token) throws ModelActionException, UnauthorizedException {
+    public Game create(AuthToken token) throws ModelActionException, UnauthorizedException {
         AuthAction.user(token);
         UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
         Game game = new Game();
         game.addPlayer(userId);
         games.add(game);
+        return game;
     }
 
     public void join(UUID gameId, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
@@ -53,7 +53,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         game.setState(GameState.START);
     }
 
-    public Set<Game> getAll() {
+    public HashSet<Game> getAll() {
         return games;
     }
 
@@ -61,8 +61,8 @@ public class GameModel extends AuthAction implements IModel<Game> {
         return games.stream().filter(game -> game.getId() == gameId).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
-    public Set<Game> getAfter(Instant instant) {
-        return games.stream().filter(game -> game.getUpdate().compareTo(instant) > 0).collect(Collectors.toSet());
+    public HashSet<Game> getAfter(Instant instant) {
+        return (HashSet<Game>) games.stream().filter(game -> game.getUpdate().compareTo(instant) > 0).collect(Collectors.toSet());
     }
 
     private boolean playerInGame(UUID userId) {

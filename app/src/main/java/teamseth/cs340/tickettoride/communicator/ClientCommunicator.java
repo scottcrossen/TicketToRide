@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import teamseth.cs340.common.util.Serializer;
-import teamseth.cs340.common.util.client.Config;
+import teamseth.cs340.common.util.client.Login;
 
 /**
  * @author Scott Leland Crossen
@@ -19,7 +19,7 @@ public class ClientCommunicator {
     private static String urlStem = "/command";
 
     public static <A> A post(Serializable object) throws IOException, ClassNotFoundException {
-        URL url = new URL("http://" + Config.getInstance().getServerHost() + ":" + Config.getInstance().getServerPort() + ClientCommunicator.urlStem);
+        URL url = new URL("http://" + Login.getInstance().getServerHost() + ":" + Login.getInstance().getServerPort() + ClientCommunicator.urlStem);
         HttpURLConnection http = (HttpURLConnection)url.openConnection();
 
         http.setRequestMethod("POST");

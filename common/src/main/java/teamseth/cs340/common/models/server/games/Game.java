@@ -1,8 +1,8 @@
 package teamseth.cs340.common.models.server.games;
 
+import java.io.Serializable;
 import java.time.Instant;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -11,9 +11,9 @@ import teamseth.cs340.common.exceptions.ModelActionException;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class Game implements Comparable<Game> {
+public class Game implements Serializable, Comparable<Game> {
     private UUID id = UUID.randomUUID();
-    private Set<UUID> users= new TreeSet<UUID>();
+    private HashSet<UUID> users= new HashSet<UUID>();
     private GameState state = GameState.PREGAME;
     private Instant lastUpdate = Instant.now();
 
@@ -48,6 +48,7 @@ public class Game implements Comparable<Game> {
     public UUID getId() {
         return this.id;
     }
+    public String name() { return "Game " + hashCode(); }
 
     @Override
     public int compareTo(Game game) {

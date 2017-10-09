@@ -45,7 +45,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
     public void join(UUID gameId, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
         AuthAction.user(token);
         UUID userId = token.getUser();
-        if (playerInGame(userId)) throw new ModelActionException();
+        //if (playerInGame(userId)) throw new ModelActionException();
         User user = ServerModelRoot.getInstance().users.getById(userId);
         this.get(gameId).addPlayer(user);
     }

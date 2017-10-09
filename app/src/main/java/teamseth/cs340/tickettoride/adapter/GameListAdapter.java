@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -50,10 +51,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView gameName;
+        private RelativeLayout gameNameLayout;
+
 
         public ViewHolder(View view) {
             super(view);
             gameName = (TextView) view.findViewById(R.id.game_name);
+            gameNameLayout = (RelativeLayout) view.findViewById(R.id.game_name_layout);
+            view.setOnClickListener(this);
         }
 
         @Override
@@ -63,7 +68,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             Game clickedGame = GameModel.getInstance().getGame(gameNameText);
             UUID gameId = clickedGame.getId();
             Activity activity = (Activity)view.getContext();
-            new CommandTask(activity).execute(new JoinGameCommand(gameId));
+            new CommandTask(context).execute(new JoinGameCommand(gameId));
         }
     }
 

@@ -5,7 +5,15 @@ package teamseth.cs340.common.exceptions;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class UnauthorizedException extends Exception {
+    private static final long serialVersionUID = -1372608453349490966L;
     public UnauthorizedException() {
-        super("The token used in the request does not have sufficient privileges");
+        super("Error: Unauthorized.");
     }
+
+    @Override
+    public String getMessage(){
+        return "Error: Unauthorized.";
+    }
+
+
 }

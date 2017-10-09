@@ -1,8 +1,7 @@
 package teamseth.cs340.common.models.server.games;
 
 import java.time.Instant;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -10,6 +9,8 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -27,41 +28,53 @@ public class GameModel extends AuthAction implements IModel<Game> {
         return instance;
     }
 
-    private Set<Game> games = new TreeSet<Game>();
+    private HashSet<Game> games = new HashSet<Game>();
 
-    public void create(UUID userId, AuthToken token) throws ModelActionException, UnauthorizedException {
+    public Game create(AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);
+        UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
         Game game = new Game();
-        game.addPlayer(userId);
+        User user = ServerModelRoot.getInstance().users.getById(userId);
+        game.addPlayer(user);
         games.add(game);
+        return game;
     }
 
     public void join(UUID gameId, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
         AuthAction.user(token);
         UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
-        this.get(gameId).addPlayer(userId);
+        User user = ServerModelRoot.getInstance().users.getById(userId);
+        this.get(gameId).addPlayer(user);
     }
 
     public void start(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
         AuthAction.user(token);
         Game game = this.get(gameId);
         if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
-        if (game.getState() != GameState.PREGAME) throw new ModelActionException();
+        if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
         game.setState(GameState.START);
     }
 
-    public Set<Game> getAll() {
+    public void leave(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
+        AuthAction.user(token);
+        Game game = this.get(gameId);
+        if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
+        if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
+        game.removePlayer(token.getUser());
+    }
+
+    public HashSet<Game> getAll() {
         return games;
     }
 
     public Game get(UUID gameId) throws ResourceNotFoundException {
-        return games.stream().filter(game -> game.getId() == gameId).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return games.stream().filter(game -> game.getId().equals(gameId)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
-    public Set<Game> getAfter(Instant instant) {
-        return games.stream().filter(game -> game.getUpdate().compareTo(instant) > 0).collect(Collectors.toSet());
+    public HashSet<Game> getAfter(Instant instant) {
+        return (HashSet<Game>) games.stream().filter(game -> game.getUpdate().compareTo(instant) > 0).collect(Collectors.toSet());
     }
 
     private boolean playerInGame(UUID userId) {

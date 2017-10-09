@@ -8,14 +8,10 @@ import java.util.concurrent.Callable;
  * @Copyright 2017 Scott Leland Crossen
  */
 final public class Result<A> implements Serializable {
+    private static final long serialVersionUID = 4075552706224012080L;
     private A underlying;
 
     private Exception error;
-
-    public Result(boolean success, A data, Exception error) {
-        this.underlying = data;
-        this.error = error;
-    }
 
     public Result(Callable<A> resFunc) {
         try {
@@ -36,7 +32,7 @@ final public class Result<A> implements Serializable {
     }
 
     public Result map(IMapFunc lambda) {
-        if (this.error != null) {
+        if (this.error == null) {
             return new Result(() -> lambda.call(this.underlying));
         } else {
             return this;
@@ -48,7 +44,7 @@ final public class Result<A> implements Serializable {
     }
 
     public Result flatMap(IFlatMapFunc lambda) {
-        if (this.error != null) {
+        if (this.error == null) {
             return lambda.call(this.underlying);
         } else {
             return this;
@@ -56,7 +52,7 @@ final public class Result<A> implements Serializable {
     }
 
     public A getOrElse(A alternate){
-        if (this.error != null) {
+        if (this.error == null) {
             return this.underlying;
         } else {
             return alternate;
@@ -64,7 +60,7 @@ final public class Result<A> implements Serializable {
     }
 
     public A get() throws Exception {
-        if (this.error != null) {
+        if (this.error == null) {
             return this.underlying;
         } else {
             throw this.error;
@@ -72,7 +68,7 @@ final public class Result<A> implements Serializable {
     }
 
     public A orNull() throws Exception {
-        if (this.error != null) {
+        if (this.error == null) {
             return this.underlying;
         } else {
             return null;

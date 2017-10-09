@@ -1,5 +1,6 @@
 package teamseth.cs340.common.root.client;
 
+import java.util.HashSet;
 import java.util.Observer;
 import java.util.Set;
 
@@ -25,6 +26,11 @@ public class ClientFacade implements IClient {
     public void addGames(Set<Game> newGames) {
         model.games.upsert(newGames);
     }
+
+    public HashSet<Game> getGames() { return model.games.getAll();}
+
+    public void setActiveGame(Game current) { model.games.setActive(current);}
+    public void clearActiveGame() { model.games.clearActive(); }
 
     // Attach an observer to the game model
     public void watchGames(Observer observer) { model.games.addObserver(observer);}

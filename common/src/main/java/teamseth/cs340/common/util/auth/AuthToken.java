@@ -13,13 +13,14 @@ import javax.crypto.spec.IvParameterSpec;
 
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.users.User;
-import teamseth.cs340.common.util.Config;
+import teamseth.cs340.common.util.server.Config;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
 public class AuthToken implements Serializable {
+    private static final long serialVersionUID = 8368458447159720690L;
     private static class TokenData implements Serializable {
         public TokenData(AuthType privilege, Instant instant, UUID userId){
             this.privilege = privilege;
@@ -32,13 +33,12 @@ public class AuthToken implements Serializable {
     }
 
     private SealedObject tokenData;
-    private IvParameterSpec ivSpec;
+    private byte[] ivSpec;
 
     public AuthToken(User user){
         SecureRandom r = new SecureRandom();
-        byte[] iv = new byte[16];
-        r.nextBytes(iv);
-        this.ivSpec = new IvParameterSpec(iv);
+        this.ivSpec = new byte[16];
+        r.nextBytes(this.ivSpec);
         try {
             tokenData = encryptData(new TokenData(user.getAuthType(), Instant.now(), user.getId()));
         } catch (Exception e) {
@@ -51,7 +51,7 @@ public class AuthToken implements Serializable {
         if (key == null) throw new UnauthorizedException();
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key, this.ivSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(this.ivSpec));
             return new SealedObject(data, cipher);
         } catch (Exception e) {
             throw new UnauthorizedException();
@@ -63,7 +63,7 @@ public class AuthToken implements Serializable {
         if (key == null) throw new UnauthorizedException();
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key, this.ivSpec);
+            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(this.ivSpec));
             return (TokenData) sealed.getObject(cipher);
         } catch (Exception e) {
             throw new UnauthorizedException();

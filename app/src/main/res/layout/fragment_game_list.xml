@@ -21,7 +21,7 @@
         android:layout_below="@+id/open_games"/>
 
     <Button
-        android:id="@+id/createGame"
+        android:id="@+id/create_game"
         style="?android:textAppearanceSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

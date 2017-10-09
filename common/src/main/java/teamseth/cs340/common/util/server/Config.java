@@ -1,4 +1,4 @@
-package teamseth.cs340.common.util;
+package teamseth.cs340.common.util.server;
 
 import java.time.Duration;
 

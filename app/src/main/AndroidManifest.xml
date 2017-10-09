@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="teamseth.cs340.tickettoride">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,20 +18,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.GameListActivity"
+            android:name=".activity.GameListActivity"
             android:label="Game List"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".Activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activity.LoginActivity" />
+                android:value=".activity.LoginActivity" />
         </activity>
         <activity
-            android:name=".Activity.GameLobby"
-            android:label="Game List"
+            android:name=".activity.GameLobbyActivity"
+            android:label="Game Lobby"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".Activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activity.LoginActivity" />
+                android:value=".activity.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".activity.GameActivity"
+            android:label="Game Start"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".activity.GameLobbyActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.GameLobbyActivity" />
         </activity>
 
     </application>

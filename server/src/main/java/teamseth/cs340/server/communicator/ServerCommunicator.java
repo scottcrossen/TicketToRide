@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import teamseth.cs340.common.models.server.ServerModelRoot;
-import teamseth.cs340.common.util.Config;
+import teamseth.cs340.common.util.server.Config;
 import teamseth.cs340.server.communicator.controllers.CommandHandler;
 
 /**
@@ -26,7 +26,7 @@ public class ServerCommunicator {
 
     private void run(String portNumber) {
 
-        System.out.println("Initializing HTTP Server");
+        System.out.println("Initializing HTTP Server on port " + portNumber.toString());
 
         try {
             server = HttpServer.create(new InetSocketAddress(Integer.parseInt(portNumber)), MAX_WAITING_CONNECTIONS);
@@ -44,7 +44,7 @@ public class ServerCommunicator {
 
         System.out.println("Creating contexts");
 
-        server.createContext("/execCommand", new CommandHandler());
+        server.createContext("/command", new CommandHandler());
 
         System.out.println("Starting server");
 

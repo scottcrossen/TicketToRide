@@ -1,7 +1,7 @@
 package teamseth.cs340.common.models.server.users;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -22,13 +22,13 @@ public class UserModel implements IModel<User> {
         return instance;
     }
 
-    private Set<User> users = new TreeSet<User>();
+    private HashSet<User> users = new HashSet<User>();
 
     public AuthToken login(UserCreds credentials) throws ResourceNotFoundException, UnauthorizedException {
         // Check if user exists
         User user = getByName(credentials);
         // Check if user is authorized
-        if (user.getUserCreds() != credentials) throw new UnauthorizedException();
+        if (!user.getUserCreds().equals(credentials)) throw new UnauthorizedException();
         // Generate auth token
         AuthToken token = new AuthToken(user);
         // Return the token
@@ -49,6 +49,10 @@ public class UserModel implements IModel<User> {
     }
 
     private User getByName(UserCreds creds) throws ResourceNotFoundException {
-        return users.stream().filter((user) -> user.getUserCreds().getUsername() == creds.getUsername()).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return users.stream().filter((user) -> user.getUserCreds().getUsername().equals(creds.getUsername())).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+    }
+
+    public User getById(UUID id) throws ResourceNotFoundException {
+        return users.stream().filter((user) -> user.getId().equals(id)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 }

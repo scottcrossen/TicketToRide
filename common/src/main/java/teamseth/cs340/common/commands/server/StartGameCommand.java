@@ -1,6 +1,8 @@
 package teamseth.cs340.common.commands.server;
 
-import teamseth.cs340.common.commands.client.SetActiveGameCommand;
+import java.util.HashSet;
+import java.util.UUID;
+
 import teamseth.cs340.common.commands.client.UpdateGamesCommand;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.root.server.ServerFacade;
@@ -12,14 +14,22 @@ import teamseth.cs340.common.util.client.Login;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class CreateGameCommand implements IServerCommand {
-    private static final long serialVersionUID = 1076140290157434203L;
+public class StartGameCommand implements IServerCommand {
+    private static final long serialVersionUID = 8978879028087301674L;
+
+    private UUID gameId;
     private AuthToken token = Login.getInstance().getToken();
+
+    public StartGameCommand(UUID gameId) {
+        this.gameId = gameId;
+    }
 
     public Result<UpdateGamesCommand> call() {
         return new Result(() -> {
-            Game newGame = ServerFacade.getInstance().createGame(token);
-            return new SetActiveGameCommand(newGame);
+            ServerFacade.getInstance().startGame(this.gameId, token);
+            HashSet<Game> games = new HashSet<Game>();
+            games.add(ServerFacade.getInstance().getGame(gameId));
+            return new UpdateGamesCommand(games);
         });
     }
 }

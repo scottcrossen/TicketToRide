@@ -31,8 +31,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
         setContentView(R.layout.activity_game_list);
 
         ClientModelRoot.getInstance().games.addObserver(this);
-        //TODO: Uncomment this.
-        //Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
+        Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.game_list_fragment_container);
 

@@ -11,17 +11,17 @@ import teamseth.cs340.common.util.client.Config;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class JoinGameCommand implements IServerCommand {
-    private static final long serialVersionUID = 6582928080311780721L;
+public class StartGameCommand implements IServerCommand {
+    private static final long serialVersionUID = 8978879028087301674L;
 
     private UUID gameId;
     private AuthToken token = Config.getInstance().getToken();
 
-    public JoinGameCommand(UUID gameId) {
+    public StartGameCommand(UUID gameId) {
         this.gameId = gameId;
     }
 
     public Result call() {
-        return new Result(() -> {ServerFacade.getInstance().joinGame(this.gameId, token); return null;});
+        return new Result(() -> {ServerFacade.getInstance().startGame(this.gameId, token); return null;});
     }
 }

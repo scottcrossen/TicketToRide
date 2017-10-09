@@ -27,8 +27,8 @@ public final class ServerFacade implements IServer {
     private ServerModelRoot model = ServerModelRoot.getInstance();
 
     // Game model methods
-    public void createGame(UUID userId, AuthToken token) throws ModelActionException, UnauthorizedException {
-        model.games.create(userId, token);
+    public void createGame(AuthToken token) throws ModelActionException, UnauthorizedException {
+        model.games.create(token);
     }
     public Set<Game> listGames() {
         return model.games.getAll();

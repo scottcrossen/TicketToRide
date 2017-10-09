@@ -8,23 +8,13 @@ import teamseth.cs340.common.util.auth.AuthType;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class User {
+public class User implements Comparable<User> {
     private UserCreds credentials;
     private AuthType privilege = AuthType.user;
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     public User(UserCreds credentials) {
         this.credentials = credentials;
-        this.id = UUID.randomUUID();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        else if (o == null) return false;
-        else if (o.getClass() == UserCreds.class) return this.credentials == o;
-        else if (o.getClass() == User.class) return this.id == ((User)o).id;
-        else return false;
     }
 
     @Override
@@ -34,4 +24,8 @@ public class User {
     public UUID getId() { return this.id;}
     public UserCreds getUserCreds() { return this.credentials; }
     public AuthType getAuthType() { return this.privilege; }
+
+    public int compareTo(User user) {
+        return this.id.compareTo(user.id);
+    }
 }

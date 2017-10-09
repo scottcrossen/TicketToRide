@@ -29,8 +29,9 @@ public class GameModel extends AuthAction implements IModel<Game> {
 
     private Set<Game> games = new TreeSet<Game>();
 
-    public void create(UUID userId, AuthToken token) throws ModelActionException, UnauthorizedException {
+    public void create(AuthToken token) throws ModelActionException, UnauthorizedException {
         AuthAction.user(token);
+        UUID userId = token.getUser();
         if (playerInGame(userId)) throw new ModelActionException();
         Game game = new Game();
         game.addPlayer(userId);

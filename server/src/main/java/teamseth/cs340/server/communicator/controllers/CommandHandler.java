@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 
 import teamseth.cs340.common.commands.ICommand;
 import teamseth.cs340.common.util.Result;
-import teamseth.cs340.server.util.Serializer;
+import teamseth.cs340.common.util.Serializer;
 
 
 /**
@@ -21,23 +21,22 @@ import teamseth.cs340.server.util.Serializer;
  */
 public class CommandHandler implements HttpHandler {
 
-    private static final Serializer serializer = Serializer.getInstance();
-
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
         boolean success = false;
 
         try {
+
             if (exchange.getRequestMethod().toLowerCase().equals("post")) {
 
-                ICommand reqCommand = (ICommand) serializer.getInstance().read(exchange.getRequestBody());
+                ICommand reqCommand = (ICommand) Serializer.getInstance().read(exchange.getRequestBody());
+                System.out.println("Executing Command: " + reqCommand.toString());
                 Result result = reqCommand.call();
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
                 OutputStream respBody = exchange.getResponseBody();
-                serializer.write(respBody, result);
+                Serializer.getInstance().write(respBody, result);
                 respBody.close();
 
                 success = true;
@@ -46,6 +45,7 @@ public class CommandHandler implements HttpHandler {
             if (!success) {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 exchange.getResponseBody().close();
+            } else {
             }
         }
         catch (IOException e) {

@@ -1,4 +1,4 @@
-package teamseth.cs340.server.util;
+package teamseth.cs340.common.util;
 
 import java.io.*;
 

@@ -11,7 +11,7 @@ import teamseth.cs340.common.exceptions.ModelActionException;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class Game {
+public class Game implements Comparable<Game> {
     private UUID id = UUID.randomUUID();
     private Set<UUID> users= new TreeSet<UUID>();
     private GameState state = GameState.PREGAME;
@@ -47,5 +47,10 @@ public class Game {
     }
     public UUID getId() {
         return this.id;
+    }
+
+    @Override
+    public int compareTo(Game game) {
+        return this.id.compareTo(game.id);
     }
 }

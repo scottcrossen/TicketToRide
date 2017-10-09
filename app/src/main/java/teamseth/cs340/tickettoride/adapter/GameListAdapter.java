@@ -58,7 +58,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             super(view);
             gameName = (TextView) view.findViewById(R.id.game_name);
             gameNameLayout = (RelativeLayout) view.findViewById(R.id.game_name_layout);
-            gameNameLayout.setOnClickListener(this);
+            view.setOnClickListener(this);
         }
 
         @Override
@@ -68,7 +68,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             Game clickedGame = GameModel.getInstance().getGame(gameNameText);
             UUID gameId = clickedGame.getId();
             Activity activity = (Activity)view.getContext();
-            new CommandTask(activity).execute(new JoinGameCommand(gameId));
+            new CommandTask(context).execute(new JoinGameCommand(gameId));
         }
     }
 

@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.server.games;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -70,11 +71,15 @@ public class GameModel extends AuthAction implements IModel<Game> {
     }
 
     public Game get(UUID gameId) throws ResourceNotFoundException {
-        return games.stream().filter(game -> game.getId().equals(gameId)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        Game output = games.stream().filter(game -> game.getId().equals(gameId)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return output;
     }
 
     public HashSet<Game> getAfter(Instant instant) {
         return (HashSet<Game>) games.stream().filter(game -> game.getUpdate().compareTo(instant) > 0).collect(Collectors.toSet());
+    }
+    public Optional<Game> getAfter(UUID id, Instant instant) throws ResourceNotFoundException {
+        return games.stream().filter(game -> game.getUpdate().compareTo(instant) > 0 && game.getId().equals(id)).findFirst();
     }
 
     private boolean playerInGame(UUID userId) {

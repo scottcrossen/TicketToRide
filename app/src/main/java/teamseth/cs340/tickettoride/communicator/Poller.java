@@ -37,7 +37,7 @@ public class Poller {
     ScheduledExecutorService cron;
 
     public void reset(){
-        currentCommands = null;
+        currentCommands = new ArrayList<ICommand>();
         this.stop();
     }
 

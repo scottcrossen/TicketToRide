@@ -33,14 +33,6 @@
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>
-        <activity
-            android:name=".activity.GameActivity"
-            android:label="Game Start"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.GameLobbyActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.GameLobbyActivity" />
-        </activity>
 
     </application>
 

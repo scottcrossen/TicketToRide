@@ -31,8 +31,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
         setContentView(R.layout.activity_game_list);
 
         ClientModelRoot.getInstance().games.addObserver(this);
-        //TODO: Uncomment this.
-        //Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
+        Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.game_list_fragment_container);
 
@@ -55,7 +54,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
         if (getFragmentManager().getBackStackEntryCount() == 0) {
             this.finish();
         } else {
-            super.onBackPressed(); //replaced
+            super.onBackPressed();
         }
     }
 
@@ -75,10 +74,12 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
 
     @Override
     public void update(Observable observable, Object o) {
-        if (ClientModelRoot.getInstance().games.hasActive()) {
-            Poller.getInstance(this.getApplicationContext()).reset();
-            startActivity(new Intent(this, GameLobbyActivity.class));
-        }
+        this.runOnUiThread(() -> {
+            if (ClientModelRoot.getInstance().games.hasActive()) {
+                Poller.getInstance(this.getApplicationContext()).reset();
+                startActivity(new Intent(this, GameLobbyActivity.class));
+            }
+        });
     }
 }
 

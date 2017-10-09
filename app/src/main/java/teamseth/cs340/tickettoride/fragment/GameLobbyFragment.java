@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.UUID;
 
 import teamseth.cs340.common.commands.server.LeaveGameCommand;
@@ -27,7 +25,7 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class GameLobbyFragment extends Fragment implements View.OnClickListener, Observer
+public class GameLobbyFragment extends Fragment implements View.OnClickListener
 {
 
     Game activeGame;
@@ -56,7 +54,6 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ClientModelRoot.getInstance().games.addObserver(this);
     }
 
     @Override
@@ -85,10 +82,8 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener,
 
     public void setFields() {
         if (activeGame != null) {
-            System.out.println("Flag 0");
             HashMap<UUID, String> playerNames = activeGame.getPlayerNames();
             UUID[] players = activeGame.getPlayers().toArray(new UUID[activeGame.getPlayers().size()]);
-            System.out.println(players.length);
             if (players.length > 0) {
                 player1Name.setText(playerNames.get(players[0]));
                 player1Status.setText("Ready");
@@ -155,10 +150,9 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    public void updateGame() {
         try {
-            if (ClientModelRoot.getInstance().games.getActive() != this.activeGame) {
+            if (!ClientModelRoot.getInstance().games.getActive().equals(this.activeGame)) {
                 this.activeGame = ClientModelRoot.getInstance().games.getActive();
                 setFields();
             }

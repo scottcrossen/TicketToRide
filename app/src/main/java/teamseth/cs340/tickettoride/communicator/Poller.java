@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import teamseth.cs340.common.commands.ICommand;
@@ -32,25 +33,25 @@ public class Poller {
     }
 
     protected List<ICommand> currentCommands = new ArrayList<ICommand>();
-    private int frequency = 5;
+    private int frequency = 2;
     private Context context = null;
-    ScheduledExecutorService cron;
+    static ScheduledExecutorService cron = Executors.newScheduledThreadPool(1);
+    static ScheduledFuture<?> currentTask;
 
     public void reset(){
         currentCommands = new ArrayList<ICommand>();
-        this.stop();
     }
 
     public void addToJobs(ICommand command){
         currentCommands.add(command);
-        if (currentCommands.size() == 1) this.start();
+        if (currentTask == null || currentTask.isDone()) this.start();
+
     }
 
 
     private void start()
     {
-        cron = Executors.newScheduledThreadPool(1);
-        cron.scheduleAtFixedRate(new Runnable() {
+        currentTask = cron.scheduleAtFixedRate(new Runnable() {
             Instant lastUpdateTime = null;
             @Override
             public void run() {
@@ -69,7 +70,8 @@ public class Poller {
             }
         }, 0, frequency, TimeUnit.SECONDS);
     }
-    private void stop() {
-        cron.shutdown();
+
+    public void stop() {
+        currentTask.cancel(true);
     }
 }

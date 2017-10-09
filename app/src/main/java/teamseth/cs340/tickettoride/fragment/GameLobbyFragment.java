@@ -1,6 +1,5 @@
 package teamseth.cs340.tickettoride.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.tickettoride.R;
-import teamseth.cs340.tickettoride.activity.GameListActivity;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
@@ -28,7 +26,6 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
 public class GameLobbyFragment extends Fragment implements View.OnClickListener
 {
 
-    Game activeGame;
     private Button startBtn;
     private Button quitBtn;
     private TextView player1Name;
@@ -43,11 +40,6 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
     private TextView player5Status;
 
     public GameLobbyFragment() {
-        try {
-            activeGame = ClientModelRoot.getInstance().games.getActive();
-        } catch (Exception e) {
-            startActivity(new Intent(getContext(), GameListActivity.class));
-        }
     }
 
     @Override
@@ -73,14 +65,13 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
         player4Status = v.findViewById(R.id.textView8);
         player5Name = v.findViewById(R.id.textView9);
         player5Status = v.findViewById(R.id.textView10);
-        setFields();
 
         startBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
         return v;
     }
 
-    public void setFields() {
+    public void setFields(Game activeGame) {
         if (activeGame != null) {
             HashMap<UUID, String> playerNames = activeGame.getPlayerNames();
             UUID[] players = activeGame.getPlayers().toArray(new UUID[activeGame.getPlayers().size()]);
@@ -147,16 +138,6 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
             new CommandTask(this.getContext()).execute(new LeaveGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void updateGame() {
-        try {
-            if (!ClientModelRoot.getInstance().games.getActive().equals(this.activeGame)) {
-                this.activeGame = ClientModelRoot.getInstance().games.getActive();
-                setFields();
-            }
-        } catch (ResourceNotFoundException e) {
         }
     }
 }

@@ -15,6 +15,7 @@ import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.GameLobbyFragment;
+import teamseth.cs340.common.commands.server.GetGameCommand;
 
 /**
  * @author Scott Leland Crossen
@@ -29,8 +30,7 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
         ClientModelRoot.getInstance().games.addObserver(this);
 
         try {
-            //TODO: Uncomment this.
-            //Poller.getInstance(this.getApplicationContext()).addToJobs(new getGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
+            Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
         } catch (Exception e) {
             startActivity(new Intent(this, GameListActivity.class));
         }

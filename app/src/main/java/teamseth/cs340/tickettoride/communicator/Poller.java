@@ -30,7 +30,7 @@ public class Poller {
     }
 
     protected List<ICommand> currentCommands = new ArrayList<ICommand>();
-    private int frequency = 2;
+    private int frequency = 5;
     private Context context = null;
 
     private class PollTasker extends CommandTask {

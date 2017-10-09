@@ -61,7 +61,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener
         mRecyclerView = (RecyclerView) v.findViewById(R.id.game_list_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mAdapter = new GameListAdapter();
+        mAdapter = new GameListAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
         return v;
     }

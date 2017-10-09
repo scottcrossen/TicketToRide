@@ -8,14 +8,16 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import java.time.Instant;
 import java.util.Observable;
 import java.util.Observer;
 
+import teamseth.cs340.common.commands.server.ListGamesAfterCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
-import teamseth.cs340.tickettoride.fragment.GameListFragment;
-import teamseth.cs340.tickettoride.fragment.FragmentChangeListener;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
+import teamseth.cs340.tickettoride.fragment.FragmentChangeListener;
+import teamseth.cs340.tickettoride.fragment.GameListFragment;
 
 /**
  * @author Scott Leland Crossen

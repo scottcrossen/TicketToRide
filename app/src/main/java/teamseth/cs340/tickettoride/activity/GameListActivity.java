@@ -13,8 +13,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import teamseth.cs340.common.commands.server.ListGamesAfterCommand;
+import teamseth.cs340.common.commands.server.ListGamesCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.FragmentChangeListener;
 import teamseth.cs340.tickettoride.fragment.GameListFragment;
@@ -32,6 +34,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
 
         ClientModelRoot.getInstance().games.addObserver(this);
         Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
+        (new CommandTask(getApplicationContext())).execute(new ListGamesCommand());
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.game_list_fragment_container);
 

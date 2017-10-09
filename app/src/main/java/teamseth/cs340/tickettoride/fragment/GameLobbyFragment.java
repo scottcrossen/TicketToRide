@@ -72,8 +72,6 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
         startBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
 
-        startBtn.
-
         try {
             setFields(ClientModelRoot.getInstance().games.getActive());
         } catch (ResourceNotFoundException e) {

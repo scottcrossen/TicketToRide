@@ -1,5 +1,6 @@
 package teamseth.cs340.common.util.client;
 
+import java.io.Serializable;
 import java.util.Observable;
 
 import teamseth.cs340.common.util.auth.AuthToken;
@@ -8,7 +9,8 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class Login extends Observable {
+public class Login extends Observable implements Serializable {
+    private static final long serialVersionUID = 7466912604359963018L;
     private static Login instance;
     public static Login getInstance() {
         if (instance == null) {

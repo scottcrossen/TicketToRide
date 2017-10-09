@@ -5,7 +5,13 @@ package teamseth.cs340.common.exceptions;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class ModelActionException extends Exception {
+    private static final long serialVersionUID = 5842707007555619939L;
     public ModelActionException() {
-        super("The attempted action violated model restrictions");
+        super("Error: Action not allowed.");
+    }
+
+    @Override
+    public String getMessage(){
+        return "Error: Action not allowed.";
     }
 }

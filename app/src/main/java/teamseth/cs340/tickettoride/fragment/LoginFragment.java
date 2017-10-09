@@ -1,4 +1,4 @@
-package teamseth.cs340.tickettoride.Fragment;
+package teamseth.cs340.tickettoride.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -97,7 +97,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         registerBtn = v.findViewById(R.id.register_button);
 
         signInBtn.setOnClickListener(this);
-
         registerBtn.setOnClickListener(this);
 
         userNameTextIn = v.findViewById(R.id.nameEditText);
@@ -173,7 +172,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String serverP = serverPortTextIn.getText().toString();
         if (serverH != null) Login.getInstance().setServerHost(serverH);
         if (serverP != null) Login.getInstance().setServerPort(serverP);
-        new CommandTask().execute(new RegisterCommand(new UserCreds(userN, passW)));
+        new CommandTask(this.getContext()).execute(new RegisterCommand(new UserCreds(userN, passW)));
     }
 
     public void onSignInPressed() {
@@ -183,6 +182,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String serverP = serverPortTextIn.getText().toString();
         if (serverH != null) Login.getInstance().setServerHost(serverH);
         if (serverP != null) Login.getInstance().setServerPort(serverP);
-        new CommandTask().execute(new LoginCommand(new UserCreds(userN, passW)));
+        new CommandTask(this.getContext()).execute(new LoginCommand(new UserCreds(userN, passW)));
     }
 }

@@ -4,6 +4,7 @@ import teamseth.cs340.common.commands.client.UpdateTokenCommand;
 import teamseth.cs340.common.models.server.users.UserCreds;
 import teamseth.cs340.common.root.server.ServerFacade;
 import teamseth.cs340.common.util.Result;
+import teamseth.cs340.common.util.auth.AuthToken;
 
 /**
  * @author Scott Leland Crossen
@@ -19,6 +20,9 @@ public class LoginCommand implements IServerCommand {
     }
 
     public Result<UpdateTokenCommand> call() {
-        return new Result<UpdateTokenCommand>(() -> new UpdateTokenCommand(ServerFacade.getInstance().login(this.creds)));
+        return new Result<UpdateTokenCommand>(() -> {
+            AuthToken token = ServerFacade.getInstance().login(this.creds);
+            return new UpdateTokenCommand(token);
+        });
     }
 }

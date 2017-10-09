@@ -60,10 +60,15 @@ public class GameModel extends Observable implements IModel<Game> {
         setChanged();
         notifyObservers();
     }
+    public void clearActive() {
+        this.active = null;
+        setChanged();
+        notifyObservers();
+    }
 
     public Game getActive() throws ResourceNotFoundException {
         if (active == null) throw new ResourceNotFoundException();
-        return games.stream().filter(game -> game.getId() == active).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return games.stream().filter(game -> game.getId().equals(active)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
     public boolean hasActive() {

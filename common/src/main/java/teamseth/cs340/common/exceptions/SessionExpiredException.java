@@ -5,7 +5,13 @@ package teamseth.cs340.common.exceptions;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class SessionExpiredException extends Exception {
+    private static final long serialVersionUID = 6430103867093097974L;
     public SessionExpiredException() {
-        super("The token used in the request has expired");
+        super("Error: Session expired.");
+    }
+
+    @Override
+    public String getMessage(){
+        return "Error: Session expired.";
     }
 }

@@ -1,4 +1,4 @@
-package teamseth.cs340.tickettoride.Fragment;
+package teamseth.cs340.tickettoride.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 
 import teamseth.cs340.common.commands.server.CreateGameCommand;
-import teamseth.cs340.tickettoride.Adapter.GameListAdapter;
+import teamseth.cs340.tickettoride.adapter.GameListAdapter;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
@@ -76,7 +76,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener
     }
 
     public void onCreatePressed() {
-        new CommandTask().execute(new CreateGameCommand());
+        new CommandTask(this.getContext()).execute(new CreateGameCommand());
     }
 }
 

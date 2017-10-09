@@ -27,7 +27,7 @@ public class UserModel implements IModel<User> {
         // Check if user exists
         User user = getByName(credentials);
         // Check if user is authorized
-        if (user.getUserCreds() != credentials) throw new UnauthorizedException();
+        if (!user.getUserCreds().equals(credentials)) throw new UnauthorizedException();
         // Generate auth token
         AuthToken token = new AuthToken(user);
         // Return the token
@@ -48,6 +48,6 @@ public class UserModel implements IModel<User> {
     }
 
     private User getByName(UserCreds creds) throws ResourceNotFoundException {
-        return users.stream().filter((user) -> user.getUserCreds().getUsername() == creds.getUsername()).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return users.stream().filter((user) -> user.getUserCreds().getUsername().equals(creds.getUsername())).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 }

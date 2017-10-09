@@ -49,8 +49,16 @@ public class GameModel extends AuthAction implements IModel<Game> {
         AuthAction.user(token);
         Game game = this.get(gameId);
         if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
-        if (game.getState() != GameState.PREGAME) throw new ModelActionException();
+        if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
         game.setState(GameState.START);
+    }
+
+    public void leave(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
+        AuthAction.user(token);
+        Game game = this.get(gameId);
+        if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
+        if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
+        game.removePlayer(token.getUser());
     }
 
     public HashSet<Game> getAll() {
@@ -58,7 +66,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
     }
 
     public Game get(UUID gameId) throws ResourceNotFoundException {
-        return games.stream().filter(game -> game.getId() == gameId).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return games.stream().filter(game -> game.getId().equals(gameId)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
     public HashSet<Game> getAfter(Instant instant) {

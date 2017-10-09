@@ -30,6 +30,7 @@ public class ClientFacade implements IClient {
     public HashSet<Game> getGames() { return model.games.getAll();}
 
     public void setActiveGame(Game current) { model.games.setActive(current);}
+    public void clearActiveGame() { model.games.clearActive(); }
 
     // Attach an observer to the game model
     public void watchGames(Observer observer) { model.games.addObserver(observer);}

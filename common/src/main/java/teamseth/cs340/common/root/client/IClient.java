@@ -13,4 +13,5 @@ public interface IClient {
     public void addGames(Set<Game> newGames);
     public HashSet<Game> getGames();
     public void setActiveGame(Game active);
+    public void clearActiveGame();
 }

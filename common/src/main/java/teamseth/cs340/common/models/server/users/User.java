@@ -10,6 +10,7 @@ import teamseth.cs340.common.util.auth.AuthType;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class User implements Serializable, Comparable<User> {
+    private static final long serialVersionUID = 3867417489812381413L;
     private UserCreds credentials;
     private AuthType privilege = AuthType.user;
     private UUID id = UUID.randomUUID();
@@ -28,5 +29,20 @@ public class User implements Serializable, Comparable<User> {
 
     public int compareTo(User user) {
         return this.id.compareTo(user.id);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (credentials != null ? !credentials.equals(user.credentials) : user.credentials != null)
+            return false;
+        if (privilege != user.privilege) return false;
+        return id != null ? id.equals(user.id) : user.id == null;
+
     }
 }

@@ -1,4 +1,4 @@
-package teamseth.cs340.tickettoride.Adapter;
+package teamseth.cs340.tickettoride.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.root.client.ClientFacade;
-import teamseth.cs340.tickettoride.Activity.GameListActivity;
+import teamseth.cs340.tickettoride.activity.GameListActivity;
 import teamseth.cs340.tickettoride.R;
 
 /**

@@ -1,25 +1,30 @@
 package teamseth.cs340.tickettoride.communicator;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import teamseth.cs340.common.commands.ICommand;
 import teamseth.cs340.common.commands.client.IClientCommand;
 import teamseth.cs340.common.commands.server.IServerCommand;
 import teamseth.cs340.common.util.Result;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class CommandTask extends AsyncTask<ICommand, Void, Void> {
+public class CommandTask extends AsyncTask<ICommand, Void, String> {
+
+    Context context;
+    public CommandTask(Context context){
+        this.context = context;
+    }
 
     @Override
-    protected Void doInBackground(ICommand[] iCommands) {
-        List<Object> output = Arrays.stream(iCommands).map((currentCommand) -> {
+    protected String doInBackground(ICommand[] iCommands) {
+        String output = Arrays.stream(iCommands).map((currentCommand) -> {
             Object currentObject = currentCommand;
             while (currentObject instanceof ICommand) {
                 try {
@@ -38,12 +43,18 @@ public class CommandTask extends AsyncTask<ICommand, Void, Void> {
                     currentObject = result.get();
                 } catch (Exception e) {
                     System.out.println("An error occured while executing a command");
-                    e.printStackTrace();
-                    currentObject = null;
+                    System.out.println(e.toString());
+                    currentObject = e;
                 }
             }
             return currentObject;
-        }).collect(Collectors.toList());;
-        return null; // change this to return the list of results if you like
+        }).filter((obj) -> obj instanceof Exception).findFirst().map((e) -> ((Exception) e).getMessage()).orElseGet(() -> "");
+        return output;
     }
+
+    protected void onPostExecute(String output) {
+        System.out.println(output);
+        if (output != "") Toaster.getInstance().makeToast(this.context, output);
+    }
+
 }

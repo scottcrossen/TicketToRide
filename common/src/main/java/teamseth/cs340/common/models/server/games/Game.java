@@ -12,6 +12,7 @@ import teamseth.cs340.common.exceptions.ModelActionException;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class Game implements Serializable, Comparable<Game> {
+    private static final long serialVersionUID = 2374397675854997368L;
     private UUID id = UUID.randomUUID();
     private HashSet<UUID> users= new HashSet<UUID>();
     private GameState state = GameState.PREGAME;
@@ -28,6 +29,10 @@ public class Game implements Serializable, Comparable<Game> {
         } else {
             throw new ModelActionException();
         }
+    }
+    public void removePlayer(UUID userId) {
+        users.remove(userId);
+        updateTime();
     }
 
     public boolean hasPlayer(UUID userId) {
@@ -53,5 +58,24 @@ public class Game implements Serializable, Comparable<Game> {
     @Override
     public int compareTo(Game game) {
         return this.id.compareTo(game.id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Game game = (Game) o;
+
+        if (id != null ? !id.equals(game.id) : game.id != null) return false;
+        if (users != null ? !users.equals(game.users) : game.users != null) return false;
+        if (state != game.state) return false;
+        return lastUpdate != null ? lastUpdate.equals(game.lastUpdate) : game.lastUpdate == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
     }
 }

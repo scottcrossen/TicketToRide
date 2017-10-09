@@ -1,4 +1,4 @@
-package teamseth.cs340.tickettoride.Activity;
+package teamseth.cs340.tickettoride.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import teamseth.cs340.common.util.client.Login;
-import teamseth.cs340.tickettoride.Fragment.LoginFragment;
+import teamseth.cs340.tickettoride.fragment.LoginFragment;
 import teamseth.cs340.tickettoride.R;
 
 /**

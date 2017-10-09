@@ -5,7 +5,15 @@ package teamseth.cs340.common.exceptions;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class ResourceNotFoundException extends Exception {
+    private static final long serialVersionUID = 6843920357828690275L;
+
     public ResourceNotFoundException() {
-        super("The attempted resource access did not work on account that it does not exist");
+        super("Error: Resource not found.");
     }
+
+    @Override
+    public String getMessage(){
+        return "Error: Resource not found.";
+    }
+
 }

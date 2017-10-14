@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import teamseth.cs340.common.commands.server.CreateGameCommand;
-import teamseth.cs340.common.models.client.games.GameModel;
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
-import teamseth.cs340.tickettoride.adapter.GameListAdapter;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.adapter.GameListAdapter;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
@@ -30,7 +29,6 @@ public class GameListFragment extends Fragment implements View.OnClickListener
     private GameListAdapter mAdapter;
     private ArrayList<String> mGameList = new ArrayList<>();
     private Button createBtn;
-    private HashSet<Game> games = new HashSet<Game>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener
 
     private void requestFilters()
     {
-        for (Game game : GameModel.getInstance().getAll())
+        for (Game game : ClientModelRoot.games.getAll())
         {
             mGameList.add(game.name());
         }
@@ -75,6 +73,10 @@ public class GameListFragment extends Fragment implements View.OnClickListener
 
     public void onCreatePressed() {
         new CommandTask(this.getContext()).execute(new CreateGameCommand());
+    }
+
+    public void update() {
+        mAdapter.update();
     }
 }
 

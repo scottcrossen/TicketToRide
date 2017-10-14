@@ -45,9 +45,11 @@ public class GameModel extends AuthAction implements IModel<Game> {
     public void join(UUID gameId, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
         AuthAction.user(token);
         UUID userId = token.getUser();
-        //if (playerInGame(userId)) throw new ModelActionException();
+        if (playerInGame(userId)) throw new ModelActionException();
         User user = ServerModelRoot.getInstance().users.getById(userId);
-        this.get(gameId).addPlayer(user);
+        Game game = this.get(gameId);
+        if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
+        game.addPlayer(user);
     }
 
     public void start(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
@@ -64,6 +66,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
         if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
         game.removePlayer(token.getUser());
+        if (game.getPlayers().size() == 0) game.setState(GameState.DELETED);
     }
 
     public HashSet<Game> getAll() {

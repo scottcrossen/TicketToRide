@@ -2,6 +2,7 @@ package teamseth.cs340.common.commands.server;
 
 import java.util.UUID;
 
+import teamseth.cs340.common.commands.client.SetActiveGameCommand;
 import teamseth.cs340.common.root.server.ServerFacade;
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.common.util.auth.AuthToken;
@@ -21,7 +22,10 @@ public class JoinGameCommand implements IServerCommand {
         this.gameId = gameId;
     }
 
-    public Result call() {
-        return new Result(() -> {ServerFacade.getInstance().joinGame(this.gameId, token); return null;});
+    public Result<SetActiveGameCommand> call() {
+        return new Result<SetActiveGameCommand>(() -> {
+            ServerFacade.getInstance().joinGame(this.gameId, token);
+            return new SetActiveGameCommand(ServerFacade.getInstance().getGame(gameId));
+        });
     }
 }

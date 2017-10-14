@@ -28,6 +28,7 @@ public class GameModel extends Observable implements IModel<Game> {
     private UUID active = null;
 
     public void upsert(Set<Game> newGames) {
+        int addSize = newGames.size();
         // Overwrite old data with new data on uuid.
         Iterator<Game> iterator1 = games.iterator();
         while (iterator1.hasNext()) {
@@ -36,15 +37,15 @@ public class GameModel extends Observable implements IModel<Game> {
             while (iterator2.hasNext()) {
                 Game currentGame2 = iterator2.next();
                 if (currentGame1.getId().equals(currentGame2.getId())) {
-                    currentGame1 = currentGame2;
-                    iterator2.remove();
+                    iterator1.remove();
                 }
             }
         }
-        // Add all the remaining.
         games.addAll(newGames);
-        setChanged();
-        notifyObservers();
+        if (addSize > 0) {
+            setChanged();
+            notifyObservers();
+        }
     }
 
     public HashSet<Game> getAll(){

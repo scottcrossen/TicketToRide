@@ -7,4 +7,12 @@
         <item>Blue</item>
         <item>Purple</item>
     </string-array>
+    <string-array name="tabs_array">
+        <item>Game Map</item>
+        <item>Player Info</item>
+        <item>Other Players</item>
+        <item>Game Info</item>
+        <item>History</item>
+        <item>Chat</item>
+    </string-array>
 </resources>

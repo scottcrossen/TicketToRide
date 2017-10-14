@@ -1,13 +1,5 @@
 <resources>
     <string name="app_name">Ticket To Ride</string>
-        <string-array name="tabs_array">
-            <item>Game Map</item>
-            <item>Player Info</item>
-            <item>Other Players</item>
-            <item>Game Info</item>
-            <item>History</item>
-            <item>Chat</item>
-        </string-array>
         <string name="drawer_open">Open navigation drawer</string>
         <string name="drawer_close">Close navigation drawer</string>
         <string name="action_websearch">Web search</string>

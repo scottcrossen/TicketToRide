@@ -31,8 +31,6 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
-
-        ClientModelRoot.getInstance().games.addObserver(this);
         Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
         (new CommandTask(getApplicationContext())).execute(new ListGamesCommand());
         FragmentManager fm = getSupportFragmentManager();
@@ -73,6 +71,19 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ClientModelRoot.getInstance().games.addObserver(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ClientModelRoot.getInstance().games.deleteObserver(this);
     }
 
     @Override

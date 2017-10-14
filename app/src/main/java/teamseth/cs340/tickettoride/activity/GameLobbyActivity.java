@@ -33,7 +33,6 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
-        ClientModelRoot.getInstance().games.addObserver(this);
 
         try {
             Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
@@ -58,6 +57,17 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ClientModelRoot.getInstance().games.addObserver(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ClientModelRoot.getInstance().games.deleteObserver(this);
+    }
 
     public void updateGame() {
         try {

@@ -26,17 +26,17 @@ import teamseth.cs340.tickettoride.fragment.GameListFragment;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class GameListActivity extends AppCompatActivity implements FragmentChangeListener, Observer {
+
+    Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
-
-        ClientModelRoot.getInstance().games.addObserver(this);
         Poller.getInstance(this.getApplicationContext()).addToJobs(new ListGamesAfterCommand(Instant.now()));
         (new CommandTask(getApplicationContext())).execute(new ListGamesCommand());
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.game_list_fragment_container);
+        fragment = fm.findFragmentById(R.id.game_list_fragment_container);
 
         if (fragment == null) {
             fragment = new GameListFragment();
@@ -75,12 +75,27 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ClientModelRoot.games.addObserver(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ClientModelRoot.games.deleteObserver(this);
+    }
+
     @Override
     public void update(Observable observable, Object o) {
         this.runOnUiThread(() -> {
-            if (ClientModelRoot.getInstance().games.hasActive()) {
+            if (ClientModelRoot.games.hasActive()) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 startActivity(new Intent(this, GameLobbyActivity.class));
+            } else {
+                if (fragment instanceof GameListFragment) ((GameListFragment) fragment).update();
             }
         });
     }

@@ -21,7 +21,7 @@ public class Game implements Serializable, Comparable<Game> {
     private Instant lastUpdate = Instant.now();
     private HashMap<UUID, String> playerNames = new HashMap<>();
     private void updateTime() {
-        this.lastUpdate = Instant.now();
+        System.out.println(this.lastUpdate);
     }
 
     public void addPlayer(User user) throws ModelActionException {

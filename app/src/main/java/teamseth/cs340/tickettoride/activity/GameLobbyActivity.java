@@ -33,16 +33,15 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
-        ClientModelRoot.getInstance().games.addObserver(this);
 
         try {
-            Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
+            Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.games.getActive().getId()));
         } catch (Exception e) {
             startActivity(new Intent(this, GameListActivity.class));
         }
 
         try {
-            activeGame = ClientModelRoot.getInstance().games.getActive();
+            activeGame = ClientModelRoot.games.getActive();
         } catch (Exception e) {
             startActivity(new Intent(getApplicationContext(), GameListActivity.class));
         }
@@ -58,12 +57,23 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ClientModelRoot.games.addObserver(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ClientModelRoot.games.deleteObserver(this);
+    }
 
     public void updateGame() {
         try {
-            if (!ClientModelRoot.getInstance().games.getActive().getPlayers().equals(this.activeGame.getPlayers())) {
+            if (!ClientModelRoot.games.getActive().getPlayers().equals(this.activeGame.getPlayers())) {
                 System.out.println("Game updating");
-                this.activeGame = ClientModelRoot.getInstance().games.getActive();
+                this.activeGame = ClientModelRoot.games.getActive();
                 ((GameLobbyFragment) fragment).setFields(activeGame);
             }
         } catch (ResourceNotFoundException e) {
@@ -73,10 +83,10 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         try {
-            if (!ClientModelRoot.getInstance().games.hasActive()) {
+            if (!ClientModelRoot.games.hasActive()) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 startActivity(new Intent(this, GameListActivity.class));
-            } else if (ClientModelRoot.getInstance().games.hasActive() && ClientModelRoot.getInstance().games.getActive().getState().equals(GameState.START)) {
+            } else if (ClientModelRoot.games.hasActive() && ClientModelRoot.games.getActive().getState().equals(GameState.START)) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 Context context = this.getApplicationContext();
                 this.runOnUiThread(() -> Toaster.getInstance().makeToast(context, "New game started."));

@@ -85,15 +85,16 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
         if (activeGame != null) {
             HashMap<UUID, String> playerNames = activeGame.getPlayerNames();
             UUID[] players = activeGame.getPlayers().toArray(new UUID[activeGame.getPlayers().size()]);
+            startBtn.setEnabled(true);
 
             if (players.length > 0) {
                 player1Name.setText(playerNames.get(players[0]));
                 player1Status.setText("Ready");
-                startBtn.setEnabled(false);
+                //startBtn.setEnabled(false);
             } else {
                 player1Name.setText("Player 1");
                 player1Status.setText("Waiting on Player 1");
-                startBtn.setEnabled(false);
+                //startBtn.setEnabled(false);
             }
             if (players.length > 1) {
                 player2Name.setText(playerNames.get(players[1]));

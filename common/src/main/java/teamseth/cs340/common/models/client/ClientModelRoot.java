@@ -1,5 +1,7 @@
 package teamseth.cs340.common.models.client;
 
+import teamseth.cs340.common.models.client.cards.CurrentCards;
+import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.common.models.client.games.GameModel;
 
 /**
@@ -17,4 +19,6 @@ public class ClientModelRoot {
     }
 
     public static GameModel games = GameModel.getInstance();
+    public static CurrentCards cards = CurrentCards.getInstance();
+    public static CurrentChat chat = CurrentChat.getInstance();
 }

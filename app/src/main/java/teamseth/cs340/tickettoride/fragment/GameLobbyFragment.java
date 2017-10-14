@@ -73,7 +73,7 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
         quitBtn.setOnClickListener(this);
 
         try {
-            setFields(ClientModelRoot.getInstance().games.getActive());
+            setFields(ClientModelRoot.games.getActive());
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
@@ -143,7 +143,7 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
     public void onStartPressed() {
 
         try {
-            new CommandTask(this.getContext()).execute(new StartGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
+            new CommandTask(this.getContext()).execute(new StartGameCommand(ClientModelRoot.games.getActive().getId()));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
@@ -151,7 +151,7 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
 
     public void onQuitPressed() {
         try {
-            new CommandTask(this.getContext()).execute(new LeaveGameCommand(ClientModelRoot.getInstance().games.getActive().getId()));
+            new CommandTask(this.getContext()).execute(new LeaveGameCommand(ClientModelRoot.games.getActive().getId()));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }

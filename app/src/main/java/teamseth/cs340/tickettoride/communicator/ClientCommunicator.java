@@ -28,11 +28,12 @@ public class ClientCommunicator {
         http.connect();
 
         OutputStream reqBody = http.getOutputStream();
-        Serializer.getInstance().write(reqBody, object);
+        Serializer.write(reqBody, object);
         reqBody.close();
 
         InputStream respBody = http.getInputStream();
-        return (A) Serializer.getInstance().read(respBody);
+
+        return (A) Serializer.read(respBody);
     }
 
 }

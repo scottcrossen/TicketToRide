@@ -1,10 +1,12 @@
 package teamseth.cs340.common.root.client;
 
-import java.util.HashSet;
-import java.util.Observer;
+import java.util.ArrayList;
 import java.util.Set;
 
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.server.cards.DestinationCard;
+import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.models.server.chat.Message;
 import teamseth.cs340.common.models.server.games.Game;
 
 /**
@@ -27,11 +29,13 @@ public class ClientFacade implements IClient {
         model.games.upsert(newGames);
     }
 
-    public HashSet<Game> getGames() { return model.games.getAll();}
+    public void setActiveGame(Game current) { model.games.setActive(current); }
 
-    public void setActiveGame(Game current) { model.games.setActive(current);}
     public void clearActiveGame() { model.games.clearActive(); }
 
-    // Attach an observer to the game model
-    public void watchGames(Observer observer) { model.games.addObserver(observer);}
+    public void addDestinationCard(DestinationCard destinationCard) { model.cards.addDestinationCard(destinationCard); }
+
+    public void addResourceCard(ResourceColor resourceCard) { model.cards.addResourceCard(resourceCard); }
+
+    public void addMessages(ArrayList<Message> newMessages) { model.chat.addMessages(newMessages); }
 }

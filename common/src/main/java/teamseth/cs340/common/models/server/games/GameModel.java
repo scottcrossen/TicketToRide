@@ -11,6 +11,9 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.cards.DestinationDeck;
+import teamseth.cs340.common.models.server.cards.ResourceDeck;
+import teamseth.cs340.common.models.server.chat.ChatRoom;
 import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
@@ -57,7 +60,16 @@ public class GameModel extends AuthAction implements IModel<Game> {
         Game game = this.get(gameId);
         if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
         if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
+        ChatRoom newRoom = new ChatRoom();
+        DestinationDeck newDestDeck = new DestinationDeck();
+        ResourceDeck newResDeck = new ResourceDeck();
+        ServerModelRoot.chat.upsert(newRoom, token);
+        ServerModelRoot.cards.upsert(newDestDeck, token);
+        ServerModelRoot.cards.upsert(newResDeck, token);
         game.setState(GameState.START);
+        game.setChatRoom(newRoom.getId());
+        game.setDestinationDeck(newDestDeck.getId());
+        game.setResourceDeck(newResDeck.getId());
     }
 
     public void leave(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {

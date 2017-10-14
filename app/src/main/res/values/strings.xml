@@ -4,4 +4,10 @@
         <string name="drawer_close">Close navigation drawer</string>
         <string name="action_websearch">Web search</string>
         <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="score_text"><u>Score:</u></string>
+    <string name="destination_cards_text"><u>Destination Cards:</u></string>
+    <string name="train_cars_text"><u>Train Cars Remaining:</u></string>
+    <string name="train_cards_text"><u>Cards:</u></string>
+
+
 </resources>

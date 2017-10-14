@@ -147,8 +147,8 @@ public class MapActivity extends AppCompatActivity {
                 args.putInt(HistoryFragment.ARG_TAB_NUMBER, position);
                 break;
             case 5:
-                fragment = new HistoryFragment();
-                args.putInt(HistoryFragment.ARG_TAB_NUMBER, position);
+                fragment = new ChatFragment();
+                args.putInt(ChatFragment.ARG_TAB_NUMBER, position);
                 break;
             case 0:
                 fragment = new MapFragment();

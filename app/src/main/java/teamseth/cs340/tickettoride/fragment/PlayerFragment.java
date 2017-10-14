@@ -27,7 +27,7 @@ public class PlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Toast.makeText(this.getContext(), "Player", Toast.LENGTH_SHORT).show();
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_player, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String planet = getResources().getStringArray(R.array.tabs_array)[i];
 

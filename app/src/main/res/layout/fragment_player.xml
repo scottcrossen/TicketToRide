@@ -127,11 +127,7 @@
             android:layout_margin="1dp"
             android:gravity="center"
             android:text="Hello"
-            android:textColor="#FFFFFF"
-            android:shadowColor="#000000"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"/>
+            android:textColor="#FFFFFF" />
 
     </RelativeLayout>
     <LinearLayout

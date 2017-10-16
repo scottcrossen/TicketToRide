@@ -18,32 +18,150 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
         android:columnCount="3"
         android:rowCount="3">
 
         <ImageView
-            />
+            android:id="@+id/greenTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/green_train_card" />
+
+        <ImageView
+            android:id="@+id/blueTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/blue_train_card" />
+
+        <ImageView
+            android:id="@+id/blackTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/black_train_card" />
+
+        <ImageView
+            android:id="@+id/purpleTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/purple_train_card" />
+
+        <ImageView
+            android:id="@+id/locomotiveTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/locomotive" />
+
+        <ImageView
+            android:id="@+id/orangeTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/orange_train_card" />
+
+        <ImageView
+            android:id="@+id/redTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/red_train_card" />
+
+        <ImageView
+            android:id="@+id/whiteTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/white_train_card" />
+
+        <ImageView
+            android:id="@+id/yellowTrainCard"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:src="@drawable/yellow_train_card" />
 
     </GridLayout>
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/train_cars_text"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/train_cars_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/trainCarsRemaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/relativelayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/myImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/blue_train_card" />
+
+        <TextView
+            android:id="@+id/myImageViewText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/myImageView"
+            android:layout_alignTop="@id/myImageView"
+            android:layout_alignRight="@id/myImageView"
+            android:layout_alignBottom="@id/myImageView"
+            android:layout_margin="1dp"
+            android:gravity="center"
+            android:text="Hello"
+            android:textColor="#FFFFFF"
+            android:shadowColor="#000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/score_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/currentScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp" />
+
+        </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/destination_cards_text"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/score_text"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp" />
 

@@ -20,9 +20,9 @@ public class Game implements Serializable, Comparable<Game> {
     private GameState state = GameState.PREGAME;
     private Instant lastUpdate = Instant.now();
     private HashMap<UUID, String> playerNames = new HashMap<>();
-    private void updateTime() {
-        System.out.println(this.lastUpdate);
-    }
+    private UUID chatRoom;
+    private UUID destinationDeck;
+    private UUID resourceDeck;
 
     public void addPlayer(User user) throws ModelActionException {
         if (users.size() <= 5) {
@@ -33,10 +33,15 @@ public class Game implements Serializable, Comparable<Game> {
             throw new ModelActionException();
         }
     }
+
     public void removePlayer(UUID userId) {
         users.remove(userId);
         playerNames.remove(userId);
         updateTime();
+    }
+
+    private void updateTime() {
+        System.out.println(this.lastUpdate);
     }
 
     public boolean hasPlayer(UUID userId) {
@@ -47,20 +52,32 @@ public class Game implements Serializable, Comparable<Game> {
         this.state = state;
         updateTime();
     }
+    public void setChatRoom(UUID id) {
+        this.chatRoom = id;
+        updateTime();
+    }
+    public void setDestinationDeck(UUID id) {
+        this.destinationDeck = id;
+        updateTime();
+    }
+    public void setResourceDeck(UUID id){
+        this.resourceDeck = id;
+        updateTime();
+    }
 
     public GameState getState() {
         return state;
     }
-    public Instant getUpdate() {
-        return this.lastUpdate;
-    }
+    public Instant getUpdate() { return this.lastUpdate; }
     public UUID getId() {
         return this.id;
     }
     public String name() { return "Game " + hashCode(); }
-    public HashMap<UUID, String> getPlayerNames() {return playerNames; }
-    public HashSet<UUID> getPlayers() {return users; }
-
+    public HashMap<UUID, String> getPlayerNames() { return playerNames; }
+    public HashSet<UUID> getPlayers() { return users; }
+    public UUID getChatRoom() { return chatRoom; }
+    public UUID getDestinationDeck() { return destinationDeck; }
+    public UUID getResourceDeck() { return resourceDeck; }
     @Override
     public int compareTo(Game game) {
         return this.id.compareTo(game.id);

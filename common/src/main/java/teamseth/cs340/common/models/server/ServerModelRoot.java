@@ -1,7 +1,9 @@
 package teamseth.cs340.common.models.server;
 
-import teamseth.cs340.common.models.server.users.UserModel;
+import teamseth.cs340.common.models.server.cards.CardModel;
+import teamseth.cs340.common.models.server.chat.ChatModel;
 import teamseth.cs340.common.models.server.games.GameModel;
+import teamseth.cs340.common.models.server.users.UserModel;
 
 /**
  * @author Scott Leland Crossen
@@ -19,4 +21,6 @@ public class ServerModelRoot {
 
     public static UserModel users = UserModel.getInstance();
     public static GameModel games = GameModel.getInstance();
+    public static ChatModel chat = ChatModel.getInstance();
+    public static CardModel cards = CardModel.getInstance();
 }

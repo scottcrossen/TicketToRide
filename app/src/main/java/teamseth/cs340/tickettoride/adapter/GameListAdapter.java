@@ -16,7 +16,6 @@ import teamseth.cs340.common.commands.server.JoinGameCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.models.server.games.GameState;
-import teamseth.cs340.common.root.client.ClientFacade;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
@@ -28,7 +27,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     public void update() {
         ArrayList<Game> oldList = gameList;
-        ArrayList<Game> newGameList = (ArrayList<Game>) ClientFacade.getInstance().getGames().stream().filter((game) -> game.getState().equals(GameState.PREGAME)).collect(Collectors.toList());
+        ArrayList<Game> newGameList = (ArrayList<Game>) ClientModelRoot.games.getAll().stream().filter((game) -> game.getState().equals(GameState.PREGAME)).collect(Collectors.toList());
         gameList = newGameList;
         if (oldList != gameList) activity.runOnUiThread(() -> notifyDataSetChanged());
     }

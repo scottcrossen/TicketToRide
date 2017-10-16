@@ -21,7 +21,6 @@ public class GetGameCommand implements IServerCommand {
         this.gameId = id;
     }
 
-    @Override
     public Result<UpdateGamesCommand> call() {
         return new Result(() -> {
             HashSet<Game> games = new HashSet<Game>();

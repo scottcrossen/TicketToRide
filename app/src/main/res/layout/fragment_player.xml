@@ -18,32 +18,267 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
         android:columnCount="3"
         android:rowCount="3">
 
-        <ImageView
-            />
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/greenTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/green_train_card" />
+            <TextView
+                android:id="@+id/greenTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/greenTrainCard"
+                android:layout_alignTop="@id/greenTrainCard"
+                android:layout_alignRight="@id/greenTrainCard"
+                android:layout_alignBottom="@id/greenTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/blueTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/blue_train_card" />
+            <TextView
+                android:id="@+id/blueTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/blueTrainCard"
+                android:layout_alignTop="@id/blueTrainCard"
+                android:layout_alignRight="@id/blueTrainCard"
+                android:layout_alignBottom="@id/blueTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/blackTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/black_train_card" />
+            <TextView
+                android:id="@+id/blackTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/blackTrainCard"
+                android:layout_alignTop="@id/blackTrainCard"
+                android:layout_alignRight="@id/blackTrainCard"
+                android:layout_alignBottom="@id/blackTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/purpleTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/purple_train_card" />
+            <TextView
+                android:id="@+id/purpleTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/purpleTrainCard"
+                android:layout_alignTop="@id/purpleTrainCard"
+                android:layout_alignRight="@id/purpleTrainCard"
+                android:layout_alignBottom="@id/purpleTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/locomotiveTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/locomotive" />
+            <TextView
+                android:id="@+id/locomotiveCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/locomotiveTrainCard"
+                android:layout_alignTop="@id/locomotiveTrainCard"
+                android:layout_alignRight="@id/locomotiveTrainCard"
+                android:layout_alignBottom="@id/locomotiveTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/orangeTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/orange_train_card" />
+            <TextView
+                android:id="@+id/orangeTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/orangeTrainCard"
+                android:layout_alignTop="@id/orangeTrainCard"
+                android:layout_alignRight="@id/orangeTrainCard"
+                android:layout_alignBottom="@id/orangeTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/redTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/red_train_card" />
+            <TextView
+                android:id="@+id/redTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/redTrainCard"
+                android:layout_alignTop="@id/redTrainCard"
+                android:layout_alignRight="@id/redTrainCard"
+                android:layout_alignBottom="@id/redTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/whiteTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/white_train_card" />
+            <TextView
+                android:id="@+id/whiteTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/whiteTrainCard"
+                android:layout_alignTop="@id/whiteTrainCard"
+                android:layout_alignRight="@id/whiteTrainCard"
+                android:layout_alignBottom="@id/whiteTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout>
+            <ImageView
+                android:id="@+id/yellowTrainCard"
+                android:layout_width="100dp"
+                android:layout_height="75dp"
+                android:src="@drawable/yellow_train_card" />
+
+            <TextView
+                android:id="@+id/yellowTrainCardsLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/yellowTrainCard"
+                android:layout_alignTop="@id/yellowTrainCard"
+                android:layout_alignRight="@id/yellowTrainCard"
+                android:layout_alignBottom="@id/yellowTrainCard"
+                android:layout_margin="1dp"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#FFFFFF"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
     </GridLayout>
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/train_cars_text"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/train_cars_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/trainCarsRemaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/score_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/currentScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp" />
+
+        </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/destination_cards_text"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/score_text"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp" />
 

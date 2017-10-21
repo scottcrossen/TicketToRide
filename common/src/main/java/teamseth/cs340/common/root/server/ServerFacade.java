@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.UUID;
 
-import teamseth.cs340.common.commands.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -67,6 +67,12 @@ public final class ServerFacade implements IServer {
     }
     public DestinationCard drawDestinationCard(UUID deckId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         return model.cards.drawDestinationCard(deckId, token);
+    }
+    public void returnResourceCard(UUID deckId, ResourceColor card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
+        model.cards.returnResourceCard(deckId, card, token);
+    }
+    public void returnDestinationCard(UUID deckId, DestinationCard card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
+        model.cards.returnDestinationCard(deckId, card, token);
     }
 
     // Chat model methods

@@ -2,7 +2,7 @@ package teamseth.cs340.common.commands.server;
 
 import java.util.UUID;
 
-import teamseth.cs340.common.commands.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;

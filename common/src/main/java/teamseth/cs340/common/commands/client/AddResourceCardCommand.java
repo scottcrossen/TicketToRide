@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import teamseth.cs340.common.commands.IHistoricalCommand;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.root.client.ClientFacade;
 import teamseth.cs340.common.util.Result;
@@ -14,6 +13,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class AddResourceCardCommand implements IClientCommand, IHistoricalCommand {
+    private static final long serialVersionUID = -5448126465480545123L;
 
     private ResourceColor card;
     private UUID id = UUID.randomUUID();

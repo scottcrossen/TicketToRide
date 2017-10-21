@@ -12,20 +12,20 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class AddDestinationCardCommand implements IClientCommand, IHistoricalCommand {
-    private static final long serialVersionUID = -7043690453037910480L;
+public class RemoveDestinationCardCommand implements IHistoricalCommand {
 
     private DestinationCard card;
     private UUID id = UUID.randomUUID();
     private UUID owner;
 
-    public AddDestinationCardCommand(DestinationCard card, UUID playerId) {
+    public RemoveDestinationCardCommand(DestinationCard card, UUID playerId) {
         this.card = card;
         this.owner = playerId;
     }
 
     public Result call() {
-        return new Result(() -> {ClientFacade.getInstance().addDestinationCard(card); return null;});
+        return new Result(() -> {
+            ClientFacade.getInstance().removeDestinationCard(card); return null;});
     }
 
     public UUID getId() {
@@ -33,7 +33,7 @@ public class AddDestinationCardCommand implements IClientCommand, IHistoricalCom
     }
 
     public String getDescription() {
-        return "drew a destination card";
+        return "returned a destination card";
     }
 
     public Set<UUID> playersVisibleTo() {

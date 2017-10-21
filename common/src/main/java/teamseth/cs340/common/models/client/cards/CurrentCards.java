@@ -1,6 +1,7 @@
 package teamseth.cs340.common.models.client.cards;
 
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Observable;
 
 import teamseth.cs340.common.models.server.cards.DestinationCard;
@@ -20,11 +21,11 @@ public class CurrentCards extends Observable {
         return instance;
     }
 
-    private HashSet<DestinationCard> destinationCards = new HashSet<>();
-    private HashSet<ResourceColor> resourceCards = new HashSet<>();
+    private LinkedList<DestinationCard> destinationCards = new LinkedList<>();
+    private LinkedList<ResourceColor> resourceCards = new LinkedList<>();
 
-    public HashSet<DestinationCard> getDestinationCards() { return destinationCards; }
-    public HashSet<ResourceColor> getResourceCards() { return resourceCards; }
+    public LinkedList<DestinationCard> getDestinationCards() { return destinationCards; }
+    public LinkedList<ResourceColor> getResourceCards() { return resourceCards; }
 
     public void addDestinationCard(DestinationCard destinationCard) {
         this.destinationCards.add(destinationCard);
@@ -36,6 +37,30 @@ public class CurrentCards extends Observable {
         this.resourceCards.add(resourceCard);
         setChanged();
         notifyObservers();
+    }
+
+    public void removeDestinationCard(DestinationCard destinationCard) {
+        Iterator<DestinationCard> iterator = this.destinationCards.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next() == destinationCard) {
+                iterator.remove();
+                setChanged();
+                notifyObservers();
+                return;
+            }
+        }
+    }
+
+    public void removeResourceCard(ResourceColor resourceCard) {
+        Iterator<ResourceColor> iterator = this.resourceCards.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next() == resourceCard) {
+                iterator.remove();
+                setChanged();
+                notifyObservers();
+                return;
+            }
+        }
     }
 
 }

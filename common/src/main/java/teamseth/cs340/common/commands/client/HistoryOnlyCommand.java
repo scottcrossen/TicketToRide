@@ -3,7 +3,6 @@ package teamseth.cs340.common.commands.client;
 import java.util.Set;
 import java.util.UUID;
 
-import teamseth.cs340.common.commands.IHistoricalCommand;
 import teamseth.cs340.common.util.Result;
 
 /**

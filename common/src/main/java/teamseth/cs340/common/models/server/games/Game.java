@@ -41,13 +41,9 @@ public class Game implements Serializable, Comparable<Game> {
         updateTime();
     }
 
-    private void updateTime() {
-        System.out.println(this.lastUpdate);
-    }
+    private void updateTime() { this.lastUpdate = Instant.now(); }
 
-    public boolean hasPlayer(UUID userId) {
-        return users.contains(userId);
-    }
+    public boolean hasPlayer(UUID userId) { return users.contains(userId); }
 
     public void setState(GameState state) {
         this.state = state;

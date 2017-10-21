@@ -14,6 +14,7 @@ import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.models.server.cards.DestinationDeck;
 import teamseth.cs340.common.models.server.cards.ResourceDeck;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
+import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
@@ -63,13 +64,16 @@ public class GameModel extends AuthAction implements IModel<Game> {
         ChatRoom newRoom = new ChatRoom();
         DestinationDeck newDestDeck = new DestinationDeck();
         ResourceDeck newResDeck = new ResourceDeck();
+        CommandHistory history = new CommandHistory();
         ServerModelRoot.chat.upsert(newRoom, token);
         ServerModelRoot.cards.upsert(newDestDeck, token);
         ServerModelRoot.cards.upsert(newResDeck, token);
+        ServerModelRoot.history.upsert(history, token);
         game.setState(GameState.START);
         game.setChatRoom(newRoom.getId());
         game.setDestinationDeck(newDestDeck.getId());
         game.setResourceDeck(newResDeck.getId());
+        game.setHistory(history.getId());
     }
 
     public void leave(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
@@ -99,16 +103,5 @@ public class GameModel extends AuthAction implements IModel<Game> {
 
     private boolean playerInGame(UUID userId) {
         return games.stream().anyMatch(game -> game.hasPlayer(userId));
-    }
-
-    public Game getGame(String gameName) {
-        if(games.contains(gameName)) {
-            for (Game game : games) {
-                if(game.name().contentEquals(gameName)) {
-                    return game;
-                }
-            }
-        }
-        return null;
     }
 }

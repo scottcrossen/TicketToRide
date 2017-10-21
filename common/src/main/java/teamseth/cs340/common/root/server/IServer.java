@@ -3,9 +3,11 @@ package teamseth.cs340.common.root.server;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.UUID;
 
+import teamseth.cs340.common.commands.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -44,4 +46,9 @@ public interface IServer {
     public void sendMessage(UUID room, Message message, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
     public ArrayList<Message> getMessages(UUID room) throws ResourceNotFoundException;
     public ArrayList<Message> getMessagesAfter(UUID room, int size) throws ResourceNotFoundException;
+
+
+    // History model methods
+    public LinkedList<IHistoricalCommand> getCommandsAfter(UUID historyId, Optional<UUID> afterId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
+    public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException;
 }

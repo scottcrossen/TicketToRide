@@ -3,9 +3,11 @@ package teamseth.cs340.common.root.server;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.UUID;
 
+import teamseth.cs340.common.commands.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -77,6 +79,15 @@ public final class ServerFacade implements IServer {
     public ArrayList<Message> getMessagesAfter(UUID room, int size) throws ResourceNotFoundException {
         return model.chat.getMessagesAfter(room, size);
     }
+
+    // History model methods
+    public LinkedList<IHistoricalCommand> getCommandsAfter(UUID historyId, Optional<UUID> afterId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException {
+        return model.history.getCommandsAfter(historyId, afterId, token);
+    }
+    public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        model.history.addCommandToHistory(historyId, command, token);
+    }
+
 
 
 }

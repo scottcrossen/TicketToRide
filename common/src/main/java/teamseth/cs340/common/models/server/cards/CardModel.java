@@ -37,19 +37,21 @@ public class CardModel extends AuthAction implements IModel<Deck> {
         return getDestinationDeck(deckId).draw();
     }
 
-    public void upsert(DestinationDeck newDeck, AuthToken token) throws UnauthorizedException {
+    public void upsert(DestinationDeck newDeck, AuthToken token) throws UnauthorizedException, ModelActionException {
         AuthAction.user(token);
         try {
             getDestinationDeck(newDeck.getId());
+            throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             destinationDecks.add(newDeck);
         }
     }
 
-    public void upsert(ResourceDeck newDeck, AuthToken token) throws UnauthorizedException {
+    public void upsert(ResourceDeck newDeck, AuthToken token) throws UnauthorizedException, ModelActionException {
         AuthAction.user(token);
         try {
             getResourceDeck(newDeck.getId());
+            throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             resourceDecks.add(newDeck);
         }

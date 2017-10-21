@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import teamseth.cs340.common.commands.client.AddMessagesCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.chat.Message;
 import teamseth.cs340.common.root.server.ServerFacade;
@@ -23,7 +24,7 @@ public class SendMessageCommand implements IServerCommand {
     private AuthToken token = Login.getInstance().getToken();
     IServerCommand execAfter;
 
-    public SendMessageCommand(Message message) throws ResourceNotFoundException {
+    public SendMessageCommand(Message message) throws ResourceNotFoundException, UnauthorizedException {
         this.message = message;
         this.chatRoom = ClientModelRoot.games.getActive().getChatRoom();
         this.execAfter = new GetNewMessagesCommand();

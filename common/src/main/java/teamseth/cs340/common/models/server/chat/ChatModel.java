@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
+import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
@@ -26,10 +27,11 @@ public class ChatModel extends AuthAction implements IModel<ChatRoom> {
 
     private HashSet<ChatRoom> rooms = new HashSet<ChatRoom>();
 
-    public void upsert(ChatRoom newRoom, AuthToken token) throws UnauthorizedException {
+    public void upsert(ChatRoom newRoom, AuthToken token) throws UnauthorizedException, ModelActionException {
         AuthAction.user(token);
         try {
             getRoom(newRoom.getId());
+            throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             rooms.add(newRoom);
         }

@@ -3,7 +3,7 @@ package teamseth.cs340.common.models.server.cards;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
-import teamseth.cs340.common.util.RandomSet;
+import teamseth.cs340.common.util.RandomList;
 
 /**
  * @author Scott Leland Crossen
@@ -11,7 +11,7 @@ import teamseth.cs340.common.util.RandomSet;
  */
 public class ResourceDeck implements Deck<ResourceColor> {
 
-    private RandomSet<ResourceColor> deck = new RandomSet<>();
+    private RandomList<ResourceColor> deck = new RandomList<>();
     private UUID id = UUID.randomUUID();
 
     public ResourceDeck(){
@@ -37,5 +37,9 @@ public class ResourceDeck implements Deck<ResourceColor> {
     public ResourceColor draw() throws ModelActionException {
         if (deck.size() == 0) throw new ModelActionException();
         return deck.popRandom();
+    }
+
+    public void returnCard(ResourceColor card) {
+        deck.add(card);
     }
 }

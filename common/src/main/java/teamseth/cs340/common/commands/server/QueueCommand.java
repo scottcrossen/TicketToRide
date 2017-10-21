@@ -1,0 +1,33 @@
+package teamseth.cs340.common.commands.server;
+
+import java.util.UUID;
+
+import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.IClientCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.root.server.ServerFacade;
+import teamseth.cs340.common.util.Result;
+import teamseth.cs340.common.util.auth.AuthToken;
+import teamseth.cs340.common.util.client.Login;
+
+/**
+ * @author Scott Leland Crossen
+ * @Copyright 2017 Scott Leland Crossen
+ */
+public abstract class QueueCommand implements IServerCommand {
+
+    IClientCommand command;
+    UUID historyId;
+    private AuthToken token = Login.getInstance().getToken();
+
+    public QueueCommand() throws ResourceNotFoundException {
+        this.historyId = ClientModelRoot.games.getActive().getHistory();
+    }
+
+    public abstract IHistoricalCommand clientCommand() throws Exception;
+
+    public Result call() {
+        return new Result(() -> {ServerFacade.getInstance().addCommandToHistory(historyId, clientCommand(), token); return null;});
+    }
+}

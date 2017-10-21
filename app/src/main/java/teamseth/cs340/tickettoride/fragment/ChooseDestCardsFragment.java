@@ -10,7 +10,9 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
 
 /**
@@ -31,6 +33,10 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         setHasOptionsMenu(true);
 
         //chooseDestCardsBtn.setEnabled(false);
+    }
+
+    public void setDestinationCards(List<DestinationCard> cards) {
+        // TODO: set the fields to the texts in these cards
     }
 
     @Override
@@ -86,6 +92,10 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
 
             //System.out.println("destCards[" + i + "]: " + destCards.get(i));
         }
+
+
+        // TODO: return the unused card:
+        // (new CommandTask(getApplicationContext())).execute(new ReturnDestinationCardCommand(/*your card here */));
     }
 
     public void enableButton() {

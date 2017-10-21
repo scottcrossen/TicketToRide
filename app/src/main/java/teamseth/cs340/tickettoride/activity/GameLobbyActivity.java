@@ -1,6 +1,5 @@
 package teamseth.cs340.tickettoride.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,6 +37,7 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
             Poller.getInstance(this.getApplicationContext()).addToJobs(new GetGameCommand(ClientModelRoot.games.getActive().getId()));
         } catch (Exception e) {
             startActivity(new Intent(this, GameListActivity.class));
+            finish();
         }
 
         try {
@@ -88,8 +88,8 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
                 startActivity(new Intent(this, GameListActivity.class));
             } else if (ClientModelRoot.games.hasActive() && ClientModelRoot.games.getActive().getState().equals(GameState.START)) {
                 Poller.getInstance(this.getApplicationContext()).reset();
-                Context context = this.getApplicationContext();
-                this.runOnUiThread(() -> Toaster.getInstance().makeToast(context, "New game started."));
+                this.runOnUiThread(() -> Toaster.getInstance().makeToast(this.getApplicationContext(), "New game started."));
+                startActivity(new Intent(this, ChooseDestCardsActivity.class));
             } else {
                 this.runOnUiThread(() -> updateGame());
             }

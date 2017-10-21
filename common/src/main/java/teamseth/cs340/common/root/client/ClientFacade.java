@@ -3,6 +3,7 @@ package teamseth.cs340.common.root.client;
 import java.util.ArrayList;
 import java.util.Set;
 
+import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
@@ -38,4 +39,11 @@ public class ClientFacade implements IClient {
     public void addResourceCard(ResourceColor resourceCard) { model.cards.addResourceCard(resourceCard); }
 
     public void addMessages(ArrayList<Message> newMessages) { model.chat.addMessages(newMessages); }
+
+    public void addHistory(IHistoricalCommand command) { model.history.add(command); }
+
+    public void removeDestinationCard(DestinationCard destinationCard){ model.cards.removeDestinationCard(destinationCard); }
+
+    public void removeResourceCard(ResourceColor resourceCard) { model.cards.removeResourceCard(resourceCard); }
 }
+

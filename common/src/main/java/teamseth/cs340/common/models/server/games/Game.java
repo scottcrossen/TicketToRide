@@ -23,6 +23,7 @@ public class Game implements Serializable, Comparable<Game> {
     private UUID chatRoom;
     private UUID destinationDeck;
     private UUID resourceDeck;
+    private UUID history;
 
     public void addPlayer(User user) throws ModelActionException {
         if (users.size() <= 5) {
@@ -40,13 +41,9 @@ public class Game implements Serializable, Comparable<Game> {
         updateTime();
     }
 
-    private void updateTime() {
-        System.out.println(this.lastUpdate);
-    }
+    private void updateTime() { this.lastUpdate = Instant.now(); }
 
-    public boolean hasPlayer(UUID userId) {
-        return users.contains(userId);
-    }
+    public boolean hasPlayer(UUID userId) { return users.contains(userId); }
 
     public void setState(GameState state) {
         this.state = state;
@@ -64,6 +61,10 @@ public class Game implements Serializable, Comparable<Game> {
         this.resourceDeck = id;
         updateTime();
     }
+    public void setHistory(UUID id){
+        this.history = id;
+        updateTime();
+    }
 
     public GameState getState() {
         return state;
@@ -78,6 +79,7 @@ public class Game implements Serializable, Comparable<Game> {
     public UUID getChatRoom() { return chatRoom; }
     public UUID getDestinationDeck() { return destinationDeck; }
     public UUID getResourceDeck() { return resourceDeck; }
+    public UUID getHistory() { return history; }
     @Override
     public int compareTo(Game game) {
         return this.id.compareTo(game.id);

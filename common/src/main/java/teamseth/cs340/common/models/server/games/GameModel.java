@@ -2,18 +2,24 @@ package teamseth.cs340.common.models.server.games;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
+import teamseth.cs340.common.commands.client.AddResourceCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.DestinationDeck;
+import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.cards.ResourceDeck;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
+import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
@@ -63,13 +69,36 @@ public class GameModel extends AuthAction implements IModel<Game> {
         ChatRoom newRoom = new ChatRoom();
         DestinationDeck newDestDeck = new DestinationDeck();
         ResourceDeck newResDeck = new ResourceDeck();
+        CommandHistory history = new CommandHistory();
         ServerModelRoot.chat.upsert(newRoom, token);
         ServerModelRoot.cards.upsert(newDestDeck, token);
         ServerModelRoot.cards.upsert(newResDeck, token);
-        game.setState(GameState.START);
+        ServerModelRoot.history.upsert(history, token);
         game.setChatRoom(newRoom.getId());
         game.setDestinationDeck(newDestDeck.getId());
         game.setResourceDeck(newResDeck.getId());
+        game.setHistory(history.getId());
+        seedGame(game, token);
+        game.setState(GameState.START);
+    }
+
+    private void seedGame(Game game, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
+        UUID historyId = game.getHistory();
+        UUID destinationDeck = game.getDestinationDeck();
+        UUID resourceDeck = game.getResourceDeck();
+        // Can't use streams because java sucks and has to handle exceptions without deferring them.
+        Iterator<UUID> iterator = game.getPlayers().iterator();
+        while (iterator.hasNext()) {
+            UUID playerId = iterator.next();
+            for (int i = 0; i < 4; i++) {
+                ResourceColor newCard = ServerModelRoot.cards.drawResourceCard(resourceDeck, token);
+                ServerModelRoot.history.addCommandToHistory(historyId, new AddResourceCardCommand(newCard, playerId), token);
+            }
+            for (int i = 0; i < 3; i++) {
+                DestinationCard newCard = ServerModelRoot.cards.drawDestinationCard(destinationDeck, token);
+                ServerModelRoot.history.addCommandToHistory(historyId, new AddDestinationCardCommand(newCard, playerId), token);
+            }
+        }
     }
 
     public void leave(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
@@ -99,16 +128,5 @@ public class GameModel extends AuthAction implements IModel<Game> {
 
     private boolean playerInGame(UUID userId) {
         return games.stream().anyMatch(game -> game.hasPlayer(userId));
-    }
-
-    public Game getGame(String gameName) {
-        if(games.contains(gameName)) {
-            for (Game game : games) {
-                if(game.name().contentEquals(gameName)) {
-                    return game;
-                }
-            }
-        }
-        return null;
     }
 }

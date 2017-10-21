@@ -33,12 +33,20 @@
                 android:value=".activity.LoginActivity" />
         </activity>
         <activity
+            android:name=".activity.ChooseDestCardsActivity"
+            android:label="Choose Destination Cards Activity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".activity.GameLobbyActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.GameLobbyActivity" />
+        </activity>
+        <activity
             android:name=".activity.MapActivity"
             android:label="Ticket To Ride Map"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.GameLobbyActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.LoginActivity" />
+                android:value=".activity.GameLobbyActivity" />
         </activity>
 
     </application>

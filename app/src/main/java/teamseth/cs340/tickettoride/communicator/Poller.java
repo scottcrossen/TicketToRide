@@ -12,7 +12,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import teamseth.cs340.common.commands.ICommand;
-import teamseth.cs340.common.commands.IUpdateCommand;
+import teamseth.cs340.common.commands.IUpdatableCommand;
 
 /**
  * @author Scott Leland Crossen
@@ -59,8 +59,8 @@ public class Poller {
                     Iterator<ICommand> iterator = currentCommands.iterator();
                     while (iterator.hasNext() && lastUpdateTime != null) {
                         ICommand current = iterator.next();
-                        if (current instanceof IUpdateCommand)
-                            ((IUpdateCommand) current).setLastUpdateTime(lastUpdateTime);
+                        if (current instanceof IUpdatableCommand)
+                            ((IUpdatableCommand) current).applyUpdate(lastUpdateTime);
                     }
                     ICommand[] commandArray = new ICommand[currentCommands.size()];
                     commandArray = currentCommands.toArray(commandArray);

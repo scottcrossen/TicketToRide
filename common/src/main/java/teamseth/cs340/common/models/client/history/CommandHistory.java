@@ -1,11 +1,11 @@
 package teamseth.cs340.common.models.client.history;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -33,8 +33,26 @@ public class CommandHistory {
 
     public List<String> getHistory() throws ResourceNotFoundException {
         Map<UUID, String> playerNames = ClientModelRoot.games.getActive().getPlayerNames();
-        List<String> output = history.stream().map(command -> playerNames.get(command.playerOwnedby()) + " " + command.getDescription()).collect(Collectors.toList());
-        return output;
+        List<String> compressedOutput = new LinkedList<>();
+        Iterator<IHistoricalCommand> iterator = history.iterator();
+        String last = null;
+        int lastCount = 0;
+        while (iterator.hasNext()) {
+            IHistoricalCommand command = iterator.next();
+            String next = playerNames.get(command.playerOwnedby()) + " " + command.getDescription();
+            if (next.equals(last)) {
+                lastCount++;
+            } else if (last != null) {
+                compressedOutput.add((lastCount > 1) ? String.format("%s (%d)", last, lastCount) : last);
+                lastCount = 1;
+                last = next;
+            } else {
+                lastCount = 1;
+                last = next;
+            }
+        }
+        if (history.size() > 0) compressedOutput.add((lastCount > 1) ? String.format("%s (%d)", last, lastCount) : last);
+        return compressedOutput;
     }
 
     public Optional<UUID> getLastId() {

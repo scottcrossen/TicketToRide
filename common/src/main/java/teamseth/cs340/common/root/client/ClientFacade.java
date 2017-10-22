@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.chat.Message;
 import teamseth.cs340.common.models.server.games.Game;
+import teamseth.cs340.common.models.server.games.GameState;
 
 /**
  * @author Scott Leland Crossen
@@ -45,5 +47,7 @@ public class ClientFacade implements IClient {
     public void removeDestinationCard(DestinationCard destinationCard){ model.cards.removeDestinationCard(destinationCard); }
 
     public void removeResourceCard(ResourceColor resourceCard) { model.cards.removeResourceCard(resourceCard); }
+
+    public void setActiveState(GameState state) throws ResourceNotFoundException { model.games.setActiveState(state); }
 }
 

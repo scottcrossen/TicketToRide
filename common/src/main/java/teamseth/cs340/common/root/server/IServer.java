@@ -33,6 +33,8 @@ public interface IServer {
     public Game getGame(UUID gameId) throws ResourceNotFoundException;
     public void leaveGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException;
     public Optional<Game> getGameAfter(UUID gameId, Instant instant) throws ResourceNotFoundException;
+    public boolean attemptStartGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;
+
 
     // User model methods
     public AuthToken login(UserCreds creds) throws ResourceNotFoundException, UnauthorizedException;

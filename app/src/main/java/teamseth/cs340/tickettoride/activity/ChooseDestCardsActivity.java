@@ -10,8 +10,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
+import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChooseDestCardsFragment;
@@ -54,21 +56,28 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
     protected void onResume() {
         super.onResume();
         ClientModelRoot.cards.addObserver(this);
+        ClientModelRoot.games.addObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         ClientModelRoot.cards.deleteObserver(this);
+        ClientModelRoot.games.deleteObserver(this);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (destinationCardsDrawn) {
+        if (!destinationCardsDrawn) {
             ((ChooseDestCardsFragment) fragment).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
-        } else {
-            Poller.getInstance(this.getApplicationContext()).reset();
-            // TODO: Go to new activity.
+            destinationCardsDrawn = true;
+        } else try {
+            if (ClientModelRoot.games.getActive().getState() == GameState.PLAYING) {
+                Poller.getInstance(this.getApplicationContext()).reset();
+                // TODO: Go to new activity.
+            }
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

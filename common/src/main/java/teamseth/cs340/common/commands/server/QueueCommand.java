@@ -28,6 +28,12 @@ public abstract class QueueCommand implements IServerCommand {
     public abstract IHistoricalCommand clientCommand() throws Exception;
 
     public Result call() {
-        return new Result(() -> {ServerFacade.getInstance().addCommandToHistory(historyId, clientCommand(), token); return null;});
+        return new Result(() -> {
+            IHistoricalCommand historicalCommand = clientCommand();
+            if (historicalCommand != null) {
+                ServerFacade.getInstance().addCommandToHistory(historyId, historicalCommand, token);
+            }
+            return null;
+        });
     }
 }

@@ -93,9 +93,8 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
             //System.out.println("destCards[" + i + "]: " + destCards.get(i));
         }
 
-
         // TODO: return the unused card:
-        // (new CommandTask(getApplicationContext())).execute(new ReturnDestinationCardCommand(/*your card here */));
+        // (new CommandTask(getApplicationContext())).execute(new InitialReturnDestinationCardCommand(Optional.of(/*your card here*/)));
     }
 
     public void enableButton() {

@@ -4,11 +4,15 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
+import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -108,6 +112,20 @@ public class GameModel extends AuthAction implements IModel<Game> {
         if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
         game.removePlayer(token.getUser());
         if (game.getPlayers().size() == 0) game.setState(GameState.DELETED);
+    }
+
+    public boolean attemptStartGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+        Game game = get(gameId);
+        UUID historyId = game.getHistory();
+        Set<UUID> destinationCardsDecided = new TreeSet<>();
+        ServerModelRoot.getInstance().history.getCommandsAfter(historyId, Optional.empty(), token).forEach((IHistoricalCommand command) -> {
+            if (command instanceof InitialReturnDestinationCardCommand) destinationCardsDecided.add(command.playerOwnedby());
+        });
+        boolean success = game.getPlayers().stream().allMatch((UUID player) -> destinationCardsDecided.contains(player));
+        if (success) {
+            game.setState(GameState.PLAYING);
+        }
+        return success;
     }
 
     public HashSet<Game> getAll() {

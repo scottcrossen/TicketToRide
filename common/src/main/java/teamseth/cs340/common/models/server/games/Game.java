@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -20,6 +22,8 @@ public class Game implements Serializable, Comparable<Game> {
     private GameState state = GameState.PREGAME;
     private Instant lastUpdate = Instant.now();
     private HashMap<UUID, String> playerNames = new HashMap<>();
+    private HashMap<UUID, PlayerColor> playerColors = new HashMap<>();
+    private List<UUID> playerTurns = new LinkedList<UUID>();
     private UUID chatRoom;
     private UUID destinationDeck;
     private UUID resourceDeck;
@@ -29,6 +33,8 @@ public class Game implements Serializable, Comparable<Game> {
         if (users.size() <= 5) {
             this.users.add(user.getId());
             this.playerNames.put(user.getId(), user.getUserCreds().getUsername());
+            this.playerColors.put(user.getId(), PlayerColor.values()[playerTurns.size()]);
+            this.playerTurns.add(user.getId());
             updateTime();
         } else {
             throw new ModelActionException();
@@ -38,6 +44,8 @@ public class Game implements Serializable, Comparable<Game> {
     public void removePlayer(UUID userId) {
         users.remove(userId);
         playerNames.remove(userId);
+        playerColors.remove(userId);
+        playerTurns.remove(userId);
         updateTime();
     }
 

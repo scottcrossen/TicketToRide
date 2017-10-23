@@ -9,6 +9,7 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.games.Game;
+import teamseth.cs340.common.models.server.games.GameState;
 
 /**
  * @author Scott Leland Crossen
@@ -70,6 +71,12 @@ public class GameModel extends Observable implements IModel<Game> {
         setChanged();
         notifyObservers();
     }
+    public void setActiveState(GameState state) throws ResourceNotFoundException {
+        getActive().setState(state);
+        setChanged();
+        notifyObservers();
+    }
+
     public void clearActive() {
         this.active = null;
         setChanged();

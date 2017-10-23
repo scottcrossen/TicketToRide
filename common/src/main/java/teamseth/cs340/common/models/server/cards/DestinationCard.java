@@ -30,7 +30,6 @@ public class DestinationCard implements Serializable {
     }
 
     public String toString() {
-        // TODO: A function needs to be created to convert cities to real strings
         return city1.toString() + " to " + city2.toString();
     }
 }

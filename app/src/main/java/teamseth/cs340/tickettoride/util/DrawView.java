@@ -2,7 +2,6 @@ package teamseth.cs340.tickettoride.util;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
@@ -18,7 +17,7 @@ public class DrawView extends View {
     public DrawView(Context context, View startView, View endView, int color) {
         super(context);
         setWillNotDraw(false);
-        paint.setColor(Color.GREEN);
+        paint.setColor(color);
         paint.setStrokeWidth(15);
         this.startView = startView;
         this.endView = endView;

@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
-import teamseth.cs340.common.commands.client.HistoryOnlyCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 
@@ -29,7 +28,7 @@ public class CommandHistory implements Serializable {
             if (found && current.playersVisibleTo().contains(playerId)) {
                 output.add(current);
             } else if (found && !current.playersVisibleTo().contains(playerId)) {
-                output.add(new HistoryOnlyCommand(current));
+                output.add(current.getAlternate());
             } else if (afterId.map((UUID gameId) -> current.getId() == gameId).orElseGet(() -> true)) {
                 found = true;
             }

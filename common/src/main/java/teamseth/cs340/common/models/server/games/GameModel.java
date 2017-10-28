@@ -18,6 +18,7 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.boards.Routes;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.DestinationDeck;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
@@ -74,14 +75,17 @@ public class GameModel extends AuthAction implements IModel<Game> {
         DestinationDeck newDestDeck = new DestinationDeck();
         ResourceDeck newResDeck = new ResourceDeck();
         CommandHistory history = new CommandHistory();
+        Routes routes = new Routes();
         ServerModelRoot.chat.upsert(newRoom, token);
         ServerModelRoot.cards.upsert(newDestDeck, token);
         ServerModelRoot.cards.upsert(newResDeck, token);
         ServerModelRoot.history.upsert(history, token);
+        ServerModelRoot.board.upsert(routes, token);
         game.setChatRoom(newRoom.getId());
         game.setDestinationDeck(newDestDeck.getId());
         game.setResourceDeck(newResDeck.getId());
         game.setHistory(history.getId());
+        game.setRoutes(routes.getId());
         seedGame(game, token);
         game.setState(GameState.START);
     }

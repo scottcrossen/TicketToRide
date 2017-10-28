@@ -54,4 +54,8 @@ public class InitialChooseDestinationCardCommand implements IHistoricalCommand {
     public UUID playerOwnedby() {
         return owner;
     }
+
+    public IHistoricalCommand getAlternate() {
+        return new AlternativeHistoryCommand(this);
+    }
 }

@@ -15,6 +15,7 @@ public class DestinationCard implements Serializable {
     public DestinationCard(CityName city1, CityName city2, int value) {
         this.city1 = city1;
         this.city2 = city2;
+        this.value = value;
     }
 
     public CityName getCity1() {

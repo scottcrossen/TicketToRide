@@ -12,6 +12,7 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.chat.Message;
@@ -31,7 +32,7 @@ public final class ServerFacade implements IServer {
         }
         return instance;
     }
-    private ServerModelRoot model = ServerModelRoot.getInstance();
+    private final ServerModelRoot model = ServerModelRoot.getInstance();
 
     // Game model methods
     public Game createGame(AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
@@ -93,6 +94,11 @@ public final class ServerFacade implements IServer {
     }
     public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
         model.history.addCommandToHistory(historyId, command, token);
+    }
+
+    // Board methods
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, ResourceColor color, int colorCount, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
+        return model.board.claimRoute(routeSetId, city1, city2, color, colorCount, token);
     }
 
 

@@ -9,21 +9,21 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class HistoryOnlyCommand implements IClientCommand, IHistoricalCommand {
+public class AlternativeHistoryCommand implements IClientCommand, IHistoricalCommand {
 
-    private UUID id;
-    private UUID owner;
-    private Set<UUID> players;
-    private String description;
+    protected UUID id;
+    protected UUID owner;
+    protected Set<UUID> players;
+    protected String description;
 
-    public HistoryOnlyCommand(IHistoricalCommand command) {
+    public AlternativeHistoryCommand(IHistoricalCommand command) {
         this.id = command.getId();
         this.owner = command.playerOwnedby();
         this.players = command.playersVisibleTo();
         this.description = command.getDescription();
     }
 
-    public HistoryOnlyCommand(UUID id, UUID owner, Set<UUID> players, String description) {
+    public AlternativeHistoryCommand(UUID id, UUID owner, Set<UUID> players, String description) {
         this.id = id;
         this.owner = owner;
         this.players = players;
@@ -48,5 +48,9 @@ public class HistoryOnlyCommand implements IClientCommand, IHistoricalCommand {
 
     public UUID playerOwnedby() {
         return owner;
+    }
+
+    public IHistoricalCommand getAlternate() {
+        return this;
     }
 }

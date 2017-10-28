@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="100dp">
+
+    <LinearLayout
+        android:id="@+id/infoColumnNames"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp">
+
+        <TextView
+            android:id="@+id/otherPlayerCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="@string/otherPlayerCards" />
+
+        <TextView
+            android:id="@+id/otherPlayerTrainCars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="@string/otherPlayerTrainCars" />
+
+        <TextView
+            android:id="@+id/otherPlayerDestCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="@string/otherPlayerDestCards" />
+
+        <TextView
+            android:id="@+id/otherPlayerScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/otherPlayerScore" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/otherPlayer1Info"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/otherPlayer1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="@string/otherPlayer1" />
+
+        <TextView
+            android:id="@+id/otherPlayer1Cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="45dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer1TrainCars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer1DestCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="61dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer1Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/testNumbers" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/otherPlayer2Info"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/otherPlayer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="@string/otherPlayer2" />
+
+        <TextView
+            android:id="@+id/otherPlayer2Cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="45dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer2TrainCars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer2DestCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="61dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer2Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/testNumbers" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/otherPlayer3Info"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/otherPlayer3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="@string/otherPlayer3" />
+
+        <TextView
+            android:id="@+id/otherPlayer3Cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="45dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer3TrainCars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer3DestCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="61dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer3Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/testNumbers" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/otherPlayer4Info"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/otherPlayer4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="@string/otherPlayer4" />
+
+        <TextView
+            android:id="@+id/otherPlayer4Cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="45dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer4TrainCars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer4DestCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="61dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer4Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/testNumbers" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/otherPlayer5Info"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/otherPlayer5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="@string/otherPlayer5" />
+
+        <TextView
+            android:id="@+id/otherPlayer5Cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="45dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer5TrainCars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer5DestCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="61dp"
+            android:text="@string/testNumbers" />
+
+        <TextView
+            android:id="@+id/otherPlayer5Score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/testNumbers" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/testStuff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test stuff" />
+
+</LinearLayout>

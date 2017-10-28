@@ -27,25 +27,20 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.setWillNotDraw(false);
         Toast.makeText(this.getContext(), "Map", Toast.LENGTH_SHORT).show();
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativeMap);
 
-
         ImageView vancouver = (ImageView) rootView.findViewById(R.id.vancouverCity);
         ImageView seattle = (ImageView) rootView.findViewById(R.id.seattleCity);
 
         DrawView vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY);
-        vancouverSeattle.setBackgroundColor(Color.YELLOW);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        vancouverSeattle.setLayoutParams(layoutParams);
+        vancouverSeattle.setBackgroundColor(Color.TRANSPARENT);
 
-        relativeLayout.addView(vancouverSeattle);
+        relativeLayout.addView(vancouverSeattle,1500,800);
+        //TODO add onclick events for the lines, so, vancouverSeattle.addOnclick() blah blah
         //rootView = drawLines(rootView);
         getActivity().setTitle(title);
         return rootView;

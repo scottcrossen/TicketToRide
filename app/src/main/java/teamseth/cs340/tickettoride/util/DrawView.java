@@ -17,14 +17,15 @@ public class DrawView extends View {
 
     public DrawView(Context context, View startView, View endView, int color) {
         super(context);
+        setWillNotDraw(false);
         paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(15);
         this.startView = startView;
         this.endView = endView;
     }
 
+    @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawLine(startView.getX()+25, startView.getY()+50, endView.getX()+25, endView.getY(), paint);
+        canvas.drawLine(startView.getX()+10, startView.getY()+15, endView.getX()+10, endView.getY(), paint);
     }
-
 }

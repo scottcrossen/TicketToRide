@@ -84,4 +84,9 @@ public class CardModel extends AuthAction implements IModel<Deck> {
         }
         throw new ResourceNotFoundException();
     }
+
+    public ResourceColor drawFaceUpCard(UUID deckId, ResourceColor color, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
+        AuthAction.user(token);
+        return getResourceDeck(deckId).drawFaceUpCard(color);
+    }
 }

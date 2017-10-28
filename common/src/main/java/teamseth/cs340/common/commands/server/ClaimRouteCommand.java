@@ -49,7 +49,7 @@ public class ClaimRouteCommand implements IServerCommand {
             if (historicalCommand != null) {
                 ServerFacade.getInstance().addCommandToHistory(historyId, historicalCommand, token);
             }
-            return new ReturnManyResourceCardsCommand(this.color, cost);
+            return new ReturnManyResourceCardsCommand(this.color, cost, token);
         });
     }
 

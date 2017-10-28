@@ -64,5 +64,6 @@ public class CurrentCards extends Observable {
     }
 
     public static final OtherPlayerCards others = OtherPlayerCards.getInstance();
+    public static final FaceUpCards faceUp = FaceUpCards.getInstance();
 
 }

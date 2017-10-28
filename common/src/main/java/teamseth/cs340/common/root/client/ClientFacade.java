@@ -1,6 +1,7 @@
 package teamseth.cs340.common.root.client;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -62,5 +63,9 @@ public class ClientFacade implements IClient {
     public void removePlayerResourceCard(UUID playerId) { model.cards.others.removePlayerResourceCard(playerId);}
 
     public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException { model.board.claimRouteByPlayer(userId, city1, city2, color); }
+
+    public void seedCards(List<ResourceColor> cards) { model.cards.faceUp.seedCards(cards); }
+
+    public void replaceCard(ResourceColor oldCard, ResourceColor newCard) throws ResourceNotFoundException { model.cards.faceUp.replaceCard(oldCard, newCard); }
 }
 

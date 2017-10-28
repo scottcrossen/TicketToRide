@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.SeedFaceUpCardsCommand;
 import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -86,6 +87,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         game.setResourceDeck(newResDeck.getId());
         game.setHistory(history.getId());
         game.setRoutes(routes.getId());
+        ServerModelRoot.history.addCommandToHistory(history.getId(), new SeedFaceUpCardsCommand(newResDeck.getFaceUp(), game.getPlayers(), token.getUser()), token);
         seedGame(game, token);
         game.setState(GameState.START);
     }

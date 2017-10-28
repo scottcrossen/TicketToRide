@@ -23,16 +23,301 @@
                 android:background="@drawable/us_outline"/>
 
             <ImageView
-                android:id="@+id/testImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/vancouverCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/seattleCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="65dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/calgaryCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginLeft="255dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/portlandCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="120dp"
+                android:layout_marginLeft="65dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/sanFranciscoCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="300dp"
+                android:layout_marginLeft="55dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/losAngelesCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="385dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/helenaCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="125dp"
+                android:layout_marginLeft="295dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/saltLakeCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="235dp"
+                android:layout_marginLeft="220dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/lasVegasCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="335dp"
+                android:layout_marginLeft="155dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/phoenixCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="415dp"
+                android:layout_marginLeft="215dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/elPasoCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="455dp"
+                android:layout_marginLeft="335dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/santFeCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/denverCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/winnipegCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/duluthCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/omahaCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/kansasCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/oklahomaCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/dallasCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/houstonCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/newOrleansCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/littleRockCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/saintLouisCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/chicagoCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/miamiCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/nashvilleCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/newYorkCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/pittsburghCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/dcCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/raleighCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/charlestonCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/atlantaCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/City"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/bostonCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/torontoCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/saultStMarieCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
+                android:src="@drawable/city_marker"/>
+
+            <ImageView
+                android:id="@+id/montrealCity"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="105dp"
                 android:src="@drawable/city_marker"/>
         </RelativeLayout>
-
-        <!--android:layout_width="1000dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:src="@drawable/ttr_board"/>-->
     </HorizontalScrollView>
 
 </FrameLayout>

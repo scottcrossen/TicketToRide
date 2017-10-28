@@ -11,16 +11,17 @@
         android:layout_marginTop="0dp" >
 
         <RelativeLayout
+            android:id="@+id/relativeMap"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-            <View
-                android:id="@+id/ticketToRideMapImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/us_outline"/>
+            <!--<View-->
+                <!--android:id="@+id/ticketToRideMapImage"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:background="@drawable/us_outline"/>-->
 
             <ImageView
                 android:id="@+id/vancouverCity"

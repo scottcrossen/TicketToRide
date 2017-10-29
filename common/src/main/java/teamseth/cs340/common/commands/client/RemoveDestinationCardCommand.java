@@ -45,4 +45,8 @@ public class RemoveDestinationCardCommand implements IHistoricalCommand {
     public UUID playerOwnedby() {
         return owner;
     }
+
+    public IHistoricalCommand getAlternate() {
+        return new DecrementPlayerDestinationCardsCommands(this);
+    }
 }

@@ -12,4 +12,5 @@ public interface IHistoricalCommand extends IClientCommand {
     Set<UUID> playersVisibleTo(); // Only allowed to be viewed by these people
     UUID playerOwnedby();
     String getDescription(); // For use with history display
+    IHistoricalCommand getAlternate();
 }

@@ -12,33 +12,31 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class RemoveResourceCardCommand implements IHistoricalCommand {
+public class ReplaceFaceUpCardCommand implements IHistoricalCommand {
 
-    private ResourceColor card;
+    private ResourceColor oldCard;
+    private ResourceColor newCard;
     private UUID id = UUID.randomUUID();
+    private Set<UUID> players = new HashSet<UUID>();
     private UUID owner;
 
-    public RemoveResourceCardCommand(ResourceColor card, UUID owner) {
-        this.card = card;
+    public ReplaceFaceUpCardCommand(ResourceColor oldCard, ResourceColor newCard, Set<UUID> allPlayers, UUID owner) {
+        this.oldCard = oldCard;
+        this.newCard = newCard;
+        this.players = allPlayers;
         this.owner = owner;
     }
 
     public Result call() {
         return new Result(() -> {
-            ClientFacade.getInstance().removeResourceCard(card); return null;});
+            ClientFacade.getInstance().replaceCard(oldCard, newCard); return null;});
     }
 
     public UUID getId() {
         return id;
     }
 
-    public String getDescription() {
-        return "returned a resource card";
-    }
-
     public Set<UUID> playersVisibleTo() {
-        HashSet<UUID> players = new HashSet<>();
-        players.add(owner);
         return players;
     }
 
@@ -46,7 +44,11 @@ public class RemoveResourceCardCommand implements IHistoricalCommand {
         return owner;
     }
 
+    public String getDescription() {
+        return "replaced a face-up card";
+    }
+
     public IHistoricalCommand getAlternate() {
-        return new DecrementPlayerResourceCardsCommand(this);
+        return new AlternativeHistoryCommand(this);
     }
 }

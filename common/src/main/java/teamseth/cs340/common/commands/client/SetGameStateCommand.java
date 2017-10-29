@@ -45,4 +45,8 @@ public class SetGameStateCommand implements IHistoricalCommand, IClientCommand {
     public String getDescription() {
         return "started the game";
     }
+
+    public IHistoricalCommand getAlternate() {
+        return new AlternativeHistoryCommand(this);
+    }
 }

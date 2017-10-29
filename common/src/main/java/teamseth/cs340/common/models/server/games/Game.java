@@ -28,6 +28,7 @@ public class Game implements Serializable, Comparable<Game> {
     private UUID destinationDeck;
     private UUID resourceDeck;
     private UUID history;
+    private UUID routes;
 
     public void addPlayer(User user) throws ModelActionException {
         if (users.size() <= 5) {
@@ -73,6 +74,10 @@ public class Game implements Serializable, Comparable<Game> {
         this.history = id;
         updateTime();
     }
+    public void setRoutes(UUID id){
+        this.routes = id;
+        updateTime();
+    }
 
     public GameState getState() {
         return state;
@@ -88,6 +93,7 @@ public class Game implements Serializable, Comparable<Game> {
     public UUID getDestinationDeck() { return destinationDeck; }
     public UUID getResourceDeck() { return resourceDeck; }
     public UUID getHistory() { return history; }
+    public UUID getRoutes() { return routes; }
     @Override
     public int compareTo(Game game) {
         return this.id.compareTo(game.id);

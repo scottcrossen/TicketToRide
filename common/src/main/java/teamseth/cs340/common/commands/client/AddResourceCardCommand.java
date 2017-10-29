@@ -45,4 +45,6 @@ public class AddResourceCardCommand implements IClientCommand, IHistoricalComman
     public UUID playerOwnedby() {
         return owner;
     }
+
+    public IHistoricalCommand getAlternate() { return new IncrementPlayerResourceCardsCommand(this);}
 }

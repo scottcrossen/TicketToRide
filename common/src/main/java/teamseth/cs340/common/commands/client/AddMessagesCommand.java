@@ -45,4 +45,8 @@ public class AddMessagesCommand implements IClientCommand, IHistoricalCommand {
     public String getDescription() {
         return "sent a message";
     }
+
+    public IHistoricalCommand getAlternate() {
+        return new AlternativeHistoryCommand(this);
+    }
 }

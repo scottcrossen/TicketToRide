@@ -54,6 +54,7 @@ public class PlayerFragment extends Fragment {
         TextView scoreText = (TextView) rootView.findViewById(R.id.currentScore);
         //TODO set score from model
         //scoreText.setText();
+        //ClientModelRoot.getInstance().score
 
         TextView trainCarsRemainingText = (TextView) rootView.findViewById(R.id.trainCarsRemaining);
         //TODO set score from model

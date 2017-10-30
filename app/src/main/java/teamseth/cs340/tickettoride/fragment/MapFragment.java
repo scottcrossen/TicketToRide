@@ -325,4 +325,5 @@ public class MapFragment extends Fragment {
         relativeLayout.addView(vancouverSeattle);
         return rootView;
     }
+
 }

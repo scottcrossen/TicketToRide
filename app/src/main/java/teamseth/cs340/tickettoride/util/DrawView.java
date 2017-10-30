@@ -21,6 +21,7 @@ public class DrawView extends View {
         paint.setColor(color);
         paint.setStrokeWidth(15);
         paint.setStyle(Paint.Style.STROKE);
+        // only draws dashed line if route is unclaimed
         paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
         this.startView = startView;
         this.endView = endView;

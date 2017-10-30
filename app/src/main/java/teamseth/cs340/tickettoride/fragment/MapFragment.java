@@ -297,6 +297,9 @@ public class MapFragment extends Fragment {
         relativeLayout.addView(santaFeOklahoma,2500,1800);
         relativeLayout.addView(saultStMarieMontreal,2500,1800);
         relativeLayout.addView(saultStMarieToronto,2500,1800);
+        relativeLayout.addView(seattleCalgary,2500,1800);
+        relativeLayout.addView(seattleHelena,2500,1800);
+        relativeLayout.addView(seattlePortland,2500,1800);
         relativeLayout.addView(torontoMontreal,2500,1800);
         relativeLayout.addView(torontoPittsburgh,2500,1800);
         relativeLayout.addView(vancouverCalgary,2500,1800);

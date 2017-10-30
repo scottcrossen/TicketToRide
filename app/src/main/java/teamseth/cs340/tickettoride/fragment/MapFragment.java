@@ -31,6 +31,7 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         Toast.makeText(this.getContext(), "Map", Toast.LENGTH_SHORT).show();
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        disableHardwareRendering(rootView);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
         RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativeMap);
@@ -326,4 +327,9 @@ public class MapFragment extends Fragment {
         return rootView;
     }
 
+    public static void disableHardwareRendering(View v) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            v.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+    }
 }

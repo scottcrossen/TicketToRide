@@ -19,9 +19,9 @@ public class DrawView extends View {
         super(context);
         setWillNotDraw(false);
         paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
         paint.setStrokeWidth(15);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
         this.startView = startView;
         this.endView = endView;
     }

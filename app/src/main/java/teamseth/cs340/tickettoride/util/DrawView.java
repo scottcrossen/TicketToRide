@@ -2,6 +2,7 @@ package teamseth.cs340.tickettoride.util;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.view.View;
 
@@ -18,6 +19,8 @@ public class DrawView extends View {
         super(context);
         setWillNotDraw(false);
         paint.setColor(color);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
         paint.setStrokeWidth(15);
         this.startView = startView;
         this.endView = endView;

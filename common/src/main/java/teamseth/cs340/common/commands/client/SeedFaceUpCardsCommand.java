@@ -14,6 +14,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class SeedFaceUpCardsCommand implements IHistoricalCommand {
+    private static final long serialVersionUID = -2226174445616083465L;
 
     private List<ResourceColor> cards;
     private UUID id = UUID.randomUUID();

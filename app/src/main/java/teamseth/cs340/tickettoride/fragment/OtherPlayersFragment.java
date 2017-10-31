@@ -5,12 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.client.cards.OtherPlayerCards;
+import teamseth.cs340.common.models.client.carts.PlayerCarts;
+import teamseth.cs340.common.models.client.points.PlayerPoints;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 
 /**
@@ -82,11 +91,54 @@ public class OtherPlayersFragment extends Fragment {
         otherPlayer4DestCards = rootView.findViewById(R.id.otherPlayer4DestCards);
         otherPlayer4Score = rootView.findViewById(R.id.otherPlayer4Score);
 
+        try {
+            setPlayerInfo();
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+
         return rootView;
     }
 
-    public void setPlayerInfo()
-    {
-        //TODO: Scott: set the number of cards, train cars, destination cards, and score for the other players in the game
+    public void setPlayerInfo() throws ResourceNotFoundException {
+        HashMap<UUID, String> otherPlayerNames = ClientModelRoot.getInstance().games.getActive().getPlayerNames();
+        OtherPlayerCards otherPlayerCards = ClientModelRoot.getInstance().cards.others;
+        PlayerPoints otherPlayerPoints = ClientModelRoot.getInstance().points;
+        PlayerCarts otherPlayerCarts = ClientModelRoot.getInstance().carts;
+        Set<UUID> players = ClientModelRoot.getInstance().games
+                .getActive().getPlayers().stream().filter((UUID id) -> id != Login.getInstance().getUserId()).collect(Collectors.toSet());
+        Iterator<UUID> iterator = players.iterator();
+        if (iterator.hasNext()) {
+            UUID nextPlayer = iterator.next();
+            otherPlayer1.setText(otherPlayerNames.get(nextPlayer));
+            otherPlayer1Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
+            otherPlayer1TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
+            otherPlayer1DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
+            otherPlayer1Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+        }
+        if (iterator.hasNext()) {
+            UUID nextPlayer = iterator.next();
+            otherPlayer2.setText(otherPlayerNames.get(nextPlayer));
+            otherPlayer2Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
+            otherPlayer2TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
+            otherPlayer2DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
+            otherPlayer2Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+        }
+        if (iterator.hasNext()) {
+            UUID nextPlayer = iterator.next();
+            otherPlayer3.setText(otherPlayerNames.get(nextPlayer));
+            otherPlayer3Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
+            otherPlayer3TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
+            otherPlayer3DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
+            otherPlayer3Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+        }
+        if (iterator.hasNext()) {
+            UUID nextPlayer = iterator.next();
+            otherPlayer4.setText(otherPlayerNames.get(nextPlayer));
+            otherPlayer4Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
+            otherPlayer4TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
+            otherPlayer4DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
+            otherPlayer4Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+        }
     }
 }

@@ -82,7 +82,6 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/card_back" />
 
-
     </GridLayout>
 
     <TextView
@@ -92,12 +91,30 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp" />
 
-    <ImageView
-        android:id="@+id/destination_card_back"
-        android:rotation="90"
-        android:layout_width="100dp"
-        android:layout_height="75dp"
-        android:layout_marginRight="15dp"
-        android:src="@drawable/dest_card_back" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/destination_card_back"
+            android:rotation="90"
+            android:layout_width="100dp"
+            android:layout_height="75dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/dest_card_back" />
+        <TextView
+            android:id="@+id/destinationCardsInDeck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/destination_card_back"
+            android:layout_alignTop="@id/destination_card_back"
+            android:layout_alignRight="@id/destination_card_back"
+            android:layout_alignBottom="@id/destination_card_back"
+            android:layout_margin="1dp"
+            android:gravity="center"
+            android:text="12"
+            android:textColor="#FFFFFF"
+            android:textSize="40dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
 </LinearLayout>

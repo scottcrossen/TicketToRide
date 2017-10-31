@@ -29,6 +29,9 @@ public class GameInfoFragment extends Fragment {
         String title = getResources().getStringArray(R.array.tabs_array)[i];
 
         getActivity().setTitle(title);
+
+
+
         return rootView;
     }
 }

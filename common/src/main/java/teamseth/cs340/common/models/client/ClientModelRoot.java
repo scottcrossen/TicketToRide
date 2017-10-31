@@ -2,9 +2,11 @@ package teamseth.cs340.common.models.client;
 
 import teamseth.cs340.common.models.client.board.Board;
 import teamseth.cs340.common.models.client.cards.CurrentCards;
+import teamseth.cs340.common.models.client.carts.PlayerCarts;
 import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.common.models.client.games.GameModel;
 import teamseth.cs340.common.models.client.history.CommandHistory;
+import teamseth.cs340.common.models.client.points.PlayerPoints;
 
 /**
  * @author Scott Leland Crossen
@@ -25,4 +27,6 @@ public class ClientModelRoot {
     public static final CurrentChat chat = CurrentChat.getInstance();
     public static final CommandHistory history = CommandHistory.getInstance();
     public static final Board board = Board.getInstance();
+    public static final PlayerPoints points = PlayerPoints.getInstance();
+    public static final PlayerCarts carts = PlayerCarts.getInstance();
 }

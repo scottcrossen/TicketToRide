@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
-
-import java.util.Locale;
 
 import teamseth.cs340.tickettoride.R;
 
@@ -27,14 +26,25 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Toast.makeText(this.getContext(), "CommandHistory", Toast.LENGTH_SHORT).show();
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
-        String planet = getResources().getStringArray(R.array.tabs_array)[i];
+        String title = getResources().getStringArray(R.array.tabs_array)[i];
 
-        int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                "drawable", getActivity().getPackageName());
-        ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
-        getActivity().setTitle(planet);
+        ListView listview = (ListView) rootView.findViewById(R.id.history_list);
+
+        String[] historyList = new String[] { "proof", "that", "this", "list",
+                "works"};
+
+        //TODO add the list of history to this list so they will display
+
+        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                historyList);
+
+        listview.setAdapter(listViewAdapter);
+
+        getActivity().setTitle(title);
         return rootView;
     }
 }

@@ -6,6 +6,8 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.view.View;
 
+import teamseth.cs340.common.models.server.games.PlayerColor;
+
 /**
  * Created by Seth on 10/28/2017.
  */
@@ -14,15 +16,25 @@ public class DrawView extends View {
     Paint paint = new Paint();
     View startView;
     View endView;
+    //maybe use this playerColor to define which color to draw the lines
+    PlayerColor playerColor;
+    Boolean routeOwned = false;
 
     public DrawView(Context context, View startView, View endView, int color) {
         super(context);
         setWillNotDraw(false);
-        paint.setColor(color);
         paint.setStrokeWidth(15);
         paint.setStyle(Paint.Style.STROKE);
+        if(!routeOwned) {
+            paint.setColor(color);
+            paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
+        }
+        else {
+            //TODO set the player color here
+            //paint.setColor(playerColor);
+        }
+
         // only draws dashed line if route is unclaimed
-        paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
         this.startView = startView;
         this.endView = endView;
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -311,6 +312,17 @@ public class MapFragment extends Fragment {
         //TODO phase 3 add onclick events for the lines, so, vancouverSeattle.addOnclick() blah blah
         //rootView = drawLines(rootView);
         getActivity().setTitle(title);
+
+        //TESTING
+        Button btn = (Button) rootView.findViewById(R.id.testButton);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add the required items here
+            }
+        });
+
         return rootView;
     }
 

@@ -45,16 +45,70 @@ public class GameInfoFragment extends Fragment {
         //TODO set onclicklisteners for the deck drawing, dest card drawing, and individual card picking
 
         ImageView card1 = (ImageView) rootView.findViewById(R.id.card1);
-        card1.setImageResource(blackCard);
         ImageView card2 = (ImageView) rootView.findViewById(R.id.card2);
-        card2.setImageResource(redCard);
         ImageView card3 = (ImageView) rootView.findViewById(R.id.card3);
-        card3.setImageResource(orangeCard);
         ImageView card4 = (ImageView) rootView.findViewById(R.id.card4);
-        card4.setImageResource(wildCard);
         ImageView card5 = (ImageView) rootView.findViewById(R.id.card5);
+        ImageView trainCardDeck = (ImageView) rootView.findViewById(R.id.cardBack);
+        ImageView destinationCardDeck = (ImageView) rootView.findViewById(R.id.destination_card_back);
+
+        //TODO set these to random cards
+        card1.setImageResource(blackCard);
+        card2.setImageResource(redCard);
+        card3.setImageResource(orangeCard);
+        card4.setImageResource(wildCard);
         card5.setImageResource(greenCard);
 
+        card1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add card to players hand, and change for a new card from the top of the deck
+                Toast.makeText(getContext(), "Chose Card 1", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        card2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add card to players hand, and change for a new card from the top of the deck
+            }
+        });
+
+        card3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add card to players hand, and change for a new card from the top of the deck
+            }
+        });
+
+        card4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add card to players hand, and change for a new card from the top of the deck
+            }
+        });
+
+        card5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add card to players hand, and change for a new card from the top of the deck
+            }
+        });
+
+        destinationCardDeck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO give player option of 3 destination cards, player must keep 1-3 of these
+                //TODO unused cards return to bottom of deck
+            }
+        });
+
+        trainCardDeck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO add top card to players hand, traindeck decrements
+            }
+        });
 
         return rootView;
     }

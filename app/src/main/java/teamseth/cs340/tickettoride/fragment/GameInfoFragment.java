@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import teamseth.cs340.tickettoride.R;
@@ -30,6 +31,29 @@ public class GameInfoFragment extends Fragment {
 
         getActivity().setTitle(title);
 
+        final int blackCard = R.drawable.black_train_card;
+        final int greenCard = R.drawable.green_train_card;
+        final int redCard = R.drawable.red_train_card;
+        final int yellowCard = R.drawable.yellow_train_card;
+        final int orangeCard = R.drawable.orange_train_card;
+        final int blueCard = R.drawable.blue_train_card;
+        final int purpleCard = R.drawable.purple_train_card;
+        final int whiteCard = R.drawable.white_train_card;
+        final int wildCard = R.drawable.locomotive;
+
+        //TODO set up the cards to update according to what is shown
+        //TODO set onclicklisteners for the deck drawing, dest card drawing, and individual card picking
+
+        ImageView card1 = (ImageView) rootView.findViewById(R.id.card1);
+        card1.setImageResource(blackCard);
+        ImageView card2 = (ImageView) rootView.findViewById(R.id.card2);
+        card2.setImageResource(redCard);
+        ImageView card3 = (ImageView) rootView.findViewById(R.id.card3);
+        card3.setImageResource(orangeCard);
+        ImageView card4 = (ImageView) rootView.findViewById(R.id.card4);
+        card4.setImageResource(wildCard);
+        ImageView card5 = (ImageView) rootView.findViewById(R.id.card5);
+        card5.setImageResource(greenCard);
 
 
         return rootView;

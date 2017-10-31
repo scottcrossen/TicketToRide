@@ -21,7 +21,6 @@
         <RelativeLayout>
             <ImageView
                 android:id="@+id/cardBack"
-                android:rotation="90"
                 android:layout_width="100dp"
                 android:layout_height="75dp"
                 android:layout_marginRight="15dp"
@@ -44,7 +43,6 @@
 
         <ImageView
             android:id="@+id/card1"
-            android:rotation="90"
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginRight="15dp"
@@ -52,7 +50,6 @@
 
         <ImageView
             android:id="@+id/card2"
-            android:rotation="90"
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginRight="15dp"
@@ -60,7 +57,6 @@
 
         <ImageView
             android:id="@+id/card3"
-            android:rotation="90"
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginRight="15dp"
@@ -68,7 +64,6 @@
 
         <ImageView
             android:id="@+id/card4"
-            android:rotation="90"
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginRight="15dp"
@@ -76,7 +71,6 @@
 
         <ImageView
             android:id="@+id/card5"
-            android:rotation="90"
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginRight="15dp"

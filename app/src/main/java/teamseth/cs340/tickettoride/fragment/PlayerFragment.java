@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,15 +54,30 @@ public class PlayerFragment extends Fragment {
         whiteCardText.setShadowLayer(15, 0, 0, Color.BLACK);
 
         TextView scoreText = (TextView) rootView.findViewById(R.id.currentScore);
-        //TODO set score from model
+        //TODO-Scott set score from model
         //scoreText.setText();
-        //ClientModelRoot.getInstance().score
+        //ClientModelRoot
 
         TextView trainCarsRemainingText = (TextView) rootView.findViewById(R.id.trainCarsRemaining);
-        //TODO set score from model
+        //TODO-Scott set score from model
         //trainCarsRemainingText.setText();
 
         getActivity().setTitle(title);
+
+        ListView listview = (ListView) rootView.findViewById(R.id.destination_card_list);
+
+        String[] destinationCardList = new String[] { "proof", "that", "this", "list",
+        "works"};
+
+        //TODO add the list of destination cards to this list so they will display
+
+        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                destinationCardList);
+
+        listview.setAdapter(listViewAdapter);
+
         return rootView;
     }
 }

@@ -20,19 +20,19 @@
 
         <RelativeLayout>
             <ImageView
-                android:id="@+id/cardBack"
+                android:id="@+id/card_back_train"
                 android:layout_width="100dp"
                 android:layout_height="75dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/card_back" />
             <TextView
-                android:id="@+id/cardsInDeck"
+                android:id="@+id/cards_in_deck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/cardBack"
-                android:layout_alignTop="@id/cardBack"
-                android:layout_alignRight="@id/cardBack"
-                android:layout_alignBottom="@id/cardBack"
+                android:layout_alignLeft="@id/card_back_train"
+                android:layout_alignTop="@id/card_back_train"
+                android:layout_alignRight="@id/card_back_train"
+                android:layout_alignBottom="@id/card_back_train"
                 android:layout_margin="1dp"
                 android:gravity="center"
                 android:text="12"
@@ -96,7 +96,7 @@
             android:layout_marginRight="15dp"
             android:src="@drawable/dest_card_back" />
         <TextView
-            android:id="@+id/destinationCardsInDeck"
+            android:id="@+id/destination_cards_in_deck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/destination_card_back"

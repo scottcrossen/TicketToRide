@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import teamseth.cs340.tickettoride.R;
@@ -49,8 +50,10 @@ public class GameInfoFragment extends Fragment {
         ImageView card3 = (ImageView) rootView.findViewById(R.id.card3);
         ImageView card4 = (ImageView) rootView.findViewById(R.id.card4);
         ImageView card5 = (ImageView) rootView.findViewById(R.id.card5);
-        ImageView trainCardDeck = (ImageView) rootView.findViewById(R.id.cardBack);
+        ImageView trainCardDeck = (ImageView) rootView.findViewById(R.id.card_back_train);
         ImageView destinationCardDeck = (ImageView) rootView.findViewById(R.id.destination_card_back);
+        TextView trainCardsLeft = (TextView) rootView.findViewById(R.id.cards_in_deck);
+        TextView destCardsLeft = (TextView) rootView.findViewById(R.id.destination_cards_in_deck);
 
         //TODO set these to random cards
         card1.setImageResource(blackCard);
@@ -58,6 +61,10 @@ public class GameInfoFragment extends Fragment {
         card3.setImageResource(orangeCard);
         card4.setImageResource(wildCard);
         card5.setImageResource(greenCard);
+
+        //TODO set the text to the number of cards left in the respective decks
+        //trainCardsLeft.setText();
+        //destCardsLeft.setText();
 
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +116,8 @@ public class GameInfoFragment extends Fragment {
                 //TODO add top card to players hand, traindeck decrements
             }
         });
+
+        //TODO do a check to ensure there are not 3 locomotives facing up at the same time
 
         return rootView;
     }

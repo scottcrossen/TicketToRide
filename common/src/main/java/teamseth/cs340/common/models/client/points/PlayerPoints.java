@@ -11,6 +11,15 @@ import teamseth.cs340.common.models.IModel;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class PlayerPoints implements IModel {
+    private static PlayerPoints instance;
+
+    public static PlayerPoints getInstance() {
+        if(instance == null) {
+            instance = new PlayerPoints();
+        }
+        return instance;
+    }
+
     private Map<UUID, Integer> playerPoints = new HashMap<>();
 
     public int getPlayerPoints(UUID playerId) {

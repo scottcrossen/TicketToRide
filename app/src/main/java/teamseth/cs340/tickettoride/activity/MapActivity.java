@@ -32,7 +32,6 @@ import teamseth.cs340.tickettoride.fragment.HistoryFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
-import teamseth.cs340.tickettoride.util.DebugCommandShortcut;
 
 /**
  * Created by Seth on 10/13/2017.
@@ -53,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
         // use this to skip out on all the earlier activities.
 
-        DebugCommandShortcut.getInstance(getApplicationContext()).run();
+        //DebugCommandShortcut.getInstance(getApplicationContext()).run();
 
         super.onCreate(savedInstanceState);
 

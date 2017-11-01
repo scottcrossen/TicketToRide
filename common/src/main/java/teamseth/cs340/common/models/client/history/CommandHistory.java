@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import teamseth.cs340.common.models.client.ClientModelRoot;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class CommandHistory {
+public class CommandHistory extends Observable {
     private static CommandHistory instance;
 
     public static CommandHistory getInstance() {
@@ -29,6 +30,8 @@ public class CommandHistory {
 
     public void add(IHistoricalCommand command) {
         history.add(command);
+        setChanged();
+        notifyObservers();
     }
 
     public List<String> getHistory() throws ResourceNotFoundException {

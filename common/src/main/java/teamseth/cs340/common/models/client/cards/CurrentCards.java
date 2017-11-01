@@ -49,6 +49,8 @@ public class CurrentCards extends Observable {
                 return;
             }
         }
+        setChanged();
+        notifyObservers();
     }
 
     public void removeResourceCard(ResourceColor resourceCard) {
@@ -61,6 +63,8 @@ public class CurrentCards extends Observable {
                 return;
             }
         }
+        setChanged();
+        notifyObservers();
     }
 
     public static final OtherPlayerCards others = OtherPlayerCards.getInstance();

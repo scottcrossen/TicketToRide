@@ -19,14 +19,18 @@ import android.widget.ListView;
 import java.util.Observable;
 import java.util.Observer;
 
+import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChatFragment;
 import teamseth.cs340.tickettoride.fragment.GameInfoFragment;
 import teamseth.cs340.tickettoride.fragment.HistoryFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
+import teamseth.cs340.tickettoride.util.DebugCommandShortcut;
 
 /**
  * Created by Seth on 10/13/2017.
@@ -40,15 +44,24 @@ public class MapActivity extends AppCompatActivity implements Observer {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mTabTitles;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         // use this to skip out on all the earlier activities.
-        /*
-        DebugCommandShortcut.getInstance(getApplicationContext()).run();*/
+
+        DebugCommandShortcut.getInstance(getApplicationContext()).run();
 
         super.onCreate(savedInstanceState);
+
+
+        try {
+            Poller.getInstance(this.getApplicationContext()).addToJobs(new UpdateClientHistoryCommand());
+        } catch (Exception e) {
+        }
+
+
         setContentView(R.layout.activity_map);
 
         mTitle = mDrawerTitle = getTitle();
@@ -133,7 +146,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-        Fragment fragment = new MapFragment();
+        fragment = new MapFragment();
         Bundle args = new Bundle();
         switch(position) {
             default:
@@ -205,17 +218,38 @@ public class MapActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
+        ClientModelRoot.cards.addObserver(this);
         ClientModelRoot.chat.addObserver(this);
+        ClientModelRoot.history.addObserver(this);
+        ClientModelRoot.board.addObserver(this);
+        ClientModelRoot.points.addObserver(this);
+        ClientModelRoot.carts.addObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        ClientModelRoot.cards.deleteObserver(this);
         ClientModelRoot.chat.deleteObserver(this);
+        ClientModelRoot.history.deleteObserver(this);
+        ClientModelRoot.board.deleteObserver(this);
+        ClientModelRoot.points.deleteObserver(this);
+        ClientModelRoot.carts.deleteObserver(this);
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        if (fragment instanceof MapFragment) {
+        } else if (fragment instanceof ChatFragment) {
+            if (o instanceof CurrentChat) ((ChatFragment) fragment).update();
+        } else if (fragment instanceof GameInfoFragment) {
 
+        } else if (fragment instanceof HistoryFragment) {
+
+        } else if (fragment instanceof OtherPlayersFragment) {
+
+        } else if (fragment instanceof PlayerFragment) {
+
+        }
     }
 }

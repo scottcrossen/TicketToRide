@@ -30,7 +30,6 @@ public class MapFragment extends Fragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
     static final int PINK = Color.rgb(255,182,193);
     static final int ORANGE = Color.rgb(255,140,0);
-    private View view;
 
     public MapFragment() {
         // Empty constructor required for fragment subclasses
@@ -336,10 +335,8 @@ public class MapFragment extends Fragment {
                 //claimRoute();
             }
         });*/
-        view = rootView;
         allClaimedRoutes = new HashSet<Route>();
         update();
-        view = rootView;
         return rootView;
     }
 
@@ -355,6 +352,7 @@ public class MapFragment extends Fragment {
             DrawView routeView = new DrawView(this.getContext(),startCity,endCity,routeColor);
             routeView.isOwned(true);
             routeView.setBackgroundColor(Color.TRANSPARENT);
+            View view = this.getView();
             RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeMap);
             relativeLayout.addView(routeView,2500,1800);
         } catch (ResourceNotFoundException e) {
@@ -381,79 +379,80 @@ public class MapFragment extends Fragment {
     }
 
     private ImageView convertCityNametoImageView(CityName cityName) {
+        View view = this.getView();
         switch (cityName) {
             case Vancouver:
-                view.findViewById(R.id.vancouverCity);
+                return view.findViewById(R.id.vancouverCity);
             case Seattle:
-                view.findViewById(R.id.seattleCity);
+                return view.findViewById(R.id.seattleCity);
             case Portland:
-                view.findViewById(R.id.portlandCity);
+                return view.findViewById(R.id.portlandCity);
             case SanFrancisco:
-                view.findViewById(R.id.sanFranciscoCity);
+                return view.findViewById(R.id.sanFranciscoCity);
             case LosAngeles:
-                view.findViewById(R.id.losAngelesCity);
+                return view.findViewById(R.id.losAngelesCity);
             case Phoenix:
-                view.findViewById(R.id.phoenixCity);
+                return view.findViewById(R.id.phoenixCity);
             case LasVegas:
-                view.findViewById(R.id.lasVegasCity);
+                return view.findViewById(R.id.lasVegasCity);
             case ElPaso:
-                view.findViewById(R.id.elPasoCity);
+                return view.findViewById(R.id.elPasoCity);
             case SantaFe:
-                view.findViewById(R.id.santFeCity);
+                return view.findViewById(R.id.santFeCity);
             case SaltLakeCity:
-                view.findViewById(R.id.saltLakeCity);
+                return view.findViewById(R.id.saltLakeCity);
             case Calgary:
-                view.findViewById(R.id.calgaryCity);
+                return view.findViewById(R.id.calgaryCity);
             case Helena:
-                view.findViewById(R.id.helenaCity);
+                return view.findViewById(R.id.helenaCity);
             case Denver:
-                view.findViewById(R.id.denverCity);
+                return view.findViewById(R.id.denverCity);
             case Winnipeg:
-                view.findViewById(R.id.winnipegCity);
+                return view.findViewById(R.id.winnipegCity);
             case Duluth:
-                view.findViewById(R.id.duluthCity);
+                return view.findViewById(R.id.duluthCity);
             case Omaha:
-                view.findViewById(R.id.omahaCity);
+                return view.findViewById(R.id.omahaCity);
             case OklahomaCity:
-                view.findViewById(R.id.oklahomaCity);
+                return view.findViewById(R.id.oklahomaCity);
             case KansasCity:
-                view.findViewById(R.id.kansasCity);
+                return view.findViewById(R.id.kansasCity);
             case Dallas:
-                view.findViewById(R.id.dallasCity);
+                return view.findViewById(R.id.dallasCity);
             case Houston:
-                view.findViewById(R.id.houstonCity);
+                return view.findViewById(R.id.houstonCity);
             case NewOrleans:
-                view.findViewById(R.id.newOrleansCity);
+                return view.findViewById(R.id.newOrleansCity);
             case LittleRock:
-                view.findViewById(R.id.littleRockCity);
+                return view.findViewById(R.id.littleRockCity);
             case SaintLouis:
-                view.findViewById(R.id.saintLouisCity);
+                return view.findViewById(R.id.saintLouisCity);
             case Chicago:
-                view.findViewById(R.id.chicagoCity);
+                return view.findViewById(R.id.chicagoCity);
             case Nashville:
-                view.findViewById(R.id.nashvilleCity);
+                return view.findViewById(R.id.nashvilleCity);
             case Miami:
-                view.findViewById(R.id.miamiCity);
+                return view.findViewById(R.id.miamiCity);
             case Atlanta:
-                view.findViewById(R.id.atlantaCity);
+                return view.findViewById(R.id.atlantaCity);
             case Charleston:
-                view.findViewById(R.id.charlestonCity);
+                return view.findViewById(R.id.charlestonCity);
             case Raleigh:
-                view.findViewById(R.id.raleighCity);
+                return view.findViewById(R.id.raleighCity);
             case DC:
-                view.findViewById(R.id.dcCity);
+                return view.findViewById(R.id.dcCity);
             case Pittsburgh:
-                view.findViewById(R.id.pittsburghCity);
+                return view.findViewById(R.id.pittsburghCity);
             case NewYork:
-                view.findViewById(R.id.newYorkCity);
+                return view.findViewById(R.id.newYorkCity);
             case Boston:
-                view.findViewById(R.id.bostonCity);
+                return view.findViewById(R.id.bostonCity);
             case Toronto:
-                view.findViewById(R.id.torontoCity);
+                return view.findViewById(R.id.torontoCity);
             case StMarie:
-                view.findViewById(R.id.saultStMarieCity);
+                return view.findViewById(R.id.saultStMarieCity);
             case Montreal:
-                view.findViewById(R.id.montrealCity);
+                return view.findViewById(R.id.montrealCity);
         }
         return view.findViewById(R.id.seattleCity);
     }

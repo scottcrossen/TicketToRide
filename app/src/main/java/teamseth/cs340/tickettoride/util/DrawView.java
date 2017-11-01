@@ -32,6 +32,7 @@ public class DrawView extends View {
             paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
         }
         else {
+            //paint.setPathEffect(null);
             //TODO set the player color here
             //paint.setColor(playerColor);
         }

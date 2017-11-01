@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.client.carts;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.IModel;
@@ -10,7 +11,7 @@ import teamseth.cs340.common.models.IModel;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class PlayerCarts implements IModel {
+public class PlayerCarts extends Observable implements IModel {
     private static PlayerCarts instance;
 
     public static PlayerCarts getInstance() {
@@ -36,5 +37,7 @@ public class PlayerCarts implements IModel {
         } else {
             playerCarts.put(playerId, 45 - carts);
         }
+        setChanged();
+        notifyObservers();
     }
 }

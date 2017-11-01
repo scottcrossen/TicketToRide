@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.client.points;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.IModel;
@@ -10,7 +11,7 @@ import teamseth.cs340.common.models.IModel;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class PlayerPoints implements IModel {
+public class PlayerPoints extends Observable implements IModel {
     private static PlayerPoints instance;
 
     public static PlayerPoints getInstance() {

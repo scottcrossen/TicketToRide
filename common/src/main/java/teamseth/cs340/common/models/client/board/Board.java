@@ -1,6 +1,7 @@
 package teamseth.cs340.common.models.client.board;
 
 import java.util.List;
+import java.util.Observable;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -14,7 +15,7 @@ import teamseth.cs340.common.models.server.cards.ResourceColor;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class Board implements IModel {
+public class Board extends Observable implements IModel {
     private static Board instance;
 
     public static Board getInstance() {
@@ -28,6 +29,8 @@ public class Board implements IModel {
 
     public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException {
         routes.claimRoute(userId, city1, city2, color);
+        setChanged();
+        notifyObservers();
     }
 
     public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {

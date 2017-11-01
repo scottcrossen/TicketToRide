@@ -49,7 +49,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         public ViewHolder(View view) {
             super(view);
             gameName = (TextView) view.findViewById(R.id.game_name);
-            //gameNameLayout = (RelativeLayout) view.findViewById(R.id.game_name_layout);
             view.setOnClickListener(this);
         }
 

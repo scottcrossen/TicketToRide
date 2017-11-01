@@ -30,14 +30,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView playerName;
         private TextView message;
-        //private RelativeLayout gameNameLayout;
 
 
         public ViewHolder(View view) {
             super(view);
+            playerName = (TextView) view.findViewById(R.id.player_name);
             message = (TextView) view.findViewById(R.id.chat_message);
-            //gameNameLayout = (RelativeLayout) view.findViewById(R.id.game_name_layout);
             view.setOnClickListener(this);
         }
 
@@ -58,7 +58,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
         Message message = messageList.get(position);
         try {
-            holder.message.setText(ClientModelRoot.getInstance().games.getActive().getPlayerNames().get(message.getUser()) + ": " + message.getMessage());
+            holder.playerName.setText(ClientModelRoot.getInstance().games.getActive().getPlayerNames().get(message.getUser()));
+            holder.message.setText(message.getMessage());
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
@@ -74,9 +75,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public void update() {
         ArrayList<Message> oldList = messageList;
-        ArrayList<Message> newMessageList = (ArrayList<Message>) ClientModelRoot.chat.getMessages();
+        System.out.println(messageList.size());
+        ArrayList<Message> newMessageList = (ArrayList<Message>) ClientModelRoot.chat.getMessages().clone();
+        System.out.println(newMessageList.size());
         messageList = newMessageList;
-        if (oldList != messageList) activity.runOnUiThread(() -> notifyDataSetChanged());
+        System.out.println(messageList.size());
+        if (oldList.size() != messageList.size()) activity.runOnUiThread(() -> notifyDataSetChanged());
     }
 
 }

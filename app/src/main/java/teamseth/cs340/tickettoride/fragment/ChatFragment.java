@@ -82,7 +82,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         makeChat.setText("");
     }
 
-    public void updateMessage() {
+    public void update() {
         mAdapter.update();
     }
 }

@@ -14,6 +14,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class AddMessagesCommand implements IClientCommand, IHistoricalCommand {
+    private static final long serialVersionUID = -11802527544567339L;
 
     private ArrayList<Message> messages;
     private UUID id = UUID.randomUUID();

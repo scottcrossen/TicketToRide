@@ -68,6 +68,7 @@ public class MapFragment extends Fragment {
     private ImageView saultStMarie;
     private ImageView montreal;
     private RelativeLayout relativeLayout;
+    private DrawView vancouverSeattle;
 
     public MapFragment() {
         // Empty constructor required for fragment subclasses
@@ -121,7 +122,7 @@ public class MapFragment extends Fragment {
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
         // TODO potentially add in the x and y offsets so the lines look cleaner, not as necessary though
-        DrawView vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY);
+        vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY);
         vancouverSeattle.setBackgroundColor(Color.TRANSPARENT);
         DrawView seattlePortland = new DrawView(this.getContext(),seattle,portland, Color.GRAY);
         seattlePortland.setBackgroundColor(Color.TRANSPARENT);
@@ -372,11 +373,11 @@ public class MapFragment extends Fragment {
                 ImageView startCity = convertCityNametoImageView(city1);
                 ImageView endCity = convertCityNametoImageView(city2);
                 int routeColor = convertColorFromEnum(color);
-                DrawView routeView = new DrawView(this.getContext(), startCity, endCity, routeColor);
-                routeView.isOwned(true);
-                routeView.setBackgroundColor(Color.TRANSPARENT);
-                View view = this.getView();
-                relativeLayout.addView(routeView, 2500, 1800);
+                relativeLayout.removeView(vancouverSeattle);
+                vancouverSeattle = new DrawView(this.getContext(), startCity, endCity, routeColor);
+                vancouverSeattle.isOwned(true);
+                vancouverSeattle.setBackgroundColor(Color.TRANSPARENT);
+                relativeLayout.addView(vancouverSeattle, 2500, 1800);
             } catch (ResourceNotFoundException e) {
                 e.printStackTrace();
             }

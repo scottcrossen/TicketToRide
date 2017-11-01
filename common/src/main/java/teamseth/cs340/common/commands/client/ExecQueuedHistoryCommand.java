@@ -22,6 +22,7 @@ public class ExecQueuedHistoryCommand implements IClientCommand {
             commands.stream().forEach((command) -> {
                 System.out.println("Executing client-side historical command: " + command.toString());
                 ClientFacade.getInstance().addHistory(command);
+                System.out.println("Successfully executed client-side historical command");
                 command.call();
             });
             return null;

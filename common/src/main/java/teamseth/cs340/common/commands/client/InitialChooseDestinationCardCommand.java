@@ -14,6 +14,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class InitialChooseDestinationCardCommand implements IHistoricalCommand {
+    private static final long serialVersionUID = -1820875388164428541L;
 
     private DestinationCard card;
     private UUID id = UUID.randomUUID();

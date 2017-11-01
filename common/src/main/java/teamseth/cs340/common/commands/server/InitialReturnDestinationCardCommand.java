@@ -20,6 +20,7 @@ import teamseth.cs340.common.util.client.Login;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class InitialReturnDestinationCardCommand extends QueueCommand implements IServerCommand {
+    private static final long serialVersionUID = -8210195450387873999L;
 
     private UUID deckId;
     private AuthToken token = Login.getInstance().getToken();

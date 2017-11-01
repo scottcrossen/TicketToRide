@@ -9,6 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.tickettoride.R;
 
 /**
@@ -32,10 +36,14 @@ public class HistoryFragment extends Fragment {
 
         ListView listview = (ListView) rootView.findViewById(R.id.history_list);
 
-        String[] historyList = new String[] { "proof", "that", "this", "list",
-                "works"};
-
-        //TODO add the list of history to this list so they will display
+        List<String> history = null;
+        try {
+            history = ClientModelRoot.getInstance().history.getHistory();
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+        String[] historyList = new String[history.size()];
+        history.toArray(historyList);
 
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
                 getActivity(),

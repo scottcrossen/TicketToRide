@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
 import teamseth.cs340.common.commands.client.SeedFaceUpCardsCommand;
-import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -120,12 +120,14 @@ public class GameModel extends AuthAction implements IModel<Game> {
         if (game.getPlayers().size() == 0) game.setState(GameState.DELETED);
     }
 
-    public boolean attemptStartGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+    public boolean attemptPlayGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
         Game game = get(gameId);
         UUID historyId = game.getHistory();
         Set<UUID> destinationCardsDecided = new TreeSet<>();
         ServerModelRoot.getInstance().history.getCommandsAfter(historyId, Optional.empty(), token).forEach((IHistoricalCommand command) -> {
-            if (command instanceof InitialReturnDestinationCardCommand) destinationCardsDecided.add(command.playerOwnedby());
+            if (command instanceof InitialChooseDestinationCardCommand) {
+                destinationCardsDecided.add(command.playerOwnedby());
+            }
         });
         boolean success = game.getPlayers().stream().allMatch((UUID player) -> destinationCardsDecided.contains(player));
         if (success) {

@@ -13,6 +13,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class SetGameStateCommand implements IHistoricalCommand, IClientCommand {
+    private static final long serialVersionUID = -520832872301540099L;
 
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();

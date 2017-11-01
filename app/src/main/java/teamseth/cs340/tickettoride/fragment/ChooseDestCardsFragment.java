@@ -7,13 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
+import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
  * Created by ajols on 10/14/2017.
@@ -25,7 +29,6 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
     private CheckBox checkBox2;
     private CheckBox checkBox3;
     private Button chooseDestCardsBtn;
-    private ArrayList destCards = new ArrayList();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,19 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
     }
 
     public void setDestinationCards(List<DestinationCard> cards) {
-        // TODO: set the fields to the texts in these cards
+        Iterator<DestinationCard> iterator = cards.iterator();
+        if (iterator.hasNext()) {
+            DestinationCard next = iterator.next();
+            checkBox1.setText(next.toString());
+        }
+        if (iterator.hasNext()) {
+            DestinationCard next = iterator.next();
+            checkBox2.setText(next.toString());
+        }
+        if (iterator.hasNext()) {
+            DestinationCard next = iterator.next();
+            checkBox3.setText(next.toString());
+        }
     }
 
     @Override
@@ -52,6 +67,7 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         chooseDestCardsBtn = v.findViewById(R.id.chooseDestCardsButton);
         chooseDestCardsBtn.setOnClickListener(this);
         chooseDestCardsBtn.setEnabled(false);
+        setDestinationCards(ClientModelRoot.getInstance().cards.getDestinationCards());
         return v;
     }
 
@@ -59,7 +75,11 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.chooseDestCardsButton:
-                onButtonClicked();
+                try {
+                    onButtonClicked();
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.checkbox1:
                 enableButton();
@@ -73,28 +93,20 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    public void onButtonClicked() {
-
-        if (checkBox1.isChecked()) {
-            destCards.add("destCard1");
+    public void onButtonClicked() throws ResourceNotFoundException {
+        List<DestinationCard> destinationCards = ClientModelRoot.getInstance().cards.getDestinationCards();
+        DestinationCard returnCard = null;
+        if (!checkBox1.isChecked()) {
+            returnCard = destinationCards.get(0);
         }
-        if (checkBox2.isChecked()) {
-            destCards.add("destCard2");
+        if (!checkBox2.isChecked()) {
+            returnCard = destinationCards.get(0);
         }
-        if (checkBox3.isChecked()) {
-            destCards.add("destCard3");
-        }
-
-        for (int i = 0; i < destCards.size(); i++) {
-
-            Toast.makeText(getActivity(), "destCards[" + i + "]: " + destCards.get(i),
-                    Toast.LENGTH_LONG).show();
-
-            //System.out.println("destCards[" + i + "]: " + destCards.get(i));
+        if (!checkBox3.isChecked()) {
+            returnCard = destinationCards.get(0);
         }
 
-        // TODO: return the unused card:
-        // (new CommandTask(getApplicationContext())).execute(new InitialReturnDestinationCardCommand(Optional.of(/*your card here*/)));
+        new CommandTask(getContext()).execute(new InitialReturnDestinationCardCommand(Optional.ofNullable(returnCard)));
     }
 
     public void enableButton() {
@@ -111,9 +123,6 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         if (checkBox3.isChecked()) {
             count++;
         }
-
-        Toast.makeText(getActivity(), "count: " + count,
-                Toast.LENGTH_LONG).show();
 
         if (count < 2) {
             chooseDestCardsBtn.setEnabled(false);

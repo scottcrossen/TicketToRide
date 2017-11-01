@@ -10,6 +10,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class AlternativeHistoryCommand implements IClientCommand, IHistoricalCommand {
+    private static final long serialVersionUID = -8362948042581350094L;
 
     protected UUID id;
     protected UUID owner;

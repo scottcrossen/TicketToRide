@@ -121,14 +121,17 @@ public class GameModel extends AuthAction implements IModel<Game> {
     }
 
     public boolean attemptPlayGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+        AuthAction.user(token);
         Game game = get(gameId);
         UUID historyId = game.getHistory();
         Set<UUID> destinationCardsDecided = new TreeSet<>();
-        ServerModelRoot.getInstance().history.getCommandsAfter(historyId, Optional.empty(), token).forEach((IHistoricalCommand command) -> {
+        ServerModelRoot.getInstance().history.getAllCommands(historyId).forEach((IHistoricalCommand command) -> {
             if (command instanceof InitialChooseDestinationCardCommand) {
                 destinationCardsDecided.add(command.playerOwnedby());
             }
         });
+        System.out.println(game.getPlayers());
+        System.out.println(destinationCardsDecided);
         boolean success = game.getPlayers().stream().allMatch((UUID player) -> destinationCardsDecided.contains(player));
         if (success) {
             game.setState(GameState.PLAYING);

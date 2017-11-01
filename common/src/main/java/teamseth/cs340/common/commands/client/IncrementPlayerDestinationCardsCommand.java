@@ -8,6 +8,8 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class IncrementPlayerDestinationCardsCommand extends AlternativeHistoryCommand implements IClientCommand, IHistoricalCommand {
+    private static final long serialVersionUID = -6742079274161154646L;
+
     public IncrementPlayerDestinationCardsCommand(IHistoricalCommand command) {
         super(command);
     }

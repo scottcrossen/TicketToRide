@@ -41,6 +41,10 @@ public class HistoryModel extends AuthAction implements IModel<CommandHistory> {
         return history.getByPlayer(userId, afterId);
     }
 
+    public LinkedList<IHistoricalCommand> getAllCommands(UUID historyId) throws ResourceNotFoundException {
+        return get(historyId).getAll();
+    }
+
     public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
         AuthAction.user(token);
         CommandHistory history = get(historyId);

@@ -344,12 +344,6 @@ public class MapFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        update();
-    }
-
     private void claimRoute(Route route) {
         CityName city1 = route.getCity1();
         CityName city2 = route.getCity2();

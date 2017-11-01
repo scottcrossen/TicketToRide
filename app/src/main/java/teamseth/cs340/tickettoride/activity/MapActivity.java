@@ -16,6 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.fragment.ChatFragment;
 import teamseth.cs340.tickettoride.fragment.GameInfoFragment;
@@ -28,7 +32,7 @@ import teamseth.cs340.tickettoride.fragment.PlayerFragment;
  * Created by Seth on 10/13/2017.
  */
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements Observer {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -42,7 +46,7 @@ public class MapActivity extends AppCompatActivity {
 
         // use this to skip out on all the earlier activities.
         /*
-        DebugCommandShortcut.getInstance(getApplicationContext()).run(); */
+        DebugCommandShortcut.getInstance(getApplicationContext()).run();*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
@@ -195,5 +199,23 @@ public class MapActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ClientModelRoot.chat.addObserver(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ClientModelRoot.chat.deleteObserver(this);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

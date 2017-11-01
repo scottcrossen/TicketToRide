@@ -9,29 +9,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
-import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.common.models.server.chat.Message;
-import teamseth.cs340.common.models.server.games.Game;
-import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.tickettoride.R;
-import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
  * Created by mike on 10/14/17.
  */
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
-    public void update() {
-        ArrayList<Message> oldList = chatList;
-        ArrayList<Message> newGameList = (ArrayList<Message>) ClientModelRoot.chat.getMessages();
-        if (oldList != chatList) activity.runOnUiThread(() -> notifyDataSetChanged());
-    }
 
-    private ArrayList<Message> chatList = new ArrayList<>();
     Context context;
     Activity activity;
 
@@ -54,12 +43,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-
-            String messageText = (String) message.getText();
-//            Game clickedGame = ClientModelRoot.chat.getMessages();
-//            UUID gameId = clickedGame.getId();
-//            Activity activity = (Activity)view.getContext();
-            //new CommandTask(context).execute(new JoinGameCommand(gameId));
         }
     }
 
@@ -73,13 +56,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
-        Message message = chatList.get(position);
-        holder.message.setText(message.message);
+        Message message = messageList.get(position);
+        try {
+            holder.message.setText(ClientModelRoot.getInstance().games.getActive().getPlayerNames().get(message.getUser()) + ": " + message.getMessage());
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return chatList.size();
+        return messageList.size();
     }
+
+    private ArrayList<Message> messageList = new ArrayList<>();
+
+    public void update() {
+        ArrayList<Message> oldList = messageList;
+        ArrayList<Message> newMessageList = (ArrayList<Message>) ClientModelRoot.chat.getMessages();
+        messageList = newMessageList;
+        if (oldList != messageList) activity.runOnUiThread(() -> notifyDataSetChanged());
+    }
+
 }

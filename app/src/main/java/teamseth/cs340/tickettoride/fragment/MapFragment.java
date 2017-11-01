@@ -31,43 +31,43 @@ public class MapFragment extends Fragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
     static final int PINK = Color.rgb(255,182,193);
     static final int ORANGE = Color.rgb(255,140,0);
-    ImageView vancouver;
-    ImageView seattle;
-    ImageView portland;
-    ImageView sanFrancisco;
-    ImageView losAngeles;
-    ImageView phoenix;
-    ImageView lasVegas;
-    ImageView elPaso;
-    ImageView santaFe;
-    ImageView saltLake;
-    ImageView calgary;
-    ImageView helena;
-    ImageView denver;
-    ImageView winnipeg;
-    ImageView duluth;
-    ImageView omaha;
-    ImageView oklahoma;
-    ImageView kansas;
-    ImageView dallas;
-    ImageView houston;
-    ImageView newOrleans;
-    ImageView littleRock;
-    ImageView saintLouis;
-    ImageView chicago;
-    ImageView nashville;
-    ImageView miami;
-    ImageView atlanta;
-    ImageView charleston;
-    ImageView raleigh;
-    ImageView dc;
-    ImageView pittsburgh;
-    ImageView newYork;
-    ImageView boston;
-    ImageView toronto;
-    ImageView saultStMarie;
-    ImageView montreal;
-    RelativeLayout relativeLayout;
+    private ImageView vancouver;
+    private ImageView seattle;
+    private ImageView portland;
+    private ImageView sanFrancisco;
+    private ImageView losAngeles;
+    private ImageView phoenix;
+    private ImageView lasVegas;
+    private ImageView elPaso;
+    private ImageView santaFe;
+    private ImageView saltLake;
+    private ImageView calgary;
+    private ImageView helena;
+    private ImageView denver;
+    private ImageView winnipeg;
+    private ImageView duluth;
+    private ImageView omaha;
+    private ImageView oklahoma;
+    private ImageView kansas;
+    private ImageView dallas;
+    private ImageView houston;
+    private ImageView newOrleans;
+    private ImageView littleRock;
+    private ImageView saintLouis;
+    private ImageView chicago;
+    private ImageView nashville;
+    private ImageView miami;
+    private ImageView atlanta;
+    private ImageView charleston;
+    private ImageView raleigh;
+    private ImageView dc;
+    private ImageView pittsburgh;
+    private ImageView newYork;
+    private ImageView boston;
+    private ImageView toronto;
+    private ImageView saultStMarie;
+    private ImageView montreal;
+    private RelativeLayout relativeLayout;
 
     public MapFragment() {
         // Empty constructor required for fragment subclasses
@@ -82,7 +82,6 @@ public class MapFragment extends Fragment {
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
         relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativeMap);
-
 
         vancouver = (ImageView) rootView.findViewById(R.id.vancouverCity);
         seattle = (ImageView) rootView.findViewById(R.id.seattleCity);
@@ -355,25 +354,10 @@ public class MapFragment extends Fragment {
         relativeLayout.addView(winnipegDuluth,2500,1800);
         relativeLayout.addView(winnipegSaultStMarie,2500,1800);
 
-
-
         //TODO phase 3 add onclick events for the lines, so, vancouverSeattle.addOnclick() blah blah
         //rootView = drawLines(rootView);
         getActivity().setTitle(title);
 
-
-
-        //TESTING
-        /*Button btn = (Button) rootView.findViewById(R.id.testButton);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO add the required items here
-                //claimRoute();
-                update();
-            }
-        });*/
         allClaimedRoutes = new HashSet<Route>();
         update();
         return rootView;

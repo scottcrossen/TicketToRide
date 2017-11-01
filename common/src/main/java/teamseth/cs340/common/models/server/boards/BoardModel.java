@@ -40,12 +40,7 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
     }
 
     private Routes getRoutes(UUID id) throws ResourceNotFoundException {
-        for (Routes routeModel : routes) {
-            if(routeModel.getId().equals(id)) {
-                return routeModel;
-            }
-        }
-        throw new ResourceNotFoundException();
+        return routes.stream().filter((Routes routeModel) -> routeModel.getId().equals(id)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
     public int claimRoute(UUID routeSetId, CityName city1, CityName city2, ResourceColor color, int colorCount, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {

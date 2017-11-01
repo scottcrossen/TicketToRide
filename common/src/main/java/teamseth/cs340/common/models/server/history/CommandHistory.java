@@ -29,7 +29,7 @@ public class CommandHistory implements Serializable {
                 output.add(current);
             } else if (found && !current.playersVisibleTo().contains(playerId)) {
                 output.add(current.getAlternate());
-            } else if (afterId.map((UUID gameId) -> current.getId() == gameId).orElseGet(() -> true)) {
+            } else if (afterId.map((UUID gameId) -> current.getId().equals(gameId)).orElseGet(() -> true)) {
                 found = true;
             }
         }

@@ -17,7 +17,7 @@ import teamseth.cs340.common.models.server.cards.ResourceColor;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class Routes implements Serializable, IModel<Route> {
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     public UUID getId() {return this.id;}
     private HashSet<Route> routes = new HashSet<>();
 

@@ -17,6 +17,7 @@ import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChooseDestCardsFragment;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * Created by ajols on 10/14/2017.
@@ -26,8 +27,6 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
 
     Game activeGame;
     Fragment fragment;
-
-    private boolean destinationCardsDrawn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +67,12 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
 
     @Override
     public void update(Observable o, Object arg) {
-        if (!destinationCardsDrawn) {
-            ((ChooseDestCardsFragment) fragment).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
-            destinationCardsDrawn = true;
-        } else try {
-            if (ClientModelRoot.games.getActive().getState() == GameState.PLAYING) {
+        ((ChooseDestCardsFragment) fragment).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
+        try {
+            if (ClientModelRoot.games.getActive().getState().equals(GameState.PLAYING)) {
                 Poller.getInstance(this.getApplicationContext()).reset();
-                // TODO: Go to new activity.
+                this.runOnUiThread(() -> Toaster.getInstance().makeToast(this.getApplicationContext(), "Starting."));
+                startActivity(new Intent(this, MapActivity.class));
             }
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();

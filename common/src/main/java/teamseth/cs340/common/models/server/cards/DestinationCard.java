@@ -31,6 +31,6 @@ public class DestinationCard implements Serializable {
     }
 
     public String toString() {
-        return city1.toString() + " to " + city2.toString();
+        return city1.toString() + " to " + city2.toString() + " (" + Integer.toString(value) + ")";
     }
 }

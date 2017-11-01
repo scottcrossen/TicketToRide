@@ -72,7 +72,6 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     public void updateGame() {
         try {
             if (!ClientModelRoot.games.getActive().getPlayers().equals(this.activeGame.getPlayers())) {
-                System.out.println("Game updating");
                 this.activeGame = ClientModelRoot.games.getActive();
                 ((GameLobbyFragment) fragment).setFields(activeGame);
             }

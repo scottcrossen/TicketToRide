@@ -8,9 +8,7 @@
     <string name="destination_cards_text"><u>Destination Cards:</u></string>
     <string name="train_cars_text"><u>Train Cars Remaining:</u></string>
     <string name="train_cards_text"><u>Cards:</u></string>
-    <string name="destCard1">Dest Card 1</string>
-    <string name="destCard2">Dest Card 2</string>
-    <string name="destCard3">Dest Card 3</string>
+    <string name="destCard">Loading Destination Cards</string>
     <string name="confirmDestCards">Confirm Destination Cards</string>
     <string name="chooseDestCardsTitle">Choose Destination Cards</string>
     <string name="otherPlayer1">Other Player 1:</string>
@@ -22,5 +20,5 @@
     <string name="otherPlayerTrainCars"><u>Train Cars</u></string>
     <string name="otherPlayerDestCards"><u>Destination Cards</u></string>
     <string name="otherPlayerScore"><u>Score</u></string>
-    <string name="testNumbers">12</string>
+    <string name="testNumbers">0</string>
 </resources>

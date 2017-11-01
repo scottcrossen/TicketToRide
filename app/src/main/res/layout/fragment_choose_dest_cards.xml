@@ -21,20 +21,23 @@
         android:id="@+id/checkbox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/destCard1" />
+        android:text="@string/destCard"
+        android:textAlignment="viewStart" />
 
     <CheckBox
         android:id="@+id/checkbox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/destCard2" />
+        android:text="@string/destCard"
+        android:textAlignment="viewStart" />
 
     <CheckBox
         android:id="@+id/checkbox3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/destCard3"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="25dp"
+        android:text="@string/destCard"
+        android:textAlignment="viewStart" />
 
     <Button
         android:id="@+id/chooseDestCardsButton"

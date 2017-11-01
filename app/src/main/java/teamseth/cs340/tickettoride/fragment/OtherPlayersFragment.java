@@ -111,34 +111,34 @@ public class OtherPlayersFragment extends Fragment {
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
             otherPlayer1.setText(otherPlayerNames.get(nextPlayer));
-            otherPlayer1Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
-            otherPlayer1TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
-            otherPlayer1DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
-            otherPlayer1Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+            otherPlayer1Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
+            otherPlayer1TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
+            otherPlayer1DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
+            otherPlayer1Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
         }
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
             otherPlayer2.setText(otherPlayerNames.get(nextPlayer));
-            otherPlayer2Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
-            otherPlayer2TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
-            otherPlayer2DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
-            otherPlayer2Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+            otherPlayer2Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
+            otherPlayer2TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
+            otherPlayer2DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
+            otherPlayer2Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
         }
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
             otherPlayer3.setText(otherPlayerNames.get(nextPlayer));
-            otherPlayer3Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
-            otherPlayer3TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
-            otherPlayer3DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
-            otherPlayer3Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+            otherPlayer3Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
+            otherPlayer3TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
+            otherPlayer3DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
+            otherPlayer3Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
         }
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
             otherPlayer4.setText(otherPlayerNames.get(nextPlayer));
-            otherPlayer4Cards.setText(otherPlayerCards.getPlayerResourceCards(nextPlayer));
-            otherPlayer4TrainCars.setText(otherPlayerCarts.getPlayerCarts(nextPlayer));
-            otherPlayer4DestCards.setText(otherPlayerCards.getPlayerDestintationCard(nextPlayer));
-            otherPlayer4Score.setText(otherPlayerPoints.getPlayerPoints(nextPlayer));
+            otherPlayer4Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
+            otherPlayer4TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
+            otherPlayer4DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
+            otherPlayer4Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
         }
     }
 }

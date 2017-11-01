@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -328,15 +327,15 @@ public class MapFragment extends Fragment {
 
 
         //TESTING
-        Button btn = (Button) rootView.findViewById(R.id.testButton);
+        //Button btn = (Button) rootView.findViewById(R.id.testButton);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        /*btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO add the required items here
                 //claimRoute();
             }
-        });
+        });*/
         view = rootView;
         allClaimedRoutes = new HashSet<Route>();
         update();
@@ -468,7 +467,10 @@ public class MapFragment extends Fragment {
     private Set<Route> allClaimedRoutes = new HashSet<Route>();
     public void update() {
         Set<Route> newRoutes = ClientModelRoot.board.getAllClaimedRoutes().stream().filter((Route route) -> {
-            return allClaimedRoutes.stream().filter((Route drawn) -> route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer())).count() > 0;
+            boolean alreadyExists = allClaimedRoutes.stream().filter((Route drawn) -> {
+                return route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer());
+            }).count() > 0;
+            return !alreadyExists;
         }).collect(Collectors.toSet());
         newRoutes.forEach((Route route) -> claimRoute(route));
         allClaimedRoutes.addAll(newRoutes);

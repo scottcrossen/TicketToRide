@@ -11,7 +11,7 @@ import android.widget.Toast;
 import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IncrementPlayerPointsCommand;
 import teamseth.cs340.common.commands.client.RemoveTrainCartsCommand;
-import teamseth.cs340.common.commands.client.addTrainCartsCommand;
+import teamseth.cs340.common.commands.client.AddTrainCartsCommand;
 import teamseth.cs340.common.commands.server.ClaimRouteCommand;
 import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
@@ -113,7 +113,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
                 case R.id.add_train_carts:
-                    new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new addTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new AddTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
                     break;
                 case R.id.remove_train_carts:
                     new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new RemoveTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));

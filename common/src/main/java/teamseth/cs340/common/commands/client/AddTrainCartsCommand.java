@@ -11,14 +11,14 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class addTrainCartsCommand implements IHistoricalCommand {
+public class AddTrainCartsCommand implements IHistoricalCommand {
     private static final long serialVersionUID = -3062231583906476942L;
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();
     private int points;
     private UUID owner;
 
-    public addTrainCartsCommand(int points, Set<UUID> allPlayers, UUID owner) {
+    public AddTrainCartsCommand(int points, Set<UUID> allPlayers, UUID owner) {
         this.players = allPlayers;
         this.owner = owner;
         this.points = points;

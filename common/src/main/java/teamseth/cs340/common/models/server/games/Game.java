@@ -30,6 +30,7 @@ public class Game implements Serializable, Comparable<Game> {
     private UUID resourceDeck;
     private UUID history;
     private UUID routes;
+    private int turn = 0;
 
     public void addPlayer(User user) throws ModelActionException {
         if (users.size() <= 5) {
@@ -118,5 +119,13 @@ public class Game implements Serializable, Comparable<Game> {
     @Override
     public int hashCode() {
         return this.id.hashCode();
+    }
+
+    public void nextTurn() {
+        this.turn = (this.turn + 1) % this.getPlayers().size();
+    };
+
+    public UUID getWhosTurnItIs() {
+        return playerTurns.get(this.turn);
     }
 }

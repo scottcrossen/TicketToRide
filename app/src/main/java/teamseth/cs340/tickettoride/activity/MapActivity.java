@@ -21,10 +21,12 @@ import java.util.Observer;
 
 import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.client.board.Board;
 import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChatFragment;
+import teamseth.cs340.tickettoride.fragment.DemoFragment;
 import teamseth.cs340.tickettoride.fragment.GameInfoFragment;
 import teamseth.cs340.tickettoride.fragment.HistoryFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
@@ -173,6 +175,10 @@ public class MapActivity extends AppCompatActivity implements Observer {
                 fragment = new ChatFragment();
                 args.putInt(ChatFragment.ARG_TAB_NUMBER, position);
                 break;
+            case 6:
+                fragment = new DemoFragment();
+                args.putInt(ChatFragment.ARG_TAB_NUMBER, position);
+                break;
             case 0:
                 fragment = new MapFragment();
                 args.putInt(MapFragment.ARG_TAB_NUMBER, position);
@@ -218,28 +224,29 @@ public class MapActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        ClientModelRoot.cards.addObserver(this);
+        //ClientModelRoot.cards.addObserver(this);
         ClientModelRoot.chat.addObserver(this);
-        ClientModelRoot.history.addObserver(this);
+        //ClientModelRoot.history.addObserver(this);
         ClientModelRoot.board.addObserver(this);
-        ClientModelRoot.points.addObserver(this);
-        ClientModelRoot.carts.addObserver(this);
+        //ClientModelRoot.points.addObserver(this);
+        //ClientModelRoot.carts.addObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ClientModelRoot.cards.deleteObserver(this);
+        //ClientModelRoot.cards.deleteObserver(this);
         ClientModelRoot.chat.deleteObserver(this);
-        ClientModelRoot.history.deleteObserver(this);
+        //ClientModelRoot.history.deleteObserver(this);
         ClientModelRoot.board.deleteObserver(this);
-        ClientModelRoot.points.deleteObserver(this);
-        ClientModelRoot.carts.deleteObserver(this);
+        //ClientModelRoot.points.deleteObserver(this);
+        //ClientModelRoot.carts.deleteObserver(this);
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (fragment instanceof MapFragment) {
+            if (o instanceof Board) ((MapFragment) fragment).update();
         } else if (fragment instanceof ChatFragment) {
             if (o instanceof CurrentChat) ((ChatFragment) fragment).update();
         } else if (fragment instanceof GameInfoFragment) {
@@ -249,6 +256,8 @@ public class MapActivity extends AppCompatActivity implements Observer {
         } else if (fragment instanceof OtherPlayersFragment) {
 
         } else if (fragment instanceof PlayerFragment) {
+
+        } else if (fragment instanceof DemoFragment) {
 
         }
     }

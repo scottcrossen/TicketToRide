@@ -14,6 +14,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class ClaimRouteByPlayerCommand implements IHistoricalCommand {
+    private static final long serialVersionUID = 6106588683793521213L;
 
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();

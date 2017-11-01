@@ -46,4 +46,12 @@ public class Route implements Serializable {
             (this.color == ResourceColor.RAINBOW || color == ResourceColor.RAINBOW || this.color == color)
             );
     }
+
+    public boolean compareCitiesAndColor(Route o) {
+        return equals(o.city1, o.city2, o.color);
+    }
+
+    public String toString() {
+        return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString();
+    }
 }

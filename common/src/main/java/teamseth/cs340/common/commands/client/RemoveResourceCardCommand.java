@@ -13,6 +13,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class RemoveResourceCardCommand implements IHistoricalCommand {
+    private static final long serialVersionUID = -682613502302569013L;
 
     private ResourceColor card;
     private UUID id = UUID.randomUUID();

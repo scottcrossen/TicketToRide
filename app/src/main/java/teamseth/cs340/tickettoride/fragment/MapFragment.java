@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
@@ -333,17 +337,22 @@ public class MapFragment extends Fragment {
             }
         });
 
+        allClaimedRoutes = new HashSet<Route>();
+        update();
         return rootView;
     }
 
     private void claimRoute(Route route) {
         CityName city1 = route.getCity1();
         CityName city2 = route.getCity2();
+        PlayerColor color;
         try {
-            PlayerColor color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(route.getClaimedPlayer());
+            color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(route.getClaimedPlayer());
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
+
+        // TODO: Seth: implement this
     }
 
     public View drawLines(View rootView) {
@@ -363,5 +372,14 @@ public class MapFragment extends Fragment {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             v.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
+    }
+
+    private Set<Route> allClaimedRoutes = new HashSet<Route>();
+    public void update() {
+        Set<Route> newRoutes = ClientModelRoot.board.getAllClaimedRoutes().stream().filter((Route route) -> {
+            return allClaimedRoutes.stream().filter((Route drawn) -> route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer())).count() > 0;
+        }).collect(Collectors.toSet());
+        newRoutes.forEach((Route route) -> claimRoute(route));
+        allClaimedRoutes.addAll(newRoutes);
     }
 }

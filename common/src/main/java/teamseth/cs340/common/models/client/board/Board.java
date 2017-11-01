@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.client.board;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -37,4 +38,7 @@ public class Board extends Observable implements IModel {
         return routes.getMatchingRoutes(city1, city2, color);
     }
 
+    public Set<Route> getAllClaimedRoutes() {
+        return routes.getAllClaimed();
+    }
 }

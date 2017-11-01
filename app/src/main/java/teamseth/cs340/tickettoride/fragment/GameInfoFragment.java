@@ -54,6 +54,7 @@ public class GameInfoFragment extends Fragment {
         ImageView destinationCardDeck = (ImageView) rootView.findViewById(R.id.destination_card_back);
         TextView trainCardsLeft = (TextView) rootView.findViewById(R.id.cards_in_deck);
         TextView destCardsLeft = (TextView) rootView.findViewById(R.id.destination_cards_in_deck);
+        TextView playerName = (TextView) rootView.findViewById(R.id.player_name);
 
         //TODO set these to random cards
         card1.setImageResource(chooseColor(0));
@@ -63,8 +64,18 @@ public class GameInfoFragment extends Fragment {
         card5.setImageResource(chooseColor(4));
 
         //TODO set the text to the number of cards left in the respective decks
-        trainCardsLeft.setText(Integer.toString(ClientModelRoot.getInstance().cards.getResourceCards().size()));
-        destCardsLeft.setText(Integer.toString(ClientModelRoot.getInstance().cards.getDestinationCards().size()));
+
+        trainCardsLeft.setText(Integer.toString(
+                110 - ClientModelRoot.getInstance().cards.others.getResourceAmountUsed() - 5 - ClientModelRoot.getInstance().cards.getResourceCards().size()
+        ));
+        destCardsLeft.setText(Integer.toString(
+                30 - ClientModelRoot.getInstance().cards.others.getDestinationAmountUsed() - ClientModelRoot.getInstance().cards.getDestinationCards().size()
+        ));
+        try {
+            playerName.setText(ClientModelRoot.getInstance().games.getActive().getPlayerNames().get(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         card1.setOnClickListener(new View.OnClickListener() {
             @Override

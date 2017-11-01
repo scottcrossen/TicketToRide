@@ -13,6 +13,7 @@ import teamseth.cs340.common.util.Result;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class RemoveDestinationCardCommand implements IHistoricalCommand {
+    private static final long serialVersionUID = -2523548458438612945L;
 
     private DestinationCard card;
     private UUID id = UUID.randomUUID();

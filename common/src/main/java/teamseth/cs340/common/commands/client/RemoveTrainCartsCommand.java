@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.root.client.ClientFacade;
 import teamseth.cs340.common.util.Result;
 
@@ -12,25 +11,22 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class ReplaceFaceUpCardCommand implements IHistoricalCommand {
-    private static final long serialVersionUID = -3055841912455707517L;
-
-    private ResourceColor oldCard;
-    private ResourceColor newCard;
+public class RemoveTrainCartsCommand implements IHistoricalCommand {
+    private static final long serialVersionUID = -4969534889028520893L;
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();
+    private int points;
     private UUID owner;
 
-    public ReplaceFaceUpCardCommand(ResourceColor oldCard, ResourceColor newCard, Set<UUID> allPlayers, UUID owner) {
-        this.oldCard = oldCard;
-        this.newCard = newCard;
+    public RemoveTrainCartsCommand(int points,  Set<UUID> allPlayers, UUID owner) {
         this.players = allPlayers;
         this.owner = owner;
+        this.points = points;
     }
 
     public Result call() {
         return new Result(() -> {
-            ClientFacade.getInstance().replaceCard(oldCard, newCard); return null;});
+            ClientFacade.getInstance().removePlayerTrainCarts(owner, points); return null;});
     }
 
     public UUID getId() {
@@ -46,10 +42,11 @@ public class ReplaceFaceUpCardCommand implements IHistoricalCommand {
     }
 
     public String getDescription() {
-        return "replaced a face-up card";
+        return "used train carts";
     }
 
     public IHistoricalCommand getAlternate() {
         return new AlternativeHistoryCommand(this);
     }
 }
+

@@ -66,4 +66,12 @@ public class OtherPlayerCards implements IModel {
             playerResourceCards.put(playerId, playerResourceCards.get(playerId) - 1);
         }
     }
+
+    public int getResourceAmountUsed() {
+        return playerResourceCards.values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public int getDestinationAmountUsed() {
+        return playerDestinationCards.values().stream().mapToInt(Integer::intValue).sum();
+    }
 }

@@ -47,7 +47,7 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
         AuthAction.user(token);
         Routes routeSet = getRoutes(routeSetId);
         List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, color);
-        if (matchedRoutes.size() != 1) {
+        if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1)))) {
             throw new ModelActionException();
         } else {
             Route matchingRoute = matchedRoutes.get(0);

@@ -40,4 +40,14 @@ public class PlayerCarts extends Observable implements IModel {
         setChanged();
         notifyObservers();
     }
+
+    public void incrementPlayerCarts(UUID playerId, int carts) {
+        if(playerCarts.containsKey(playerId)) {
+            playerCarts.put(playerId, playerCarts.get(playerId) + carts);
+        } else {
+            playerCarts.put(playerId, 45 + carts);
+        }
+        setChanged();
+        notifyObservers();
+    }
 }

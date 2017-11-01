@@ -67,5 +67,13 @@ public class ClientFacade implements IClient {
     public void seedCards(List<ResourceColor> cards) { model.cards.faceUp.seedCards(cards); }
 
     public void replaceCard(ResourceColor oldCard, ResourceColor newCard) throws ResourceNotFoundException { model.cards.faceUp.replaceCard(oldCard, newCard); }
+
+    public void incrementPlayerPoints(UUID playerId, int amount) { model.points.incrementPlayerPoints(playerId, amount); }
+
+    public void addPlayerTrainCarts(UUID playerId, int amount) { model.carts.incrementPlayerCarts(playerId, amount); }
+
+    public void removePlayerTrainCarts(UUID playerId, int amount)  {model.carts.decrementPlayerCarts(playerId, amount); }
+
+    public void nextTurn() throws ResourceNotFoundException{ model.games.getActive().nextTurn(); }
 }
 

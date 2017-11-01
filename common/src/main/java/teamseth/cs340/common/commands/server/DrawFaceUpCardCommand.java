@@ -23,6 +23,7 @@ import teamseth.cs340.common.util.client.Login;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class DrawFaceUpCardCommand implements IServerCommand {
+    private static final long serialVersionUID = -3918296503032080679L;
     private UUID deckId;
     private AuthToken token = Login.getInstance().getToken();
     private ResourceColor card;

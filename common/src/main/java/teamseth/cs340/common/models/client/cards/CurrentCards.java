@@ -42,21 +42,23 @@ public class CurrentCards extends Observable {
     public void removeDestinationCard(DestinationCard destinationCard) {
         Iterator<DestinationCard> iterator = this.destinationCards.iterator();
         while (iterator.hasNext()) {
-            if (iterator.next() == destinationCard) {
+            DestinationCard next = iterator.next();
+            if ((
+                    (next.getCity1().equals(destinationCard.getCity1()) && next.getCity2().equals(destinationCard.getCity2())) ||
+                    (next.getCity1().equals(destinationCard.getCity2()) && next.getCity2().equals(destinationCard.getCity1()))
+                ) && next.getValue() == destinationCard.getValue()) {
                 iterator.remove();
                 setChanged();
                 notifyObservers();
                 return;
             }
         }
-        setChanged();
-        notifyObservers();
     }
 
     public void removeResourceCard(ResourceColor resourceCard) {
         Iterator<ResourceColor> iterator = this.resourceCards.iterator();
         while (iterator.hasNext()) {
-            if (iterator.next() == resourceCard) {
+            if (iterator.next().equals(resourceCard)) {
                 iterator.remove();
                 setChanged();
                 notifyObservers();

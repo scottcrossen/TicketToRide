@@ -24,7 +24,7 @@ public class ReturnResourceCardCommand extends QueueCommand implements IServerCo
 
     public ReturnResourceCardCommand(ResourceColor card) throws ResourceNotFoundException {
         super();
-        this.deckId = ClientModelRoot.games.getActive().getDestinationDeck();
+        this.deckId = ClientModelRoot.getInstance().games.getActive().getResourceDeck();
         this.card = card;
     }
 

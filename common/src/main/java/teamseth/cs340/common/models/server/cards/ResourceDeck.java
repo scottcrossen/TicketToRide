@@ -58,7 +58,9 @@ public class ResourceDeck implements Deck<ResourceColor> {
             ResourceColor next = iterator.next();
             if (next.equals(oldCard)) {
                 iterator.remove();
-                faceUp.add(draw());
+                ResourceColor newCard = draw();
+                faceUp.add(newCard);
+                return newCard;
             }
         }
         throw new ResourceNotFoundException();

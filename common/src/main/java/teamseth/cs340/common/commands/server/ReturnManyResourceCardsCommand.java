@@ -10,7 +10,6 @@ import teamseth.cs340.common.commands.client.RemoveResourceCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.root.server.ServerFacade;
 import teamseth.cs340.common.util.Result;
@@ -21,16 +20,17 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class ReturnManyResourceCardsCommand implements IServerCommand {
+    private static final long serialVersionUID = 7217755804173741901L;
     private UUID deckId;
     private AuthToken token;
     private ResourceColor card;
     private int amount;
     private UUID historyId;
 
-    public ReturnManyResourceCardsCommand(ResourceColor card, int amount, AuthToken token) throws ResourceNotFoundException {
-        this.deckId = ClientModelRoot.games.getActive().getResourceDeck();
+    public ReturnManyResourceCardsCommand(ResourceColor card, int amount, UUID deckId, UUID historyId, AuthToken token) throws ResourceNotFoundException {
+        this.deckId = deckId;
         this.card = card;
-        this.historyId = ClientModelRoot.games.getActive().getHistory();
+        this.historyId = historyId;
         this.amount = amount;
         this.token = token;
     }

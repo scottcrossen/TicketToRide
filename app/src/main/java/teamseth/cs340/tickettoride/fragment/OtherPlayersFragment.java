@@ -106,7 +106,7 @@ public class OtherPlayersFragment extends Fragment {
         PlayerPoints otherPlayerPoints = ClientModelRoot.getInstance().points;
         PlayerCarts otherPlayerCarts = ClientModelRoot.getInstance().carts;
         Set<UUID> players = ClientModelRoot.getInstance().games
-                .getActive().getPlayers().stream().filter((UUID id) -> id != Login.getInstance().getUserId()).collect(Collectors.toSet());
+                .getActive().getPlayers().stream().filter((UUID id) -> !id.equals(Login.getInstance().getUserId())).collect(Collectors.toSet());
         Iterator<UUID> iterator = players.iterator();
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();

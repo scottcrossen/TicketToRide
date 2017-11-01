@@ -128,24 +128,31 @@ public class Routes implements Serializable, IModel<Route> {
 
     public void claimRoute(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException {
         List<Route> matchedRoutes = getMatchingRoutes(city1, city2, color);
-        if (matchedRoutes.size() != 1) {
+        if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1)))) {
             throw new ModelActionException(); // not correctly specified
         } else {
-            Route toAdd = matchedRoutes.get(0);
-            if (toAdd.getClaimedPlayer().isPresent()) {
-                throw new ModelActionException();
+            Route toAdd;
+            if (!matchedRoutes.get(0).getClaimedPlayer().isPresent()) {
+                toAdd = matchedRoutes.get(0);
+            } else if (matchedRoutes.size() > 1 && !matchedRoutes.get(1).getClaimedPlayer().isPresent()) {
+                toAdd = matchedRoutes.get(1);
             } else {
-                routes.remove(matchedRoutes.get(0));
-                toAdd.claimBy(userId);
-                routes.add(toAdd);
+                throw new ModelActionException();
             }
+            Route toRemove = toAdd;
+            routes.remove(toRemove);
+            toAdd.claimBy(userId);
+            routes.add(toAdd);
         }
-
     }
 
     public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {
         return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, color)).collect(Collectors.toList());
     }
 
-    public Set<Route> getAllRoutes() {return routes;}
+    public Set<Route> getAll() {return routes;}
+
+    public Set<Route> getAllClaimed() {
+        return routes.stream().filter((Route current) -> current.getClaimedPlayer().isPresent()).collect(Collectors.toSet());
+    }
 }

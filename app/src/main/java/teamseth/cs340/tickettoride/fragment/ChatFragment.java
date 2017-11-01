@@ -9,16 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import teamseth.cs340.common.commands.server.SendMessageCommand;
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
-import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.chat.Message;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.adapter.ChatAdapter;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
@@ -28,9 +25,10 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
  */
 
 public class ChatFragment extends Fragment implements View.OnClickListener{
-    private RecyclerView mRecyclerView;
+
     private LinearLayoutManager mLinearLayoutManager;
     private ChatAdapter mAdapter;
+    private RecyclerView mRecyclerView;
     private ArrayList<String> mChatList = new ArrayList<>();
     private Button sendBtn;
     private EditText makeChat;
@@ -49,9 +47,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         sendBtn = v.findViewById(R.id.send_chat);
         sendBtn.setOnClickListener(this);
-        makeChat = v.findViewById(R.id.chat_message);
-        String planet = getResources().getStringArray(R.array.tabs_array)[i];
+        makeChat = v.findViewById(R.id.make_chat);
 
+
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.chat_recycler_view);
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mAdapter = new ChatAdapter(getContext(), getActivity());
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        String planet = getResources().getStringArray(R.array.tabs_array)[i];
 
         getActivity().setTitle(planet);
         return v;
@@ -67,13 +73,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
     }
 
     private void onSendPressed() {
-        Message newMessage = (Message) makeChat.getText();
+        Message newMessage = new Message(Login.getUserId(), makeChat.getText().toString());
         try {
             new CommandTask(this.getContext()).execute(new SendMessageCommand(newMessage));
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnauthorizedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        makeChat.setText("");
+    }
+
+    public void updateMessage() {
+        mAdapter.update();
     }
 }

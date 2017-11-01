@@ -130,8 +130,6 @@ public class GameModel extends AuthAction implements IModel<Game> {
                 destinationCardsDecided.add(command.playerOwnedby());
             }
         });
-        System.out.println(game.getPlayers());
-        System.out.println(destinationCardsDecided);
         boolean success = game.getPlayers().stream().allMatch((UUID player) -> destinationCardsDecided.contains(player));
         if (success) {
             game.setState(GameState.PLAYING);

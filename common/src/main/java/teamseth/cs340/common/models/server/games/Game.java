@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -94,6 +95,7 @@ public class Game implements Serializable, Comparable<Game> {
     public UUID getResourceDeck() { return resourceDeck; }
     public UUID getHistory() { return history; }
     public UUID getRoutes() { return routes; }
+    public Map<UUID, PlayerColor> getPlayerColors() { return playerColors; }
     @Override
     public int compareTo(Game game) {
         return this.id.compareTo(game.id);

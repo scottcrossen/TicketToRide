@@ -11,6 +11,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.server.boards.Route;
+import teamseth.cs340.common.models.server.cards.CityName;
+import teamseth.cs340.common.models.server.games.PlayerColor;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.util.DrawView;
 
@@ -309,9 +314,13 @@ public class MapFragment extends Fragment {
         relativeLayout.addView(winnipegDuluth,2500,1800);
         relativeLayout.addView(winnipegSaultStMarie,2500,1800);
 
+
+
         //TODO phase 3 add onclick events for the lines, so, vancouverSeattle.addOnclick() blah blah
         //rootView = drawLines(rootView);
         getActivity().setTitle(title);
+
+
 
         //TESTING
         Button btn = (Button) rootView.findViewById(R.id.testButton);
@@ -320,10 +329,21 @@ public class MapFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO add the required items here
+                //claimRoute();
             }
         });
 
         return rootView;
+    }
+
+    private void claimRoute(Route route) {
+        CityName city1 = route.getCity1();
+        CityName city2 = route.getCity2();
+        try {
+            PlayerColor color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(route.getClaimedPlayer());
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public View drawLines(View rootView) {

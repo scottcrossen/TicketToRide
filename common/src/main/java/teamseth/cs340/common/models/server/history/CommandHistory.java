@@ -50,6 +50,10 @@ public class CommandHistory implements Serializable {
         }
     }
 
+    public LinkedList<IHistoricalCommand> getAll() {
+        return commandQueue;
+    }
+
     public UUID getId() {
         return this.id;
     }

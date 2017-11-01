@@ -21,7 +21,7 @@ public class DrawView extends View {
     PlayerColor playerColor;
     Boolean routeOwned = false;
 
-    public DrawView(Context context, View startView, View endView, int color) {
+    public DrawView(Context context, View startView, View endView, int color) {//, int routeLength) {
         super(context);
         setWillNotDraw(false);
         paint.setStrokeWidth(15);

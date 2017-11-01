@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -30,6 +31,43 @@ public class MapFragment extends Fragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
     static final int PINK = Color.rgb(255,182,193);
     static final int ORANGE = Color.rgb(255,140,0);
+    ImageView vancouver;
+    ImageView seattle;
+    ImageView portland;
+    ImageView sanFrancisco;
+    ImageView losAngeles;
+    ImageView phoenix;
+    ImageView lasVegas;
+    ImageView elPaso;
+    ImageView santaFe;
+    ImageView saltLake;
+    ImageView calgary;
+    ImageView helena;
+    ImageView denver;
+    ImageView winnipeg;
+    ImageView duluth;
+    ImageView omaha;
+    ImageView oklahoma;
+    ImageView kansas;
+    ImageView dallas;
+    ImageView houston;
+    ImageView newOrleans;
+    ImageView littleRock;
+    ImageView saintLouis;
+    ImageView chicago;
+    ImageView nashville;
+    ImageView miami;
+    ImageView atlanta;
+    ImageView charleston;
+    ImageView raleigh;
+    ImageView dc;
+    ImageView pittsburgh;
+    ImageView newYork;
+    ImageView boston;
+    ImageView toronto;
+    ImageView saultStMarie;
+    ImageView montreal;
+    RelativeLayout relativeLayout;
 
     public MapFragment() {
         // Empty constructor required for fragment subclasses
@@ -43,45 +81,45 @@ public class MapFragment extends Fragment {
         disableHardwareRendering(rootView);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
-        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativeMap);
+        relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativeMap);
 
 
-        ImageView vancouver = (ImageView) rootView.findViewById(R.id.vancouverCity);
-        ImageView seattle = (ImageView) rootView.findViewById(R.id.seattleCity);
-        ImageView portland = (ImageView) rootView.findViewById(R.id.portlandCity);
-        ImageView sanFrancisco = (ImageView) rootView.findViewById(R.id.sanFranciscoCity);
-        ImageView losAngeles = (ImageView) rootView.findViewById(R.id.losAngelesCity);
-        ImageView phoenix = (ImageView) rootView.findViewById(R.id.phoenixCity);
-        ImageView lasVegas = (ImageView) rootView.findViewById(R.id.lasVegasCity);
-        ImageView elPaso = (ImageView) rootView.findViewById(R.id.elPasoCity);
-        ImageView santaFe = (ImageView) rootView.findViewById(R.id.santFeCity);
-        ImageView saltLake = (ImageView) rootView.findViewById(R.id.saltLakeCity);
-        ImageView calgary = (ImageView) rootView.findViewById(R.id.calgaryCity);
-        ImageView helena = (ImageView) rootView.findViewById(R.id.helenaCity);
-        ImageView denver = (ImageView) rootView.findViewById(R.id.denverCity);
-        ImageView winnipeg = (ImageView) rootView.findViewById(R.id.winnipegCity);
-        ImageView duluth = (ImageView) rootView.findViewById(R.id.duluthCity);
-        ImageView omaha = (ImageView) rootView.findViewById(R.id.omahaCity);
-        ImageView oklahoma = (ImageView) rootView.findViewById(R.id.oklahomaCity);
-        ImageView kansas = (ImageView) rootView.findViewById(R.id.kansasCity);
-        ImageView dallas = (ImageView) rootView.findViewById(R.id.dallasCity);
-        ImageView houston = (ImageView) rootView.findViewById(R.id.houstonCity);
-        ImageView newOrleans = (ImageView) rootView.findViewById(R.id.newOrleansCity);
-        ImageView littleRock = (ImageView) rootView.findViewById(R.id.littleRockCity);
-        ImageView saintLouis = (ImageView) rootView.findViewById(R.id.saintLouisCity);
-        ImageView chicago = (ImageView) rootView.findViewById(R.id.chicagoCity);
-        ImageView nashville = (ImageView) rootView.findViewById(R.id.nashvilleCity);
-        ImageView miami = (ImageView) rootView.findViewById(R.id.miamiCity);
-        ImageView atlanta = (ImageView) rootView.findViewById(R.id.atlantaCity);
-        ImageView charleston = (ImageView) rootView.findViewById(R.id.charlestonCity);
-        ImageView raleigh = (ImageView) rootView.findViewById(R.id.raleighCity);
-        ImageView dc = (ImageView) rootView.findViewById(R.id.dcCity);
-        ImageView pittsburgh = (ImageView) rootView.findViewById(R.id.pittsburghCity);
-        ImageView newYork = (ImageView) rootView.findViewById(R.id.newYorkCity);
-        ImageView boston = (ImageView) rootView.findViewById(R.id.bostonCity);
-        ImageView toronto = (ImageView) rootView.findViewById(R.id.torontoCity);
-        ImageView saultStMarie = (ImageView) rootView.findViewById(R.id.saultStMarieCity);
-        ImageView montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
+        vancouver = (ImageView) rootView.findViewById(R.id.vancouverCity);
+        seattle = (ImageView) rootView.findViewById(R.id.seattleCity);
+        portland = (ImageView) rootView.findViewById(R.id.portlandCity);
+        sanFrancisco = (ImageView) rootView.findViewById(R.id.sanFranciscoCity);
+        losAngeles = (ImageView) rootView.findViewById(R.id.losAngelesCity);
+        phoenix = (ImageView) rootView.findViewById(R.id.phoenixCity);
+        lasVegas = (ImageView) rootView.findViewById(R.id.lasVegasCity);
+        elPaso = (ImageView) rootView.findViewById(R.id.elPasoCity);
+        santaFe = (ImageView) rootView.findViewById(R.id.santFeCity);
+        saltLake = (ImageView) rootView.findViewById(R.id.saltLakeCity);
+        calgary = (ImageView) rootView.findViewById(R.id.calgaryCity);
+        helena = (ImageView) rootView.findViewById(R.id.helenaCity);
+        denver = (ImageView) rootView.findViewById(R.id.denverCity);
+        winnipeg = (ImageView) rootView.findViewById(R.id.winnipegCity);
+        duluth = (ImageView) rootView.findViewById(R.id.duluthCity);
+        omaha = (ImageView) rootView.findViewById(R.id.omahaCity);
+        oklahoma = (ImageView) rootView.findViewById(R.id.oklahomaCity);
+        kansas = (ImageView) rootView.findViewById(R.id.kansasCity);
+        dallas = (ImageView) rootView.findViewById(R.id.dallasCity);
+        houston = (ImageView) rootView.findViewById(R.id.houstonCity);
+        newOrleans = (ImageView) rootView.findViewById(R.id.newOrleansCity);
+        littleRock = (ImageView) rootView.findViewById(R.id.littleRockCity);
+        saintLouis = (ImageView) rootView.findViewById(R.id.saintLouisCity);
+        chicago = (ImageView) rootView.findViewById(R.id.chicagoCity);
+        nashville = (ImageView) rootView.findViewById(R.id.nashvilleCity);
+        miami = (ImageView) rootView.findViewById(R.id.miamiCity);
+        atlanta = (ImageView) rootView.findViewById(R.id.atlantaCity);
+        charleston = (ImageView) rootView.findViewById(R.id.charlestonCity);
+        raleigh = (ImageView) rootView.findViewById(R.id.raleighCity);
+        dc = (ImageView) rootView.findViewById(R.id.dcCity);
+        pittsburgh = (ImageView) rootView.findViewById(R.id.pittsburghCity);
+        newYork = (ImageView) rootView.findViewById(R.id.newYorkCity);
+        boston = (ImageView) rootView.findViewById(R.id.bostonCity);
+        toronto = (ImageView) rootView.findViewById(R.id.torontoCity);
+        saultStMarie = (ImageView) rootView.findViewById(R.id.saultStMarieCity);
+        montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
         // TODO potentially add in the x and y offsets so the lines look cleaner, not as necessary though
         DrawView vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY);
@@ -326,13 +364,14 @@ public class MapFragment extends Fragment {
 
 
         //TESTING
-        //Button btn = (Button) rootView.findViewById(R.id.testButton);
+        /*Button btn = (Button) rootView.findViewById(R.id.testButton);
 
-        /*btn.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO add the required items here
                 //claimRoute();
+                update();
             }
         });*/
         allClaimedRoutes = new HashSet<Route>();
@@ -343,21 +382,22 @@ public class MapFragment extends Fragment {
     private void claimRoute(Route route) {
         CityName city1 = route.getCity1();
         CityName city2 = route.getCity2();
-        PlayerColor color;
-        try {
-            color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(route.getClaimedPlayer());
-            ImageView startCity = convertCityNametoImageView(city1);
-            ImageView endCity = convertCityNametoImageView(city2);
-            int routeColor = convertColorFromEnum(color);
-            DrawView routeView = new DrawView(this.getContext(),startCity,endCity,routeColor);
-            routeView.isOwned(true);
-            routeView.setBackgroundColor(Color.TRANSPARENT);
-            View view = this.getView();
-            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeMap);
-            relativeLayout.addView(routeView,2500,1800);
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        }
+        route.getClaimedPlayer().map((UUID playerId) -> {
+            try {
+                PlayerColor color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(playerId);
+                ImageView startCity = convertCityNametoImageView(city1);
+                ImageView endCity = convertCityNametoImageView(city2);
+                int routeColor = convertColorFromEnum(color);
+                DrawView routeView = new DrawView(this.getContext(), startCity, endCity, routeColor);
+                routeView.isOwned(true);
+                routeView.setBackgroundColor(Color.TRANSPARENT);
+                View view = this.getView();
+                relativeLayout.addView(routeView, 2500, 1800);
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
 
         // TODO: Seth: implement this
     }
@@ -379,82 +419,81 @@ public class MapFragment extends Fragment {
     }
 
     private ImageView convertCityNametoImageView(CityName cityName) {
-        View view = this.getView();
         switch (cityName) {
             case Vancouver:
-                return view.findViewById(R.id.vancouverCity);
+                return vancouver;
             case Seattle:
-                return view.findViewById(R.id.seattleCity);
+                return seattle;
             case Portland:
-                return view.findViewById(R.id.portlandCity);
+                return portland;
             case SanFrancisco:
-                return view.findViewById(R.id.sanFranciscoCity);
+                return sanFrancisco;
             case LosAngeles:
-                return view.findViewById(R.id.losAngelesCity);
+                return losAngeles;
             case Phoenix:
-                return view.findViewById(R.id.phoenixCity);
+                return phoenix;
             case LasVegas:
-                return view.findViewById(R.id.lasVegasCity);
+                return lasVegas;
             case ElPaso:
-                return view.findViewById(R.id.elPasoCity);
+                return elPaso;
             case SantaFe:
-                return view.findViewById(R.id.santFeCity);
+                return santaFe;
             case SaltLakeCity:
-                return view.findViewById(R.id.saltLakeCity);
+                return saltLake;
             case Calgary:
-                return view.findViewById(R.id.calgaryCity);
+                return calgary;
             case Helena:
-                return view.findViewById(R.id.helenaCity);
+                return helena;
             case Denver:
-                return view.findViewById(R.id.denverCity);
+                return denver;
             case Winnipeg:
-                return view.findViewById(R.id.winnipegCity);
+                return winnipeg;
             case Duluth:
-                return view.findViewById(R.id.duluthCity);
+                return duluth;
             case Omaha:
-                return view.findViewById(R.id.omahaCity);
+                return omaha;
             case OklahomaCity:
-                return view.findViewById(R.id.oklahomaCity);
+                return oklahoma;
             case KansasCity:
-                return view.findViewById(R.id.kansasCity);
+                return kansas;
             case Dallas:
-                return view.findViewById(R.id.dallasCity);
+                return dallas;
             case Houston:
-                return view.findViewById(R.id.houstonCity);
+                return houston;
             case NewOrleans:
-                return view.findViewById(R.id.newOrleansCity);
+                return newOrleans;
             case LittleRock:
-                return view.findViewById(R.id.littleRockCity);
+                return littleRock;
             case SaintLouis:
-                return view.findViewById(R.id.saintLouisCity);
+                return saintLouis;
             case Chicago:
-                return view.findViewById(R.id.chicagoCity);
+                return chicago;
             case Nashville:
-                return view.findViewById(R.id.nashvilleCity);
+                return nashville;
             case Miami:
-                return view.findViewById(R.id.miamiCity);
+                return miami;
             case Atlanta:
-                return view.findViewById(R.id.atlantaCity);
+                return atlanta;
             case Charleston:
-                return view.findViewById(R.id.charlestonCity);
+                return charleston;
             case Raleigh:
-                return view.findViewById(R.id.raleighCity);
+                return raleigh;
             case DC:
-                return view.findViewById(R.id.dcCity);
+                return dc;
             case Pittsburgh:
-                return view.findViewById(R.id.pittsburghCity);
+                return pittsburgh;
             case NewYork:
-                return view.findViewById(R.id.newYorkCity);
+                return newYork;
             case Boston:
-                return view.findViewById(R.id.bostonCity);
+                return boston;
             case Toronto:
-                return view.findViewById(R.id.torontoCity);
+                return toronto;
             case StMarie:
-                return view.findViewById(R.id.saultStMarieCity);
+                return saultStMarie;
             case Montreal:
-                return view.findViewById(R.id.montrealCity);
+                return montreal;
         }
-        return view.findViewById(R.id.seattleCity);
+        return seattle;
     }
 
     public static void disableHardwareRendering(View v) {

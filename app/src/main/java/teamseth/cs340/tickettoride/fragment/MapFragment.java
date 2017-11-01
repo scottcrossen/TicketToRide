@@ -31,6 +31,7 @@ public class MapFragment extends Fragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
     static final int PINK = Color.rgb(255,182,193);
     static final int ORANGE = Color.rgb(255,140,0);
+    private View view;
 
     public MapFragment() {
         // Empty constructor required for fragment subclasses
@@ -336,10 +337,17 @@ public class MapFragment extends Fragment {
                 //claimRoute();
             }
         });
-
+        view = rootView;
         allClaimedRoutes = new HashSet<Route>();
         update();
+        view = rootView;
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
     }
 
     private void claimRoute(Route route) {
@@ -348,6 +356,14 @@ public class MapFragment extends Fragment {
         PlayerColor color;
         try {
             color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(route.getClaimedPlayer());
+            ImageView startCity = convertCityNametoImageView(city1);
+            ImageView endCity = convertCityNametoImageView(city2);
+            int routeColor = convertColorFromEnum(color);
+            DrawView routeView = new DrawView(this.getContext(),startCity,endCity,routeColor);
+            routeView.isOwned(true);
+            routeView.setBackgroundColor(Color.TRANSPARENT);
+            RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeMap);
+            relativeLayout.addView(routeView,2500,1800);
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
@@ -355,17 +371,98 @@ public class MapFragment extends Fragment {
         // TODO: Seth: implement this
     }
 
-    public View drawLines(View rootView) {
-        RelativeLayout relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativeMap);
+    private int convertColorFromEnum(PlayerColor color) {
+        switch (color) {
+            case GREEN:
+                return Color.GREEN;
+            case RED:
+                return Color.RED;
+            case BLACK:
+                return Color.BLACK;
+            case BLUE:
+                return Color.BLUE;
+            case YELLOW:
+                return Color.YELLOW;
+        }
+        return Color.BLUE;
+    }
 
-        ImageView vancouver = (ImageView) rootView.findViewById(R.id.vancouverCity);
-        ImageView seattle = (ImageView) rootView.findViewById(R.id.seattleCity);
-
-        DrawView vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY);
-        vancouverSeattle.setBackgroundColor(Color.YELLOW);
-
-        relativeLayout.addView(vancouverSeattle);
-        return rootView;
+    private ImageView convertCityNametoImageView(CityName cityName) {
+        switch (cityName) {
+            case Vancouver:
+                view.findViewById(R.id.vancouverCity);
+            case Seattle:
+                view.findViewById(R.id.seattleCity);
+            case Portland:
+                view.findViewById(R.id.portlandCity);
+            case SanFrancisco:
+                view.findViewById(R.id.sanFranciscoCity);
+            case LosAngeles:
+                view.findViewById(R.id.losAngelesCity);
+            case Phoenix:
+                view.findViewById(R.id.phoenixCity);
+            case LasVegas:
+                view.findViewById(R.id.lasVegasCity);
+            case ElPaso:
+                view.findViewById(R.id.elPasoCity);
+            case SantaFe:
+                view.findViewById(R.id.santFeCity);
+            case SaltLakeCity:
+                view.findViewById(R.id.saltLakeCity);
+            case Calgary:
+                view.findViewById(R.id.calgaryCity);
+            case Helena:
+                view.findViewById(R.id.helenaCity);
+            case Denver:
+                view.findViewById(R.id.denverCity);
+            case Winnipeg:
+                view.findViewById(R.id.winnipegCity);
+            case Duluth:
+                view.findViewById(R.id.duluthCity);
+            case Omaha:
+                view.findViewById(R.id.omahaCity);
+            case OklahomaCity:
+                view.findViewById(R.id.oklahomaCity);
+            case KansasCity:
+                view.findViewById(R.id.kansasCity);
+            case Dallas:
+                view.findViewById(R.id.dallasCity);
+            case Houston:
+                view.findViewById(R.id.houstonCity);
+            case NewOrleans:
+                view.findViewById(R.id.newOrleansCity);
+            case LittleRock:
+                view.findViewById(R.id.littleRockCity);
+            case SaintLouis:
+                view.findViewById(R.id.saintLouisCity);
+            case Chicago:
+                view.findViewById(R.id.chicagoCity);
+            case Nashville:
+                view.findViewById(R.id.nashvilleCity);
+            case Miami:
+                view.findViewById(R.id.miamiCity);
+            case Atlanta:
+                view.findViewById(R.id.atlantaCity);
+            case Charleston:
+                view.findViewById(R.id.charlestonCity);
+            case Raleigh:
+                view.findViewById(R.id.raleighCity);
+            case DC:
+                view.findViewById(R.id.dcCity);
+            case Pittsburgh:
+                view.findViewById(R.id.pittsburghCity);
+            case NewYork:
+                view.findViewById(R.id.newYorkCity);
+            case Boston:
+                view.findViewById(R.id.bostonCity);
+            case Toronto:
+                view.findViewById(R.id.torontoCity);
+            case StMarie:
+                view.findViewById(R.id.saultStMarieCity);
+            case Montreal:
+                view.findViewById(R.id.montrealCity);
+        }
+        return view.findViewById(R.id.seattleCity);
     }
 
     public static void disableHardwareRendering(View v) {

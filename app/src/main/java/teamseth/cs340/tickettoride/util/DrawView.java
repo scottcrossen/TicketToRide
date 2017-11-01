@@ -27,8 +27,8 @@ public class DrawView extends View {
         paint.setStrokeWidth(15);
         paint.setStyle(Paint.Style.STROKE);
         //Route route = getLocalRoute();
+        paint.setColor(color);
         if(!routeOwned) {
-            paint.setColor(color);
             paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
         }
         else {
@@ -39,6 +39,12 @@ public class DrawView extends View {
         // only draws dashed line if route is unclaimed
         this.startView = startView;
         this.endView = endView;
+    }
+
+    public void isOwned(Boolean owned) {
+        if(owned) {
+            routeOwned = true;
+        }
     }
 
     /*private Route getLocalRoute(View start, View end) {

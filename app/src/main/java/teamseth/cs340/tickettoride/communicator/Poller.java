@@ -16,7 +16,7 @@ import teamseth.cs340.common.commands.IUpdatableCommand;
 
 /**
  * @author Scott Leland Crossen
- * @Copyright 2017 Scott Leland Crossen
+ * @copyright 2017 Scott Leland Crossen
  */
 public class Poller {
     private static Poller instance;

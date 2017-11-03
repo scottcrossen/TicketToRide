@@ -11,11 +11,11 @@
     <string name="destCard">Loading Destination Cards</string>
     <string name="confirmDestCards">Confirm Destination Cards</string>
     <string name="chooseDestCardsTitle">Choose Destination Cards</string>
-    <string name="otherPlayer1">Other Player 1:</string>
-    <string name="otherPlayer2">Other Player 2:</string>
-    <string name="otherPlayer3">Other Player 3:</string>
-    <string name="otherPlayer4">Other Player 4:</string>
-    <string name="otherPlayer5">Other Player 5:</string>
+    <string name="otherPlayer1">Other Player 1</string>
+    <string name="otherPlayer2">Other Player 2</string>
+    <string name="otherPlayer3">Other Player 3</string>
+    <string name="otherPlayer4">Other Player 4</string>
+    <string name="otherPlayer5">Other Player 5</string>
     <string name="otherPlayerCards"><u>Cards</u></string>
     <string name="otherPlayerTrainCars"><u>Train Cars</u></string>
     <string name="otherPlayerDestCards"><u>Destination Cards</u></string>

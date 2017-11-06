@@ -59,6 +59,8 @@ public class OtherPlayersFragment extends Fragment {
     private LinearLayout otherPlayer3View;
     private LinearLayout otherPlayer4View;
 
+    private View rootView;
+
     public OtherPlayersFragment() {
         // Empty constructor required for fragment subclasses
     }
@@ -67,7 +69,7 @@ public class OtherPlayersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Toast.makeText(this.getContext(), "Other Players", Toast.LENGTH_SHORT).show();
-        View rootView = inflater.inflate(R.layout.fragment_other_players_info, container, false);
+        rootView = inflater.inflate(R.layout.fragment_other_players_info, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
 
@@ -79,7 +81,7 @@ public class OtherPlayersFragment extends Fragment {
         otherPlayer1DestCards = rootView.findViewById(R.id.otherPlayer1DestCards);
         otherPlayer1Score = rootView.findViewById(R.id.otherPlayer1Score);
         otherPlayer1View = rootView.findViewById(R.id.other_player_1_view);
-        otherPlayer1View.setVisibility(View.GONE);
+        otherPlayer1View.setVisibility(rootView.GONE);
 
         otherPlayer2 = rootView.findViewById(R.id.otherPlayer2);
         otherPlayer2Cards = rootView.findViewById(R.id.otherPlayer2Cards);
@@ -87,7 +89,7 @@ public class OtherPlayersFragment extends Fragment {
         otherPlayer2DestCards = rootView.findViewById(R.id.otherPlayer2DestCards);
         otherPlayer2Score = rootView.findViewById(R.id.otherPlayer2Score);
         otherPlayer2View = rootView.findViewById(R.id.other_player_2_view);
-        otherPlayer2View.setVisibility(View.GONE);
+        otherPlayer2View.setVisibility(rootView.GONE);
 
         otherPlayer3 = rootView.findViewById(R.id.otherPlayer3);
         otherPlayer3Cards = rootView.findViewById(R.id.otherPlayer3Cards);
@@ -95,7 +97,7 @@ public class OtherPlayersFragment extends Fragment {
         otherPlayer3DestCards = rootView.findViewById(R.id.otherPlayer3DestCards);
         otherPlayer3Score = rootView.findViewById(R.id.otherPlayer3Score);
         otherPlayer3View = rootView.findViewById(R.id.other_player_3_view);
-        otherPlayer3View.setVisibility(View.GONE);
+        otherPlayer3View.setVisibility(rootView.GONE);
 
         otherPlayer4 = rootView.findViewById(R.id.otherPlayer4);
         otherPlayer4Cards = rootView.findViewById(R.id.otherPlayer4Cards);
@@ -103,7 +105,7 @@ public class OtherPlayersFragment extends Fragment {
         otherPlayer4DestCards = rootView.findViewById(R.id.otherPlayer4DestCards);
         otherPlayer4Score = rootView.findViewById(R.id.otherPlayer4Score);
         otherPlayer4View = rootView.findViewById(R.id.other_player_4_view);
-        otherPlayer4View.setVisibility(View.GONE);
+        otherPlayer4View.setVisibility(rootView.GONE);
 
         try {
             setPlayerInfo();
@@ -129,7 +131,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer1TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer1DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
             otherPlayer1Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
-            otherPlayer1View.setVisibility(View.VISIBLE);
+            otherPlayer1View.setVisibility(rootView.VISIBLE);
         }
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
@@ -138,7 +140,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer2TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer2DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
             otherPlayer2Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
-            otherPlayer2View.setVisibility(View.VISIBLE);
+            otherPlayer2View.setVisibility(rootView.VISIBLE);
         }
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
@@ -147,7 +149,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer3TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer3DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
             otherPlayer3Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
-            otherPlayer3View.setVisibility(View.VISIBLE);
+            otherPlayer3View.setVisibility(rootView.VISIBLE);
         }
         if (iterator.hasNext()) {
             UUID nextPlayer = iterator.next();
@@ -156,7 +158,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer4TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer4DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
             otherPlayer4Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
-            otherPlayer4View.setVisibility(View.VISIBLE);
+            otherPlayer4View.setVisibility(rootView.VISIBLE);
         }
     }
 }

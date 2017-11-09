@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 
 import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
@@ -17,7 +18,7 @@ import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChooseDestCardsFragment;
-import teamseth.cs340.tickettoride.fragment.WaitingFragment;
+import teamseth.cs340.tickettoride.fragment.SingleTextFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
 import teamseth.cs340.tickettoride.util.Toaster;
 
@@ -67,7 +68,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
         fragment = fm.findFragmentById(R.id.choose_dest_cards_fragment_container);
 
         if (fragment == null) {
-            fragment = ClientModelRoot.history.playerChoseInitialCards(Login.getUserId()) ? new WaitingFragment() : new ChooseDestCardsFragment();
+            fragment = ClientModelRoot.history.playerChoseInitialCards(Login.getUserId()) ? SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...") : new ChooseDestCardsFragment();
             fm.beginTransaction()
                     .add(R.id.choose_dest_cards_fragment_container, fragment)
                     .commit();
@@ -95,7 +96,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
     public void update(Observable o, Object arg) {
         if (fragment instanceof ChooseDestCardsFragment) {
             if (ClientModelRoot.history.playerChoseInitialCards(Login.getUserId())) {
-                Fragment newFragment = new WaitingFragment();
+                Fragment newFragment = SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...");
                 getSupportFragmentManager().beginTransaction()
                     .replace(R.id.choose_dest_cards_fragment_container, newFragment)
                     .addToBackStack(null)

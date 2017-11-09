@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.UUID;
 
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.util.auth.AuthToken;
 
 /**
@@ -75,6 +76,6 @@ public class Login extends Observable implements Serializable {
 
     public void logout() {
         this.token = null;
-        //ClientModelRoot.getInstance().resetAll();
+        ClientModelRoot.getInstance().resetAll();
     }
 }

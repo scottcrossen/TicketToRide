@@ -4,11 +4,13 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/mainText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Waiting for other players..."
-        android:textColor="@color/colorPrimaryDark"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
         android:gravity="center"
+        android:text="Loading..."
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="48sp" />
 
 </LinearLayout>

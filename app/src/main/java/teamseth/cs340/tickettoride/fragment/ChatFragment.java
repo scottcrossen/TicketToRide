@@ -60,6 +60,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener{
         String planet = getResources().getStringArray(R.array.tabs_array)[i];
 
         getActivity().setTitle(planet);
+        update();
         return v;
     }
 

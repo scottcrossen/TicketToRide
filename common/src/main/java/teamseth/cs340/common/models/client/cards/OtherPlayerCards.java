@@ -20,6 +20,11 @@ public class OtherPlayerCards implements IModel {
         return instance;
     }
 
+    public void resetModel() {
+        playerResourceCards = new HashMap<>();
+        playerDestinationCards = new HashMap<>();
+    }
+
     private Map<UUID, Integer> playerResourceCards = new HashMap<>();
     private Map<UUID, Integer> playerDestinationCards = new HashMap<>();
 

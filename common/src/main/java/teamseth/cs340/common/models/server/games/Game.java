@@ -46,7 +46,7 @@ public class Game implements Serializable, Comparable<Game> {
 
     public void removePlayer(UUID userId) {
         users.remove(userId);
-        playerNames.remove(userId);
+        // Keep player name for reference if messages exist.
         playerColors.remove(userId);
         playerTurns.remove(userId);
         updateTime();

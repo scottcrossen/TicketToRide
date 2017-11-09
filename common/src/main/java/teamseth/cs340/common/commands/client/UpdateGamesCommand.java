@@ -20,6 +20,6 @@ public class UpdateGamesCommand implements IClientCommand {
     }
 
     public Result call() {
-        return new Result(() -> {ClientFacade.getInstance().addGames(newGames); return null;});
+        return new Result(() -> {ClientFacade.getInstance().addGames(newGames); return null; });
     }
 }

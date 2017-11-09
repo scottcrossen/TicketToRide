@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 
@@ -24,6 +25,10 @@ public class CommandHistory extends Observable {
             instance = new CommandHistory();
         }
         return instance;
+    }
+
+    public void resetModel() {
+        history = new LinkedList<>();
     }
 
     private List<IHistoricalCommand> history = new LinkedList<>();
@@ -64,5 +69,11 @@ public class CommandHistory extends Observable {
         } else {
             return Optional.empty();
         }
+    }
+
+    public boolean playerChoseInitialCards(UUID playerId) {
+        return history.stream().anyMatch((IHistoricalCommand command) ->
+            (command instanceof InitialChooseDestinationCardCommand && command.playerOwnedby().equals(playerId))
+        );
     }
 }

@@ -21,6 +21,10 @@ public class PlayerPoints extends Observable implements IModel {
         return instance;
     }
 
+    public void resetModel() {
+        playerPoints = new HashMap<>();
+    }
+
     private Map<UUID, Integer> playerPoints = new HashMap<>();
 
     public int getPlayerPoints(UUID playerId) {

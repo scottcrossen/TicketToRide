@@ -48,7 +48,7 @@ public class DebugCommandShortcut implements Runnable {
         try {
             System.out.println("Running start game command");
             new CommandTask(this.context).execute(new StartGameCommand(ClientModelRoot.games.getActive().getId()));
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         while (ClientModelRoot.getInstance().cards.getDestinationCards().size() == 0) {

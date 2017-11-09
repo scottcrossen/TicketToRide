@@ -25,12 +25,11 @@ public class Login extends Observable implements Serializable {
     private static String serverHost = "10.0.2.2";
     private static String username;
     private static String password;
+    private static UUID player;
 
     public static UUID getUserId() { return player;}
 
     public static void setUserId(UUID player) { Login.player = player; }
-
-    private static UUID player;
 
     public String getUsername() {
         return username;
@@ -72,5 +71,10 @@ public class Login extends Observable implements Serializable {
 
     public void setServerHost(String serverHost) {
         Login.serverHost = serverHost;
+    }
+
+    public void logout() {
+        this.token = null;
+        //ClientModelRoot.getInstance().resetAll();
     }
 }

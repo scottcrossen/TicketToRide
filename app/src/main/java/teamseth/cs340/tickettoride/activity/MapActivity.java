@@ -23,6 +23,7 @@ import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.client.board.Board;
 import teamseth.cs340.common.models.client.chat.CurrentChat;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChatFragment;
@@ -135,6 +136,13 @@ public class MapActivity extends AppCompatActivity implements Observer {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Login.getInstance().logout();
+        this.finish();
     }
 
     /* The click listener for ListView in the navigation drawer */

@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import teamseth.cs340.common.commands.server.LeaveGameCommand;
 import teamseth.cs340.common.commands.server.StartGameCommand;
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.tickettoride.R;
@@ -71,10 +70,9 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
 
         startBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
-
         try {
             setFields(ClientModelRoot.games.getActive());
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -141,10 +139,9 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
     }
 
     public void onStartPressed() {
-
         try {
             new CommandTask(this.getContext()).execute(new StartGameCommand(ClientModelRoot.games.getActive().getId()));
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -152,7 +149,7 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
     public void onQuitPressed() {
         try {
             new CommandTask(this.getContext()).execute(new LeaveGameCommand(ClientModelRoot.games.getActive().getId()));
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -15,11 +15,13 @@ import java.util.Observer;
 import teamseth.cs340.common.commands.server.ListGamesAfterCommand;
 import teamseth.cs340.common.commands.server.ListGamesCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.FragmentChangeListener;
 import teamseth.cs340.tickettoride.fragment.GameListFragment;
+import teamseth.cs340.tickettoride.util.ActivityDecider;
 
 /**
  * @author Scott Leland Crossen
@@ -28,6 +30,7 @@ import teamseth.cs340.tickettoride.fragment.GameListFragment;
 public class GameListActivity extends AppCompatActivity implements FragmentChangeListener, Observer {
 
     Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -51,14 +54,15 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
 
     }
 
+    private void backPressed() {
+        Login.getInstance().logout();
+        this.finish();
+    }
+
     @Override
     public void onBackPressed()
     {
-        if (getFragmentManager().getBackStackEntryCount() == 0) {
-            this.finish();
-        } else {
-            super.onBackPressed();
-        }
+        backPressed();
     }
 
     @Override
@@ -69,10 +73,11 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
                 parentIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 parentIntent.putExtra("message", "filter");
                 startActivity(parentIntent);
-                finish();
+                backPressed();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -93,7 +98,12 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
         this.runOnUiThread(() -> {
             if (ClientModelRoot.games.hasActive()) {
                 Poller.getInstance(this.getApplicationContext()).reset();
-                startActivity(new Intent(this, GameLobbyActivity.class));
+                try {
+                    startActivity(new Intent(this, ActivityDecider.next()));
+                    this.finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 if (fragment instanceof GameListFragment) ((GameListFragment) fragment).update();
             }

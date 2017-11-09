@@ -1,108 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+android:orientation="vertical" android:layout_width="match_parent"
+android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cards:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Cards:"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="20sp" />
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingBottom="5dp"
-        android:columnCount="3"
-        android:rowCount="2">
+<GridLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingBottom="5dp"
+    android:columnCount="3"
+    android:rowCount="2">
 
-        <RelativeLayout>
-            <ImageView
-                android:id="@+id/card_back_train"
-                android:layout_width="100dp"
-                android:layout_height="75dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/card_back" />
-            <TextView
-                android:id="@+id/cards_in_deck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/card_back_train"
-                android:layout_alignTop="@id/card_back_train"
-                android:layout_alignRight="@id/card_back_train"
-                android:layout_alignBottom="@id/card_back_train"
-                android:layout_margin="1dp"
-                android:gravity="center"
-                android:text="12"
-                android:textColor="#FFFFFF"
-                android:textSize="40dp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-
+    <RelativeLayout>
         <ImageView
-            android:id="@+id/card1"
+            android:id="@+id/card_back_train"
             android:layout_width="100dp"
             android:layout_height="75dp"
             android:layout_marginRight="15dp"
             android:src="@drawable/card_back" />
-
-        <ImageView
-            android:id="@+id/card2"
-            android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/card_back" />
-
-        <ImageView
-            android:id="@+id/card3"
-            android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/card_back" />
-
-        <ImageView
-            android:id="@+id/card4"
-            android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/card_back" />
-
-        <ImageView
-            android:id="@+id/card5"
-            android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/card_back" />
-
-    </GridLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Destination Cards:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/destination_card_back"
-            android:rotation="90"
-            android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/dest_card_back" />
         <TextView
-            android:id="@+id/destination_cards_in_deck"
+            android:id="@+id/cards_in_deck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/destination_card_back"
-            android:layout_alignTop="@id/destination_card_back"
-            android:layout_alignRight="@id/destination_card_back"
-            android:layout_alignBottom="@id/destination_card_back"
+            android:layout_alignLeft="@id/card_back_train"
+            android:layout_alignTop="@id/card_back_train"
+            android:layout_alignRight="@id/card_back_train"
+            android:layout_alignBottom="@id/card_back_train"
             android:layout_margin="1dp"
             android:gravity="center"
             android:text="12"
@@ -111,20 +41,90 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/card1"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/card_back" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Current Player Turn:"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/card2"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/card_back" />
 
+    <ImageView
+        android:id="@+id/card3"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/card_back" />
+
+    <ImageView
+        android:id="@+id/card4"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/card_back" />
+
+    <ImageView
+        android:id="@+id/card5"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/card_back" />
+
+</GridLayout>
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Destination Cards:"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="20sp" />
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/destination_card_back"
+        android:rotation="90"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/dest_card_back" />
     <TextView
-        android:id="@+id/player_name"
-        android:layout_width="match_parent"
+        android:id="@+id/destination_cards_in_deck"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading"
-        android:textColor="@color/colorPrimary"
-        android:textSize="12sp" />
+        android:layout_alignLeft="@id/destination_card_back"
+        android:layout_alignTop="@id/destination_card_back"
+        android:layout_alignRight="@id/destination_card_back"
+        android:layout_alignBottom="@id/destination_card_back"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="12"
+        android:textColor="#FFFFFF"
+        android:textSize="40dp"
+        android:textStyle="bold" />
+</RelativeLayout>
+
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Current Player Turn:"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="20sp" />
+
+<TextView
+    android:id="@+id/player_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Loading"
+    android:textColor="@color/colorPrimary"
+    android:textSize="12sp" />
 
 </LinearLayout>

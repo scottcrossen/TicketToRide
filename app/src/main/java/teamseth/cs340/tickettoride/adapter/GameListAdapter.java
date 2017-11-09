@@ -56,7 +56,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         public void onClick(View view) {
 
             String gameNameText = (String) gameName.getText();
-            Game clickedGame = ClientModelRoot.games.getGame(gameNameText);
+            Game clickedGame = ClientModelRoot.games.getByName(gameNameText);
             UUID gameId = clickedGame.getId();
             Activity activity = (Activity)view.getContext();
             new CommandTask(context).execute(new JoinGameCommand(gameId));

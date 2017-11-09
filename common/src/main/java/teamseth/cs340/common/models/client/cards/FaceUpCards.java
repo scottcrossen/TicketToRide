@@ -21,6 +21,11 @@ public class FaceUpCards implements IModel {
         }
         return instance;
     }
+
+    public void resetModel() {
+        resourceCards = new LinkedList<>();
+    }
+
     private List<ResourceColor> resourceCards = new LinkedList<>();
     public List<ResourceColor> getFaceUpCards() { return resourceCards; }
 

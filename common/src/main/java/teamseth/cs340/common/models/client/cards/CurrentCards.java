@@ -21,6 +21,13 @@ public class CurrentCards extends Observable {
         return instance;
     }
 
+    public void resetModel() {
+        destinationCards = new LinkedList<>();
+        resourceCards = new LinkedList<>();
+        others.resetModel();
+        faceUp.resetModel();
+    }
+
     private LinkedList<DestinationCard> destinationCards = new LinkedList<>();
     private LinkedList<ResourceColor> resourceCards = new LinkedList<>();
 

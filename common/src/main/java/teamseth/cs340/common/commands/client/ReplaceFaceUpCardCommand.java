@@ -1,6 +1,7 @@
 package teamseth.cs340.common.commands.client;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,21 +17,21 @@ public class ReplaceFaceUpCardCommand implements IHistoricalCommand {
     private static final long serialVersionUID = -3055841912455707517L;
 
     private ResourceColor oldCard;
-    private ResourceColor newCard;
+    private ResourceColor newCard = null;
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();
     private UUID owner;
 
-    public ReplaceFaceUpCardCommand(ResourceColor oldCard, ResourceColor newCard, Set<UUID> allPlayers, UUID owner) {
+    public ReplaceFaceUpCardCommand(ResourceColor oldCard, Optional<ResourceColor> newCard, Set<UUID> allPlayers, UUID owner) {
         this.oldCard = oldCard;
-        this.newCard = newCard;
+        this.newCard = newCard.orElseGet(() -> null);
         this.players = allPlayers;
         this.owner = owner;
     }
 
     public Result call() {
         return new Result(() -> {
-            ClientFacade.getInstance().replaceCard(oldCard, newCard); return null;});
+            ClientFacade.getInstance().replaceCard(oldCard, Optional.ofNullable(newCard)); return null;});
     }
 
     public UUID getId() {

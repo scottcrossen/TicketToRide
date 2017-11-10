@@ -1,6 +1,7 @@
 package teamseth.cs340.common.models.server.cards;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -85,7 +86,7 @@ public class CardModel extends AuthAction implements IModel<Deck> {
         throw new ResourceNotFoundException();
     }
 
-    public ResourceColor drawFaceUpCard(UUID deckId, ResourceColor color, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
+    public Optional<ResourceColor> drawFaceUpCard(UUID deckId, ResourceColor color, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         AuthAction.user(token);
         return getResourceDeck(deckId).drawFaceUpCard(color);
     }

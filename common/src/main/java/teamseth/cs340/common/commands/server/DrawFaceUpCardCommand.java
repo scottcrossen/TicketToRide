@@ -2,6 +2,7 @@ package teamseth.cs340.common.commands.server;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class DrawFaceUpCardCommand implements IServerCommand {
     }
 
     public List<IHistoricalCommand> clientCommand() throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
-        ResourceColor newFaceUp = ServerFacade.getInstance().drawFaceUpCard(deckId, card, token);
+        Optional<ResourceColor> newFaceUp = ServerFacade.getInstance().drawFaceUpCard(deckId, card, token);
         UUID user = token.getUser();
         List<IHistoricalCommand> output = new LinkedList<>();
         output.add(new AddResourceCardCommand(card, user));

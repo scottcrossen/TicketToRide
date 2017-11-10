@@ -2,6 +2,7 @@ package teamseth.cs340.common.root.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -66,7 +67,7 @@ public class ClientFacade implements IClient {
 
     public void seedCards(List<ResourceColor> cards) { model.cards.faceUp.seedCards(cards); }
 
-    public void replaceCard(ResourceColor oldCard, ResourceColor newCard) throws ResourceNotFoundException { model.cards.faceUp.replaceCard(oldCard, newCard); }
+    public void replaceCard(ResourceColor oldCard, Optional<ResourceColor> newCard) throws ResourceNotFoundException { model.cards.faceUp.replaceCard(oldCard, newCard); }
 
     public void incrementPlayerPoints(UUID playerId, int amount) { model.points.incrementPlayerPoints(playerId, amount); }
 

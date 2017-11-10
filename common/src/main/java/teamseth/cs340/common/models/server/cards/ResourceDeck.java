@@ -3,6 +3,7 @@ package teamseth.cs340.common.models.server.cards;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -52,15 +53,19 @@ public class ResourceDeck implements Deck<ResourceColor> {
         deck.add(card);
     }
 
-    public ResourceColor drawFaceUpCard(ResourceColor oldCard) throws ModelActionException, ResourceNotFoundException {
+    public Optional<ResourceColor> drawFaceUpCard(ResourceColor oldCard) throws ModelActionException, ResourceNotFoundException {
         Iterator<ResourceColor> iterator = faceUp.iterator();
         while (iterator.hasNext()) {
             ResourceColor next = iterator.next();
             if (next.equals(oldCard)) {
                 iterator.remove();
-                ResourceColor newCard = draw();
-                faceUp.add(newCard);
-                return newCard;
+                try {
+                    ResourceColor newCard = draw();
+                    faceUp.add(newCard);
+                    return Optional.of(newCard);
+                } catch (Exception e) {
+                    return Optional.empty();
+                }
             }
         }
         throw new ResourceNotFoundException();

@@ -27,6 +27,11 @@ public class GameInfoFragment extends Fragment {
     private final int purpleCard = R.drawable.purple_train_card;
     private final int whiteCard = R.drawable.white_train_card;
     private final int wildCard = R.drawable.locomotive;
+    ImageView card1;
+    ImageView card2;
+    ImageView card3;
+    ImageView card4;
+    ImageView card5;
 
     public GameInfoFragment() {
         // Empty constructor required for fragment subclasses
@@ -45,11 +50,11 @@ public class GameInfoFragment extends Fragment {
         //TODO set up the cards to update according to what is shown
         //TODO set onclicklisteners for the deck drawing, dest card drawing, and individual card picking
 
-        ImageView card1 = (ImageView) rootView.findViewById(R.id.card1);
-        ImageView card2 = (ImageView) rootView.findViewById(R.id.card2);
-        ImageView card3 = (ImageView) rootView.findViewById(R.id.card3);
-        ImageView card4 = (ImageView) rootView.findViewById(R.id.card4);
-        ImageView card5 = (ImageView) rootView.findViewById(R.id.card5);
+        card1 = (ImageView) rootView.findViewById(R.id.card1);
+        card2 = (ImageView) rootView.findViewById(R.id.card2);
+        card3 = (ImageView) rootView.findViewById(R.id.card3);
+        card4 = (ImageView) rootView.findViewById(R.id.card4);
+        card5 = (ImageView) rootView.findViewById(R.id.card5);
         ImageView trainCardDeck = (ImageView) rootView.findViewById(R.id.card_back_train);
         ImageView destinationCardDeck = (ImageView) rootView.findViewById(R.id.destination_card_back);
         TextView trainCardsLeft = (TextView) rootView.findViewById(R.id.cards_in_deck);
@@ -57,11 +62,11 @@ public class GameInfoFragment extends Fragment {
         TextView playerName = (TextView) rootView.findViewById(R.id.player_name);
 
         //TODO set these to random cards
-        card1.setImageResource(chooseColor(0));
-        card2.setImageResource(chooseColor(1));
-        card3.setImageResource(chooseColor(2));
-        card4.setImageResource(chooseColor(3));
-        card5.setImageResource(chooseColor(4));
+        setImage(1);
+        setImage(2);
+        setImage(3);
+        setImage(4);
+        setImage(5);
 
         //TODO set the text to the number of cards left in the respective decks
 
@@ -81,8 +86,7 @@ public class GameInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO add card to players hand, and change for a new card from the top of the deck
-                Toast.makeText(getContext(), "Chose Card 1", Toast.LENGTH_SHORT).show();
-                card1.setImageResource(chooseColor(0));
+                setImage(1);
             }
         });
 
@@ -90,7 +94,7 @@ public class GameInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO add card to players hand, and change for a new card from the top of the deck
-                card2.setImageResource(chooseColor(1));
+                setImage(2);
             }
         });
 
@@ -98,7 +102,7 @@ public class GameInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO add card to players hand, and change for a new card from the top of the deck
-                card3.setImageResource(chooseColor(2));
+                setImage(3);
             }
         });
 
@@ -106,7 +110,7 @@ public class GameInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO add card to players hand, and change for a new card from the top of the deck
-                card4.setImageResource(chooseColor(3));
+                setImage(4);
             }
         });
 
@@ -114,7 +118,7 @@ public class GameInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO add card to players hand, and change for a new card from the top of the deck
-                card5.setImageResource(chooseColor(4));
+                setImage(5);
             }
         });
 
@@ -136,6 +140,32 @@ public class GameInfoFragment extends Fragment {
         //TODO do a check to ensure there are not 3 locomotives facing up at the same time
 
         return rootView;
+    }
+
+    private void setImage(int cardNum) {
+        ImageView card = null;
+        switch (cardNum) {
+            case 1:
+                card = card1;
+                break;
+            case 2:
+                card = card2;
+                break;
+            case 3:
+                card = card3;
+                break;
+            case 4:
+                card = card4;
+                break;
+            case 5:
+                card = card5;
+                break;
+        }
+        if (card != null && cardNum <= ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().size()) {
+            card.setImageResource(chooseColor(cardNum - 1));
+        } else if (card != null) {
+            card.setVisibility(View.INVISIBLE);
+        }
     }
 
     private int chooseColor(int pos){

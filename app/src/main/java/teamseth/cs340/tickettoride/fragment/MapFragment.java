@@ -285,7 +285,7 @@ public class MapFragment extends Fragment {
         allRoutes.add(dcRaleigh);
 
         //TODO add double routes using overloaded DrawView function
-
+        //tt
         //TODO phase 3 add onclick events for the lines, so, vancouverSeattle.addOnclick() blah blah
         //rootView = drawLines(rootView);
         getActivity().setTitle(title);

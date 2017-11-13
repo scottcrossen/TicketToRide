@@ -102,7 +102,6 @@ public class DrawView extends View {
         }
         return route;
     }*/
-
     /*private Route getRouteFromCities(CityName start, CityName end) {
         Route route;
 

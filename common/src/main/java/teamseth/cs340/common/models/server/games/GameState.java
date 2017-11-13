@@ -5,5 +5,5 @@ package teamseth.cs340.common.models.server.games;
  * @Copyright 2017 Scott Leland Crossen
  */
 public enum GameState {
-    DELETED, PREGAME, START, PLAYING
+    DELETED, PREGAME, START, PLAYING, FINISHED
 }

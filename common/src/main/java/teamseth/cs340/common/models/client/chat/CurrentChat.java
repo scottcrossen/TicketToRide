@@ -19,6 +19,10 @@ public class CurrentChat extends Observable {
         return instance;
     }
 
+    public void resetModel() {
+        messages = new ArrayList<>();
+    }
+
     private ArrayList<Message> messages = new ArrayList<>();
 
     public ArrayList<Message> getMessages() { return messages; }

@@ -29,4 +29,13 @@ public class ClientModelRoot {
     public static final Board board = Board.getInstance();
     public static final PlayerPoints points = PlayerPoints.getInstance();
     public static final PlayerCarts carts = PlayerCarts.getInstance();
+    public void resetAll() {
+        games.resetModel();
+        cards.resetModel();
+        chat.resetModel();
+        history.resetModel();
+        board.resetModel();
+        points.resetModel();
+        cards.resetModel();
+    }
 }

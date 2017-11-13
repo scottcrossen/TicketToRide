@@ -2,6 +2,7 @@ package teamseth.cs340.common.root.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public interface IClient {
     public void addPlayerResourceCard(UUID playerId);
     public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException;
     public void seedCards(List<ResourceColor> cards);
-    public void replaceCard(ResourceColor oldCard, ResourceColor newCard) throws ResourceNotFoundException;
+    public void replaceCard(ResourceColor oldCard, Optional<ResourceColor> newCard) throws ResourceNotFoundException;
     public void incrementPlayerPoints(UUID playerId, int amount);
     public void addPlayerTrainCarts(UUID playerId, int amount);
     public void removePlayerTrainCarts(UUID playerId, int amount);

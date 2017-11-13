@@ -29,13 +29,22 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
     private CheckBox checkBox2;
     private CheckBox checkBox3;
     private Button chooseDestCardsBtn;
+    private Optional<Caller> parent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        try {
+            parent = Optional.of((Caller) getActivity());
+        } catch (Exception e) {
+            parent = Optional.empty();
+        }
         //chooseDestCardsBtn.setEnabled(false);
+    }
+
+    public interface Caller {
+        void onFragmentSuccess();
     }
 
     public void setDestinationCards(List<DestinationCard> cards) {
@@ -107,6 +116,7 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         }
 
         new CommandTask(getContext()).execute(new InitialReturnDestinationCardCommand(Optional.ofNullable(returnCard)));
+        parent.map((Caller caller) -> { caller.onFragmentSuccess(); return caller; });
     }
 
     public void enableButton() {

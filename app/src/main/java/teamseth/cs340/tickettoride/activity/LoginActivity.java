@@ -11,6 +11,7 @@ import java.util.Observer;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.fragment.LoginFragment;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.util.ActivityDecider;
 
 /**
  * @author Scott Leland Crossen
@@ -46,7 +47,7 @@ public class LoginActivity extends FragmentActivity implements Observer {
     public void update(Observable observable, Object o) {
         this.runOnUiThread(() -> {
             if (Login.getInstance().getToken() != null)
-                startActivity(new Intent(this, GameListActivity.class));
+                startActivity(new Intent(this, ActivityDecider.next()));
         });
     }
 }

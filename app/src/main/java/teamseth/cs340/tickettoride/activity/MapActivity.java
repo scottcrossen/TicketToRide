@@ -23,6 +23,7 @@ import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.client.board.Board;
 import teamseth.cs340.common.models.client.chat.CurrentChat;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChatFragment;
@@ -32,6 +33,7 @@ import teamseth.cs340.tickettoride.fragment.HistoryFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
+import teamseth.cs340.tickettoride.fragment.SingleTextFragment;
 
 /**
  * Created by Seth on 10/13/2017.
@@ -137,6 +139,13 @@ public class MapActivity extends AppCompatActivity implements Observer {
         }
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        Login.getInstance().logout();
+        this.finish();
+    }
+
     /* The click listener for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -159,8 +168,19 @@ public class MapActivity extends AppCompatActivity implements Observer {
                 args.putInt(PlayerFragment.ARG_TAB_NUMBER, position);
                 break;
             case 2:
-                fragment = new OtherPlayersFragment();
-                args.putInt(OtherPlayersFragment.ARG_TAB_NUMBER, position);
+                int playerAmnt = 1;
+                try {
+                    playerAmnt = ClientModelRoot.games.getActive().getPlayers().size();
+                } catch (Exception e) {
+                }
+                if (playerAmnt != 1) {
+                    fragment = new OtherPlayersFragment();
+                    args.putInt(OtherPlayersFragment.ARG_TAB_NUMBER, position);
+                } else {
+                    fragment = new SingleTextFragment.V1Fragment();
+                    args.putString("title", getResources().getStringArray(R.array.tabs_array)[position]);
+                    args.putString("mainText", "No Other Players");
+                }
                 break;
             case 3:
                 fragment = new GameInfoFragment();

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.chat.Message;
 import teamseth.cs340.tickettoride.R;
@@ -60,10 +59,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         try {
             holder.playerName.setText(ClientModelRoot.getInstance().games.getActive().getPlayerNames().get(message.getUser()));
             holder.message.setText(message.getMessage());
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

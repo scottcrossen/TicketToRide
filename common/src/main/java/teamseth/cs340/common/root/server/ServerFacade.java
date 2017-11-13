@@ -76,7 +76,7 @@ public final class ServerFacade implements IServer {
     public void returnDestinationCard(UUID deckId, DestinationCard card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         model.cards.returnDestinationCard(deckId, card, token);
     }
-    public ResourceColor drawFaceUpCard(UUID deckId, ResourceColor card, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
+    public Optional<ResourceColor> drawFaceUpCard(UUID deckId, ResourceColor card, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
         return model.cards.drawFaceUpCard(deckId, card, token);
     }
 

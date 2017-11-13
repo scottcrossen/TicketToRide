@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.CityName;
@@ -310,10 +309,11 @@ public class MapFragment extends Fragment {
                 vancouverSeattle.isOwned(true);
                 vancouverSeattle.setBackgroundColor(Color.TRANSPARENT);
                 relativeLayout.addView(vancouverSeattle, 2500, 1800);
-            } catch (ResourceNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+
         });
 
         // TODO: Seth: implement this

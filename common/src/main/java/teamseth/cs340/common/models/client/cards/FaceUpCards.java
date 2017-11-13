@@ -3,6 +3,7 @@ package teamseth.cs340.common.models.client.cards;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.IModel;
@@ -21,19 +22,28 @@ public class FaceUpCards implements IModel {
         }
         return instance;
     }
+
+    public void resetModel() {
+        resourceCards = new LinkedList<>();
+    }
+
     private List<ResourceColor> resourceCards = new LinkedList<>();
     public List<ResourceColor> getFaceUpCards() { return resourceCards; }
 
     public void seedCards(List<ResourceColor> cards) {
         this.resourceCards = cards;
     }
-    public void replaceCard(ResourceColor oldCard, ResourceColor newCard) throws ResourceNotFoundException {
+    public void replaceCard(ResourceColor oldCard, Optional<ResourceColor> newCard) throws ResourceNotFoundException {
         Iterator<ResourceColor> iterator = resourceCards.iterator();
         while (iterator.hasNext()) {
             ResourceColor next = iterator.next();
             if (next.equals(oldCard)) {
                 iterator.remove();
-                resourceCards.add(newCard);
+                newCard.map((ResourceColor newColor) -> {
+                    resourceCards.add(newColor);
+                    return newColor;
+                });
+                return;
             }
         }
         throw new ResourceNotFoundException();

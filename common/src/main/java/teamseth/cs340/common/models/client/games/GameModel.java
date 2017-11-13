@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Set;
-import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.models.server.games.GameState;
+import teamseth.cs340.common.util.client.Login;
 
 /**
  * @author Scott Leland Crossen
@@ -25,36 +25,37 @@ public class GameModel extends Observable implements IModel<Game> {
         return instance;
     }
 
-    private HashSet<Game> games = new HashSet<Game>();
-    private UUID active = null;
+    public void resetModel() {
+        state = new InactiveGameState();
+    }
+
+    private IGameModelState state = new InactiveGameState();
 
     public void upsert(Set<Game> newGames) {
-        int addSize = newGames.size();
-        // Overwrite old data with new data on uuid.
-        Iterator<Game> iterator1 = games.iterator();
-        while (iterator1.hasNext()) {
-            Game currentGame1 = iterator1.next();
-            Iterator<Game> iterator2 = newGames.iterator();
-            while (iterator2.hasNext()) {
-                Game currentGame2 = iterator2.next();
-                if (currentGame1.getId().equals(currentGame2.getId())) {
-                    iterator1.remove();
-                }
+        // Check if any of the games include this user
+        Iterator<Game> iterator0 = newGames.iterator();
+        while (iterator0.hasNext()) {
+            Game currentGame0 = iterator0.next();
+            if (!currentGame0.getState().equals(GameState.DELETED) && !currentGame0.getState().equals(GameState.FINISHED) && currentGame0.hasPlayer(Login.getInstance().getUserId())) {
+                this.state.setActive(currentGame0);
+                setChanged();
+                notifyObservers();
+                return;
             }
         }
-        games.addAll(newGames);
-        if (addSize > 0) {
+        state.addGames(newGames);
+        if (newGames.size() > 0 && !state.hasActive()) {
             setChanged();
             notifyObservers();
         }
     }
 
     public HashSet<Game> getAll(){
-        return games;
+        return state.getAll();
     }
 
-    public Game getGame(String gameName) {
-        for (Game game : games) {
+    public Game getByName(String gameName) {
+        for (Game game : state.getAll()) {
             if(game.name().contentEquals(gameName)) {
                 return game;
             }
@@ -63,32 +64,102 @@ public class GameModel extends Observable implements IModel<Game> {
     }
 
     public void setActive(Game current) {
-        HashSet<Game> toAdd = new HashSet<Game>();
-        toAdd.add(current);
-        this.upsert(toAdd);
-
-        this.active = current.getId();
+        this.state.setActive(current);
         setChanged();
         notifyObservers();
     }
+
     public void setActiveState(GameState state) throws ResourceNotFoundException {
-        getActive().setState(state);
+        this.state.getActive().setState(state);
         setChanged();
         notifyObservers();
     }
 
     public void clearActive() {
-        this.active = null;
+        this.state.setInactive();
         setChanged();
         notifyObservers();
     }
 
     public Game getActive() throws ResourceNotFoundException {
-        if (active == null) throw new ResourceNotFoundException();
-        return games.stream().filter(game -> game.getId().equals(active)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
+        return state.getActive();
     }
 
     public boolean hasActive() {
-        return (active != null);
+        return this.state.hasActive();
+    }
+
+    private interface IGameModelState {
+        Game getActive() throws ResourceNotFoundException;
+        void setActive(Game active);
+        void setInactive();
+        boolean hasActive();
+        void addGames(Set<Game> newGames);
+        HashSet<Game> getAll();
+    }
+
+    private class ActiveGameState implements IGameModelState {
+        private Game active;
+        public ActiveGameState(Game current) {
+            this.active = current;
+        }
+        public Game getActive() {
+            return active;
+        }
+        public void setActive(Game game) {
+            state = new ActiveGameState(game);
+        }
+        public void setInactive() {
+            state = new InactiveGameState();
+        }
+        public boolean hasActive() {
+            return true;
+        }
+        public void addGames(Set<Game> newGames) {
+            return;
+        }
+        public HashSet<Game> getAll(){
+            HashSet<Game> output = new HashSet<>();
+            output.add(active);
+            return output;
+        }
+    }
+
+    private class InactiveGameState implements IGameModelState {
+        public InactiveGameState() {
+        }
+        private HashSet<Game> games = new HashSet<Game>();
+        public Game getActive() throws ResourceNotFoundException {
+            throw new ResourceNotFoundException();
+        }
+        public void setActive(Game game) {
+            state = new ActiveGameState(game);
+        }
+        public void setInactive() {
+            state = new InactiveGameState();
+        }
+        public boolean hasActive() {
+            return false;
+        }
+        public void addGames(Set<Game> newGames) {
+            int addSize = newGames.size();
+            // Overwrite old data with new data on uuid.
+            Iterator<Game> iterator1 = games.iterator();
+            while (iterator1.hasNext()) {
+                Game currentGame1 = iterator1.next();
+                Iterator<Game> iterator2 = newGames.iterator();
+                while (iterator2.hasNext()) {
+                    Game currentGame2 = iterator2.next();
+                    if (currentGame1.getId().equals(currentGame2.getId())) {
+                        iterator1.remove();
+                    }
+                }
+            }
+            // Add all remaining
+            games.addAll(newGames);
+        }
+        public HashSet<Game> getAll(){
+            return games;
+        }
     }
 }

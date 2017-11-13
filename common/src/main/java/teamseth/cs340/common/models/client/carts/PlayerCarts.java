@@ -20,6 +20,9 @@ public class PlayerCarts extends Observable implements IModel {
         }
         return instance;
     }
+    public void resetModel() {
+        playerCarts = new HashMap<>();
+    }
 
     private Map<UUID, Integer> playerCarts = new HashMap<>();
 

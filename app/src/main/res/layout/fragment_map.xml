@@ -448,7 +448,7 @@
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginTop="245dp"
-                android:layout_marginLeft="895dp"
+                android:layout_marginLeft="910dp"
                 android:src="@drawable/city_marker"/>
             <TextView
                 android:layout_width="wrap_content"

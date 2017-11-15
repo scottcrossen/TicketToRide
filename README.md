@@ -9,13 +9,41 @@ There are two major components to this project: The frontend -- composed for the
 
 ### Getting Started
 
+
+#### Common Instructions
+
+The java package directory is teamseth.cs340.tickettoride and the server main class is teamseth.cs340.tickettoride.server.main.Main
+
+To package all the files into a handy script, a gradle-task has been provided in the root directory called "zipFiles".
+Once the archive has been created you can then access the files and use the following instructions:
+
 #### Server Instructions
 
-This section has not been written yet.
+To run the server use the following command:
+```bash
+java -jar server.jar
+```
+To run the server on a specific port, add the ```-p [port]``` modifier. The default is port 8081
+```bash
+java -jar server.jar -p 8080
+```
 
 #### Android Instructions
 
-This section has not been written yet.
+This project has been developed on the Nexus 5X. It is suggested that you run it on that as well.
+
+List the names of the devices and emulators that are currently running:
+```bash
+adb devices
+```
+Install the app to a specific device:
+```bash
+adb -s <device-name> install app-debug.apk
+```
+Uninstall app from a specific device:
+```bash
+adb -s <device-name> uninstall teamseth.cs340.tickettoride
+```
 
 ### Helpful Links
 

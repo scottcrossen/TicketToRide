@@ -14,13 +14,20 @@ public class Main {
         int failCount = 0;
         while (!fail && failCount < 10) {
             try {
-                System.out.println("Starting server from monitor.");
+                System.out.println("Starting fail-safe monitor.");
                 ServerCommunicator server = new ServerCommunicator();
                 String[] inputArgs = {"8081"};
+                for (int i = 0; i < args.length; i++) {
+                    if ((args[i].equals("-p") || args[i].equals("--port")) && i != (args.length - 1)) {
+                        inputArgs[0] = args[i+1];
+                        break;
+                    }
+                }
                 server.main(inputArgs);
                 fail=true;
             } catch (Exception e) {
                 System.out.println("Server failure caught by monitor.");
+                e.printStackTrace();
                 failCount ++;
                 try {
                     TimeUnit.SECONDS.sleep(5);

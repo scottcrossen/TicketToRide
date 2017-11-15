@@ -1,5 +1,12 @@
 apply plugin: 'java'
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'teamseth.cs340.server.main.Main'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(path: ':common')

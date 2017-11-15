@@ -20,4 +20,17 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+    delete file('TicketToRide.zip')
+}
+
+FileCollection collection = files(
+        'server/build/libs/server.jar',
+        'app/build/outputs/apk/app-debug.apk',
+        'README.md'
+)
+
+task zipFiles(dependsOn: [':app:build', ':server:jar'], type: Zip) {
+    from collection.files
+    archiveName 'TicketToRide.zip'
+    destinationDir(file('./'))
 }

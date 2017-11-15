@@ -38,11 +38,11 @@ adb devices
 ```
 Install the app to a specific device:
 ```bash
-adb -s <device-name> install app-debug.apk
+adb -s [device-name] install app-debug.apk
 ```
 Uninstall app from a specific device:
 ```bash
-adb -s <device-name> uninstall teamseth.cs340.tickettoride
+adb -s [device-name] uninstall teamseth.cs340.tickettoride
 ```
 
 ### Helpful Links

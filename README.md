@@ -5,7 +5,7 @@ An Android version of the classic game *Ticket To Ride*
 ### Description
 
 This repository is maintained in Java and designed as an android-port of the multiplayer game *Ticket To Ride*.
-There are two major components to this project: The frontend -- composed for the android framework -- and the backend -- composed with a generic java platform. Major services are containerized using docker's \'docker-compose\' cluster management.
+There are two major components to this project: The frontend -- composed for the android framework -- and the backend -- composed with a generic java platform.
 
 ### Getting Started
 

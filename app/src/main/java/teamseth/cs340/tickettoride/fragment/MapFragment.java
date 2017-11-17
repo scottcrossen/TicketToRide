@@ -267,7 +267,7 @@ public class MapFragment extends Fragment {
         allRoutes.add(torontoPittsburgh);
         DrawView torontoMontreal = new DrawView(this.getContext(),toronto,montreal, Color.GRAY,"torontoMontreal");
         allRoutes.add(torontoMontreal);
-        DrawView saultStMarieMontreal = new DrawView(this.getContext(),elPaso,oklahoma, Color.BLACK,"saultStMarieMontreal");
+        DrawView saultStMarieMontreal = new DrawView(this.getContext(),saultStMarie,montreal, Color.BLACK,"saultStMarieMontreal");
         allRoutes.add(saultStMarieMontreal);
         DrawView montrealBoston = new DrawView(this.getContext(),montreal,boston, Color.GRAY,"montrealBoston");
         allRoutes.add(montrealBoston);

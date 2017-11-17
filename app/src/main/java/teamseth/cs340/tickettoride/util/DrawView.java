@@ -1,14 +1,11 @@
 package teamseth.cs340.tickettoride.util;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.games.PlayerColor;
@@ -30,16 +27,21 @@ public class DrawView extends View {
     Float offsetXstart;
     Float offsetYend;
     Float offsetXend;
+    private int color;
+    private String name;
+
 
     //TODO add an int offset for startView and EndView, useful for double routes
-    public DrawView(Context context, View startView, View endView, int color) {//, int routeLength) {
+    public DrawView(Context context, View startView, View endView, int color, String name) {//, int routeLength) {
         super(context);
         setWillNotDraw(false);
         paint.setStrokeWidth(15);
         paint.setStyle(Paint.Style.STROKE);
         doubleRoute = false;
         //Route route = getLocalRoute();
+        this.color = color;
         paint.setColor(color);
+
         if(!routeOwned) {
             // only draws dashed line if route is unclaimed
             paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
@@ -48,6 +50,7 @@ public class DrawView extends View {
             //draw solid line if route is claimed
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
         }
+        this.name = name;
         this.startView = startView;
         this.endView = endView;
         offsetXend = new Float(0);
@@ -57,14 +60,16 @@ public class DrawView extends View {
     }
 
     public DrawView(Context context, View startView, View endView, int color,
-                    float offsetStartX, float offsetStartY, float offsetEndX, float offsetEndY) {//, int routeLength) {
+                    float offsetStartX, float offsetStartY, float offsetEndX, float offsetEndY,
+                    String name) {//, int routeLength) {
         super(context);
         setWillNotDraw(false);
 
         paint.setStrokeWidth(15);
         paint.setStyle(Paint.Style.STROKE);
-
+        this.color = color;
         //Route route = getLocalRoute();
+
         paint.setColor(color);
         if(!routeOwned) {
             // only draws dashed line if route is unclaimed
@@ -75,13 +80,33 @@ public class DrawView extends View {
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
         }
 
-
+        this.name = name;
         this.startView = startView;
         this.endView = endView;
         offsetYend = offsetEndY;
         offsetYstart = offsetStartY;
         offsetXstart = offsetStartX;
         offsetXend = offsetEndX;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public Paint getPaint() {
+        return this.paint;
     }
 
     public void isOwned(Boolean owned) {
@@ -212,6 +237,7 @@ public class DrawView extends View {
     Path linePath = new Path();
     RectF rectF;
 
+    /*
     @Override
     public void onDraw(Canvas canvas) {
         //canvas.drawLine(startView.getX() + offsetXstart, startView.getY() + offsetYstart,
@@ -220,6 +246,7 @@ public class DrawView extends View {
 
     // initialize components
 
+        //TODO make RectF for all lines and make them individually clickable
     // draw the line
         linePath.moveTo(startView.getX() + offsetXstart, startView.getY() + offsetYstart);
         linePath.lineTo(endView.getX() + offsetXend, endView.getY() + offsetYend);
@@ -235,7 +262,6 @@ public class DrawView extends View {
 
         float touchX = event.getX();
         float touchY = event.getY();
-        Toast.makeText(getContext(), "Clicked" + startView.getY(), Toast.LENGTH_SHORT).show();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
@@ -245,5 +271,5 @@ public class DrawView extends View {
                 break;
         }
         return true;
-    }
+    }*/
 }

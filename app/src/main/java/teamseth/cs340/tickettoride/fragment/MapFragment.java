@@ -437,9 +437,10 @@ public class MapFragment extends Fragment {
 
     private void drawTheRoutes() {
 
-        for(DrawView imRoute : allRoutes) {
+        for (DrawView imRoute : allRoutes) {
             imRoute.setBackgroundColor(Color.TRANSPARENT);
             mapView.addRouteToMap(imRoute);
-        relativeLayout.addView(mapView,2500,1800);
+            relativeLayout.addView(mapView, 2500, 1800);
+        }
     }
 }

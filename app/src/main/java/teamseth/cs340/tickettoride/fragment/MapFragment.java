@@ -267,7 +267,7 @@ public class MapFragment extends Fragment {
         allRoutes.add(torontoPittsburgh);
         DrawView torontoMontreal = new DrawView(this.getContext(),toronto,montreal, Color.GRAY,"torontoMontreal");
         allRoutes.add(torontoMontreal);
-        DrawView saultStMarieMontreal = new DrawView(this.getContext(),elPaso,oklahoma, Color.BLACK,"saultStMarieMontreal");
+        DrawView saultStMarieMontreal = new DrawView(this.getContext(),saultStMarie,montreal, Color.BLACK,"saultStMarieMontreal");
         allRoutes.add(saultStMarieMontreal);
         DrawView montrealBoston = new DrawView(this.getContext(),montreal,boston, Color.GRAY,"montrealBoston");
         allRoutes.add(montrealBoston);
@@ -440,18 +440,6 @@ public class MapFragment extends Fragment {
         for(DrawView imRoute : allRoutes) {
             imRoute.setBackgroundColor(Color.TRANSPARENT);
             mapView.addRouteToMap(imRoute);
-//            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(imRoute.getWidth(),
-//                    imRoute.getHeight());
-//            imRoute.setLayoutParams(params);
-//            imRoute.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                        Toast.makeText(getContext(), "Clicked on Route", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                }
-//            });
-        }
-        //mapView.addRouteToMap(vancouverSeattle);
         relativeLayout.addView(mapView,2500,1800);
     }
 }

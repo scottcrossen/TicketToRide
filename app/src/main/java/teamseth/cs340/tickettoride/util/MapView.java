@@ -41,8 +41,6 @@ public class MapView extends View {
     public MapView(Context context) {//, int routeLength) {
         super(context);
         setWillNotDraw(false);
-        //doubleRoute = false;
-        //Route route = getLocalRoute();
         routeNames = new HashSet<DrawView>();
         //this.startView = startView;
         //this.endView = endView;
@@ -55,9 +53,6 @@ public class MapView extends View {
 
     public void addRouteToMap(DrawView dr) {
         routeNames.add(dr);
-        RectF rectF = new RectF(dr.startView.getX() + dr.offsetXstart, dr.startView.getY() + dr.offsetYstart,
-                dr.endView.getX() + dr.offsetXend, dr.endView.getY() + dr.offsetYend);
-        rectFList.put(dr.getName(), rectF);
     }
     /*public MapView(Context context, View startView, View endView, int color,
                     float offsetStartX, float offsetStartY, float offsetEndX, float offsetEndY) {//, int routeLength) {
@@ -87,18 +82,11 @@ public class MapView extends View {
         offsetXend = offsetEndX;
     }*/
 
-    //Path linePath = new Path();
-
     @Override
     public void onDraw(Canvas canvas) {
         //canvas.drawLine(startView.getX() + offsetXstart, startView.getY() + offsetYstart,
         //       endView.getX() + offsetXend, endView.getY() + offsetYend, paint);
 
-
-        // initialize components
-        //TODO make all the drawViews draw on the same canvas, so make a list of the drawViews, and then draw them
-        //TODO on this view, add the rectF to have appropriate click events
-        //TODO make RectF for all lines and make them individually clickable
         // draw the line
         for(DrawView dr : routeNames) {
             Path linePath = new Path();
@@ -113,9 +101,18 @@ public class MapView extends View {
             }
             linePath.moveTo(dr.startView.getX() + dr.offsetXstart, dr.startView.getY() + dr.offsetYstart);
             linePath.lineTo(dr.endView.getX() + dr.offsetXend, dr.endView.getY() + dr.offsetYend);
-            canvas.drawPath(linePath, paint);
 
-            linePath.computeBounds(rectFList.get(dr.getName()), true);
+            canvas.drawPath(linePath, paint);
+            Path rectLine = new Path();
+
+            float centerOnX = ( dr.startView.getX() + dr.offsetXstart + dr.endView.getX() + dr.offsetXend ) / 2;
+            float centerOnY = ( dr.startView.getY() + dr.offsetYstart + dr.endView.getY() + dr.offsetYend ) / 2;
+            rectLine.moveTo(centerOnX - 30, centerOnY - 30);
+            rectLine.moveTo(centerOnX + 30, centerOnY + 30);
+            RectF rectF = new RectF(centerOnX - 30, centerOnY + 30, centerOnX + 30, centerOnY - 30);
+            rectFList.put(dr.getName(), rectF);
+            //canvas.drawRect(rectF,paint);
+            rectLine.computeBounds(rectFList.get(dr.getName()), false);
         }
     }
 
@@ -125,7 +122,6 @@ public class MapView extends View {
         float touchX = event.getX();
         float touchY = event.getY();
 
-        //this works for the line from sault st marie to pittsburgh
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
                 for(DrawView dr : routeNames) {

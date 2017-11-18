@@ -9,6 +9,7 @@ import java.util.UUID;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.ReplaceFaceUpCardCommand;
+import teamseth.cs340.common.commands.client.SeedFaceUpCardsCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -42,7 +43,12 @@ public class DrawFaceUpCardCommand implements IServerCommand {
         UUID user = token.getUser();
         List<IHistoricalCommand> output = new LinkedList<>();
         output.add(new AddResourceCardCommand(card, user));
-        output.add(new ReplaceFaceUpCardCommand(card, newFaceUp, players, user));
+        List<ResourceColor> newFaceUps = ServerFacade.getInstance().checkAndResuffleFaceUpCards(deckId, token);
+        if (newFaceUps.size() > 0) {
+            output.add(new SeedFaceUpCardsCommand(newFaceUps, players, user));
+        } else {
+            output.add(new ReplaceFaceUpCardCommand(card, newFaceUp, players, user));
+        }
         return output;
     }
 

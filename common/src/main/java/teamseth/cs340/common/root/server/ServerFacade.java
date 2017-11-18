@@ -80,6 +80,9 @@ public final class ServerFacade implements IServer {
     public Optional<ResourceColor> drawFaceUpCard(UUID deckId, ResourceColor card, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException {
         return model.cards.drawFaceUpCard(deckId, card, token);
     }
+    public List<ResourceColor> checkAndResuffleFaceUpCards(UUID deckId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException {
+        return model.cards.checkAndResuffleFaceUpCards(deckId, token);
+    }
 
     // Chat model methods
     public void sendMessage(UUID room, Message message, AuthToken token) throws UnauthorizedException, ResourceNotFoundException {

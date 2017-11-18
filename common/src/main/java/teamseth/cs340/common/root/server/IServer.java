@@ -47,6 +47,7 @@ public interface IServer {
     public void returnResourceCard(UUID deckId, ResourceColor card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException;
     public void returnDestinationCard(UUID deckId, DestinationCard card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException;
     public Optional<ResourceColor> drawFaceUpCard(UUID deckId, ResourceColor card, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException;
+    public List<ResourceColor> checkAndResuffleFaceUpCards(UUID deckId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
 
     // Chat model methods
     public void sendMessage(UUID room, Message message, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;

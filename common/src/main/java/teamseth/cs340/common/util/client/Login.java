@@ -26,7 +26,16 @@ public class Login extends Observable implements Serializable {
     private static String serverHost = "10.0.2.2";
     private static String username;
     private static String password;
+    private int cardsDrawn = 0;
     private static UUID player;
+
+    public int getCardsDrawn() {
+        return cardsDrawn;
+    }
+
+    public void setCardsDrawn(int cardsDrawn) {
+        this.cardsDrawn = cardsDrawn;
+    }
 
     public static UUID getUserId() { return player;}
 

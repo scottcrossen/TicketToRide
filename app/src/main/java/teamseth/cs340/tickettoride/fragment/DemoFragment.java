@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import teamseth.cs340.common.commands.client.AddTrainCartsCommand;
 import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IncrementPlayerPointsCommand;
 import teamseth.cs340.common.commands.client.RemoveTrainCartsCommand;
-import teamseth.cs340.common.commands.client.AddTrainCartsCommand;
 import teamseth.cs340.common.commands.server.ClaimRouteCommand;
 import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
@@ -21,6 +23,7 @@ import teamseth.cs340.common.commands.server.ReturnResourceCardCommand;
 import teamseth.cs340.common.commands.server.UpdateAllClientsCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.CityName;
+import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
@@ -120,7 +123,9 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     break;
                 case R.id.claim_route:
                     if (ClientModelRoot.getInstance().cards.getDestinationCards().size() > 0) {
-                        new CommandTask(this.getContext()).execute(new ClaimRouteCommand(CityName.Seattle, CityName.Vancouver, ClientModelRoot.getInstance().cards.getResourceCards().get(0)));
+                        ArrayList<ResourceColor> claimWithColors = new ArrayList<>();
+                        claimWithColors.add(ClientModelRoot.getInstance().cards.getResourceCards().get(0));
+                        new CommandTask(this.getContext()).execute(new ClaimRouteCommand(CityName.Seattle, CityName.Vancouver, claimWithColors));
                     }
                     break;
                 case R.id.change_turn:

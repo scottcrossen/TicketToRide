@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -100,8 +101,8 @@ public final class ServerFacade implements IServer {
     }
 
     // Board methods
-    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, ResourceColor color, int colorCount, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
-        return model.board.claimRoute(routeSetId, city1, city2, color, colorCount, token);
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
+        return model.board.claimRoute(routeSetId, city1, city2, colors, token);
     }
 
 

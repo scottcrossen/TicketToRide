@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.client.board;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
@@ -32,14 +33,16 @@ public class Board extends Observable implements IModel {
         routes = new Routes();
     }
 
-    public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException {
-        routes.claimRoute(userId, city1, city2, color);
+    public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors) throws ModelActionException {
+        routes.claimRoute(userId, city1, city2, colors);
         setChanged();
         notifyObservers();
     }
 
     public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {
-        return routes.getMatchingRoutes(city1, city2, color);
+        List<ResourceColor> colors = new ArrayList<>();
+        colors.add(color);
+        return routes.getMatchingRoutes(city1, city2, colors);
     }
 
     public Set<Route> getAllClaimedRoutes() {

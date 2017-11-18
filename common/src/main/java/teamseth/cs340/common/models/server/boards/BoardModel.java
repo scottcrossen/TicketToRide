@@ -8,8 +8,10 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -43,20 +45,19 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
         return routes.stream().filter((Routes routeModel) -> routeModel.getId().equals(id)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
-    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, ResourceColor color, int colorCount, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);
         Routes routeSet = getRoutes(routeSetId);
-        List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, color);
-        if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1)))) {
+        List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, colors);
+        UUID playerId = token.getUser();
+        boolean lessThanFourPlayers = ServerModelRoot.getInstance().games.getAll().stream().filter((Game game) -> game.getRoutes().equals(routeSetId)).findFirst().map((Game game) -> game.getPlayers().size() < 4).orElseGet(() -> true);
+        boolean routeClaimable = !matchedRoutes.stream().anyMatch((Route route) -> route.getClaimedPlayer().map((UUID claimedPlayer) -> (lessThanFourPlayers && !claimedPlayer.equals(playerId))).orElseGet(() -> true));
+        if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1))) && routeClaimable) {
             throw new ModelActionException();
         } else {
             Route matchingRoute = matchedRoutes.get(0);
-            if (matchingRoute.getLength() > colorCount) {
-                throw new ModelActionException();
-            } else {
-                routeSet.claimRoute(token.getUser(), city1, city2, color);
-                return matchingRoute.getLength();
-            }
+            routeSet.claimRoute(token.getUser(), city1, city2, colors);
+            return matchingRoute.getLength();
         }
     }
 

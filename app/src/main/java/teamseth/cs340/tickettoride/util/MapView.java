@@ -15,78 +15,31 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import teamseth.cs340.common.models.server.games.PlayerColor;
-
 /**
  * Created by Seth on 10/28/2017.
  */
 
 public class MapView extends View {
-    Paint paint = new Paint();
-    View startView;
-    View endView;
-    Boolean doubleRoute;
-    Set<DrawView> routeNames;
-    //maybe use this playerColor to define which color to draw the lines
-    PlayerColor playerColor;
-    Boolean routeOwned = false;
-    Float offsetYstart;
-    Float offsetXstart;
-    Float offsetYend;
-    Float offsetXend;
+    private Paint paint = new Paint();
+    private Set<DrawView> routeNames;
+    private Boolean routeOwned = false;
     private Map<String, RectF> rectFList = new HashMap<>();
-
+    //TODO print length of route here, do it in center of route
 
     //TODO add an int offset for startView and EndView, useful for double routes
-    public MapView(Context context) {//, int routeLength) {
+    public MapView(Context context) {
         super(context);
         setWillNotDraw(false);
         routeNames = new HashSet<DrawView>();
-        //this.startView = startView;
-        //this.endView = endView;
-        //offsetXend = new Float(0);
-        //offsetXstart = new Float(0);
-        //offsetYstart = new Float(0);
-        //offsetYend = new Float(0);
     }
 
 
     public void addRouteToMap(DrawView dr) {
         routeNames.add(dr);
     }
-    /*public MapView(Context context, View startView, View endView, int color,
-                    float offsetStartX, float offsetStartY, float offsetEndX, float offsetEndY) {//, int routeLength) {
-        super(context);
-        setWillNotDraw(false);
-
-        paint.setStrokeWidth(15);
-        paint.setStyle(Paint.Style.STROKE);
-
-        //Route route = getLocalRoute();
-        paint.setColor(color);
-        if(!routeOwned) {
-            // only draws dashed line if route is unclaimed
-            paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
-        }
-        else {
-            //draw solid line if route is claimed
-            paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
-        }
-
-
-        this.startView = startView;
-        this.endView = endView;
-        offsetYend = offsetEndY;
-        offsetYstart = offsetStartY;
-        offsetXstart = offsetStartX;
-        offsetXend = offsetEndX;
-    }*/
 
     @Override
     public void onDraw(Canvas canvas) {
-        //canvas.drawLine(startView.getX() + offsetXstart, startView.getY() + offsetYstart,
-        //       endView.getX() + offsetXend, endView.getY() + offsetYend, paint);
-
         // draw the line
         for(DrawView dr : routeNames) {
             Path linePath = new Path();
@@ -99,14 +52,18 @@ public class MapView extends View {
                 //draw solid line if route is claimed
                 paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
             }
-            linePath.moveTo(dr.startView.getX() + dr.offsetXstart, dr.startView.getY() + dr.offsetYstart);
-            linePath.lineTo(dr.endView.getX() + dr.offsetXend, dr.endView.getY() + dr.offsetYend);
+            linePath.moveTo(dr.getStartView().getX() + dr.getOffsetXstart(),
+                    dr.getStartView().getY() + dr.getOffsetYstart());
+            linePath.lineTo(dr.getEndView().getX() + dr.getOffsetXend(),
+                    dr.getEndView().getY() + dr.getOffsetYend());
 
             canvas.drawPath(linePath, paint);
             Path rectLine = new Path();
 
-            float centerOnX = ( dr.startView.getX() + dr.offsetXstart + dr.endView.getX() + dr.offsetXend ) / 2;
-            float centerOnY = ( dr.startView.getY() + dr.offsetYstart + dr.endView.getY() + dr.offsetYend ) / 2;
+            float centerOnX = ( dr.getStartView().getX() + dr.getOffsetXstart()
+                    + dr.getEndView().getX() + dr.getOffsetXend() ) / 2;
+            float centerOnY = ( dr.getStartView().getY() + dr.getOffsetYstart()
+                    + dr.getEndView().getY() + dr.getOffsetYend() ) / 2;
             rectLine.moveTo(centerOnX - 30, centerOnY - 30);
             rectLine.moveTo(centerOnX + 30, centerOnY + 30);
             RectF rectF = new RectF(centerOnX - 30, centerOnY + 30, centerOnX + 30, centerOnY - 30);

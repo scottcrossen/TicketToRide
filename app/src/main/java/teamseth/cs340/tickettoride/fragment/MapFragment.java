@@ -125,15 +125,21 @@ public class MapFragment extends Fragment {
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
         // TODO potentially add in the x and y offsets so the lines look cleaner, not as necessary though
-        vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY,10,-10,10,-10, "vancouverSeattle");
-        DrawView vancouverSeattle2 = new DrawView(this.getContext(),vancouver,seattle, Color.GREEN,0,10,0,10, "vancouverSeattle");
+        vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY,-10,0,-10,0, "vancouverSeattle");
+        DrawView vancouverSeattle2 = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY,15,0,15,0, "vancouverSeattle");
         vancouverSeattle.setDoubleRoute(true);
         vancouverSeattle2.setDoubleRoute(true);
         vancouverSeattle.setDoubleRouteName(vancouverSeattle2);
         vancouverSeattle2.setDoubleRouteName(vancouverSeattle);
         allRoutes.add(vancouverSeattle);
         allRoutes.add(vancouverSeattle2);
-        DrawView seattlePortland = new DrawView(this.getContext(),seattle,portland, Color.GRAY, "seattlePortland");
+        DrawView seattlePortland = new DrawView(this.getContext(),seattle,portland, Color.GRAY,0,-20,0,-20, "seattlePortland");
+        DrawView seattlePortland2 = new DrawView(this.getContext(),seattle,portland, Color.GRAY,5,15,5,15, "seattlePortland");
+        seattlePortland.setDoubleRoute(true);
+        seattlePortland2.setDoubleRoute(true);
+        seattlePortland.setDoubleRouteName(seattlePortland2);
+        seattlePortland2.setDoubleRouteName(seattlePortland);
+        allRoutes.add(seattlePortland2);
         allRoutes.add(seattlePortland);
         DrawView vancouverCalgary = new DrawView(this.getContext(),vancouver,calgary, Color.GRAY, "vancouverCalgary");
         allRoutes.add(vancouverCalgary);
@@ -287,9 +293,6 @@ public class MapFragment extends Fragment {
         allRoutes.add(dcRaleigh);
 
         //TODO add double routes using overloaded DrawView function
-        //tt
-        //TODO phase 3 add onclick events for the lines, so, vancouverSeattle.addOnclick() blah blah
-        //rootView = drawLines(rootView);
         getActivity().setTitle(title);
 
         allClaimedRoutes = new HashSet<Route>();
@@ -306,19 +309,30 @@ public class MapFragment extends Fragment {
                 ImageView startCity = convertCityNametoImageView(city1);
                 ImageView endCity = convertCityNametoImageView(city2);
                 int routeColor = convertColorFromEnum(color);
-                relativeLayout.removeView(vancouverSeattle);
-                vancouverSeattle = new DrawView(this.getContext(), startCity, endCity, routeColor, "vancouverSeattle");
-                vancouverSeattle.isOwned(true);
-                vancouverSeattle.setBackgroundColor(Color.TRANSPARENT);
-                relativeLayout.addView(vancouverSeattle, 2500, 1800);
+                String removedRoute = removeRouteFromView(startCity, endCity);
+                DrawView claimedRoute = new DrawView(this.getContext(), startCity, endCity, routeColor, removedRoute);
+                claimedRoute.isOwned(true);
+                claimedRoute.setBackgroundColor(Color.TRANSPARENT);
+                relativeLayout.addView(claimedRoute, 2500, 1800);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
 
         });
+    }
 
-        // TODO: Seth: implement this
+    private String removeRouteFromView(ImageView startCity, ImageView endCity) {
+        for (DrawView dr : allRoutes) {
+            //TODO add a check for double routes
+            if((dr.getStartView().equals(startCity) && dr.getEndView().equals(endCity)) ||
+                    (dr.getStartView().equals(endCity) && dr.getEndView().equals(startCity)))
+            {
+                relativeLayout.removeView(dr);
+                return dr.getName();
+            }
+        }
+        return "";
     }
 
     private int convertColorFromEnum(PlayerColor color) {
@@ -440,7 +454,7 @@ public class MapFragment extends Fragment {
         for (DrawView imRoute : allRoutes) {
             imRoute.setBackgroundColor(Color.TRANSPARENT);
             mapView.addRouteToMap(imRoute);
-            relativeLayout.addView(mapView, 2500, 1800);
         }
+        relativeLayout.addView(mapView, 2500, 1800);
     }
 }

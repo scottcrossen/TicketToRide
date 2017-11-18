@@ -3,30 +3,25 @@ package teamseth.cs340.tickettoride.util;
 import android.content.Context;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.view.View;
 
 import teamseth.cs340.common.models.server.cards.CityName;
-import teamseth.cs340.common.models.server.games.PlayerColor;
 
 /**
  * Created by Seth on 10/28/2017.
  */
 
 public class DrawView extends View {
-    Paint paint = new Paint();
-    View startView;
-    View endView;
-    Boolean doubleRoute;
-    DrawView doubleRouteName;
-    //maybe use this playerColor to define which color to draw the lines
-    PlayerColor playerColor;
-    Boolean routeOwned = false;
-    Float offsetYstart;
-    Float offsetXstart;
-    Float offsetYend;
-    Float offsetXend;
+    private Paint paint = new Paint();
+    private View startView;
+    private View endView;
+    private Boolean doubleRoute;
+    private DrawView doubleRouteName;
+    private Boolean routeOwned = false;
+    private Float offsetYstart;
+    private Float offsetXstart;
+    private Float offsetYend;
+    private Float offsetXend;
     private int color;
     private String name;
 
@@ -53,10 +48,10 @@ public class DrawView extends View {
         this.name = name;
         this.startView = startView;
         this.endView = endView;
-        offsetXend = new Float(0);
-        offsetXstart = new Float(0);
-        offsetYstart = new Float(0);
-        offsetYend = new Float(0);
+        this.offsetXend = new Float(0);
+        this.offsetXstart = new Float(0);
+        this.offsetYstart = new Float(0);
+        this.offsetYend = new Float(0);
     }
 
     public DrawView(Context context, View startView, View endView, int color,
@@ -83,10 +78,62 @@ public class DrawView extends View {
         this.name = name;
         this.startView = startView;
         this.endView = endView;
-        offsetYend = offsetEndY;
-        offsetYstart = offsetStartY;
-        offsetXstart = offsetStartX;
-        offsetXend = offsetEndX;
+        this.offsetYend = offsetEndY;
+        this.offsetYstart = offsetStartY;
+        this.offsetXstart = offsetStartX;
+        this.offsetXend = offsetEndX;
+    }
+
+    public void setPaint(Paint paint) {
+        this.paint = paint;
+    }
+
+    public Float getOffsetYstart() {
+        return offsetYstart;
+    }
+
+    public void setOffsetYstart(Float offsetYstart) {
+        this.offsetYstart = offsetYstart;
+    }
+
+    public Float getOffsetXstart() {
+        return offsetXstart;
+    }
+
+    public void setOffsetXstart(Float offsetXstart) {
+        this.offsetXstart = offsetXstart;
+    }
+
+    public Float getOffsetYend() {
+        return offsetYend;
+    }
+
+    public void setOffsetYend(Float offsetYend) {
+        this.offsetYend = offsetYend;
+    }
+
+    public Float getOffsetXend() {
+        return offsetXend;
+    }
+
+    public void setOffsetXend(Float offsetXend) {
+        this.offsetXend = offsetXend;
+    }
+
+    public View getStartView() {
+        return startView;
+    }
+
+    public void setStartView(View startView) {
+        this.startView = startView;
+    }
+
+    public View getEndView() {
+        return endView;
+    }
+
+    public void setEndView(View endView) {
+        this.endView = endView;
     }
 
     public String getName() {
@@ -114,24 +161,6 @@ public class DrawView extends View {
             routeOwned = true;
         }
     }
-
-    /*private Route getLocalRoute(View start, View end) {
-        CityName startCity = getFromRouteCityName(start);
-        CityName endCity = getFromRouteCityName(end);
-        Route route = getRouteFromCities(startCity, endCity);
-
-        try {
-            PlayerColor color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(route.getClaimedPlayer());
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        }
-        return route;
-    }*/
-    /*private Route getRouteFromCities(CityName start, CityName end) {
-        Route route;
-
-        return route;
-    }*/
 
     public DrawView getDoubleRouteName() {
         return doubleRouteName;
@@ -234,42 +263,4 @@ public class DrawView extends View {
         }
         return CityName.Vancouver;
     }
-    Path linePath = new Path();
-    RectF rectF;
-
-    /*
-    @Override
-    public void onDraw(Canvas canvas) {
-        //canvas.drawLine(startView.getX() + offsetXstart, startView.getY() + offsetYstart,
-         //       endView.getX() + offsetXend, endView.getY() + offsetYend, paint);
-
-
-    // initialize components
-
-        //TODO make RectF for all lines and make them individually clickable
-    // draw the line
-        linePath.moveTo(startView.getX() + offsetXstart, startView.getY() + offsetYstart);
-        linePath.lineTo(endView.getX() + offsetXend, endView.getY() + offsetYend);
-
-        canvas.drawPath(linePath, paint);
-        rectF = new RectF(startView.getX() + offsetXstart, startView.getY() + offsetYstart,
-                       endView.getX() + offsetXend, endView.getY() + offsetYend);
-        linePath.computeBounds(rectF, true);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        float touchX = event.getX();
-        float touchY = event.getY();
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                if (rectF.contains(touchX, touchY)) {
-                    Toast.makeText(getContext(), "Clicked on Route", Toast.LENGTH_SHORT).show();
-                }
-                break;
-        }
-        return true;
-    }*/
 }

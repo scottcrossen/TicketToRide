@@ -45,4 +45,8 @@ public class Board extends Observable implements IModel {
     public Set<Route> getAllClaimedRoutes() {
         return routes.getAllClaimed();
     }
+
+    public Set<Route> getAllRoutes() {
+        return routes.getAll();
+    }
 }

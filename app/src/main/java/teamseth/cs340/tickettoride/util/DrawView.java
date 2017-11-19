@@ -1,11 +1,14 @@
 package teamseth.cs340.tickettoride.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.view.View;
 
+import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.CityName;
+import teamseth.cs340.common.models.server.cards.ResourceColor;
 
 /**
  * Created by Seth on 10/28/2017.
@@ -13,6 +16,8 @@ import teamseth.cs340.common.models.server.cards.CityName;
 
 public class DrawView extends View {
     private Paint paint = new Paint();
+    private static final int PINK = Color.rgb(255,182,193);
+    private static final int ORANGE = Color.rgb(255,140,0);
     private View startView;
     private View endView;
     private Boolean doubleRoute;
@@ -22,70 +27,70 @@ public class DrawView extends View {
     private Float offsetXstart;
     private Float offsetYend;
     private Float offsetXend;
-    private int color;
-    private String name;
-
+    private Route route;
 
     //TODO add an int offset for startView and EndView, useful for double routes
-    public DrawView(Context context, View startView, View endView, int color, String name) {//, int routeLength) {
+    public DrawView(Context context, Route rt, View startView, View endView) {//String name) {//, int routeLength) {
         super(context);
         setWillNotDraw(false);
         paint.setStrokeWidth(15);
         paint.setStyle(Paint.Style.STROKE);
         doubleRoute = false;
-        //Route route = getLocalRoute();
-        this.color = color;
-        paint.setColor(color);
+        this.route = rt;
+        paint.setColor(convertColorFromEnum(rt.getColor()));
 
-        if(!routeOwned) {
-            // only draws dashed line if route is unclaimed
-            paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
-        }
-        else {
+        if(route.getOwned()) {
             //draw solid line if route is claimed
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
         }
-        this.name = name;
-        this.startView = startView;
-        this.endView = endView;
-        this.offsetXend = new Float(0);
-        this.offsetXstart = new Float(0);
-        this.offsetYstart = new Float(0);
-        this.offsetYend = new Float(0);
-    }
-
-    public DrawView(Context context, View startView, View endView, int color,
-                    float offsetStartX, float offsetStartY, float offsetEndX, float offsetEndY,
-                    String name) {//, int routeLength) {
-        super(context);
-        setWillNotDraw(false);
-
-        paint.setStrokeWidth(15);
-        paint.setStyle(Paint.Style.STROKE);
-        this.color = color;
-        //Route route = getLocalRoute();
-
-        paint.setColor(color);
-        if(!routeOwned) {
+        else {
             // only draws dashed line if route is unclaimed
             paint.setPathEffect(new DashPathEffect(new float[] {80,20}, 0));
-        }
-        else {
-            //draw solid line if route is claimed
-            paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
+            paint.setShadowLayer(5.0f, 5.0f, 5.0f, Color.BLACK);
         }
 
-        this.name = name;
         this.startView = startView;
         this.endView = endView;
-        this.offsetYend = offsetEndY;
-        this.offsetYstart = offsetStartY;
-        this.offsetXstart = offsetStartX;
-        this.offsetXend = offsetEndX;
+        this.offsetXend = route.getOffsetEndX();
+        this.offsetXstart = route.getOffsetStartX();
+        this.offsetYstart = route.getOffsetStartY();
+        this.offsetYend = route.getOffsetEndY();
     }
 
     public void setPaint(Paint paint) {
         this.paint = paint;
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    private int convertColorFromEnum(ResourceColor color) {
+        switch (color) {
+            case GREEN:
+                return Color.GREEN;
+            case RED:
+                return Color.RED;
+            case BLACK:
+                return Color.BLACK;
+            case BLUE:
+                return Color.BLUE;
+            case YELLOW:
+                return Color.YELLOW;
+            case RAINBOW:
+                return Color.GRAY;
+            case PURPLE:
+                return PINK;
+            case ORANGE:
+                return ORANGE;
+            case WHITE:
+                return Color.WHITE;
+        }
+        return Color.BLUE;
     }
 
     public Float getOffsetYstart() {
@@ -134,22 +139,6 @@ public class DrawView extends View {
 
     public void setEndView(View endView) {
         this.endView = endView;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
     }
 
     public Paint getPaint() {

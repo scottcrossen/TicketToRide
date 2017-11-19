@@ -72,6 +72,8 @@ public class MapFragment extends Fragment {
 
     private DrawView vancouverSeattle;
     private Set<DrawView> allRoutes = new HashSet<>();
+    private Set<Route> allTheGameRoutes = new HashSet<>();
+    private Set<Route> allClaimedRoutes = new HashSet<Route>();
 
     public MapFragment() {
         // Empty constructor required for fragment subclasses
@@ -124,8 +126,10 @@ public class MapFragment extends Fragment {
         saultStMarie = (ImageView) rootView.findViewById(R.id.saultStMarieCity);
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
+
+
         // TODO potentially add in the x and y offsets so the lines look cleaner, not as necessary though
-        vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY,-10,0,-10,0, "vancouverSeattle");
+        /*vancouverSeattle = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY,-10,0,-10,0, "vancouverSeattle");
         DrawView vancouverSeattle2 = new DrawView(this.getContext(),vancouver,seattle, Color.GRAY,15,0,15,0, "vancouverSeattle");
         vancouverSeattle.setDoubleRoute(true);
         vancouverSeattle2.setDoubleRoute(true);
@@ -290,7 +294,7 @@ public class MapFragment extends Fragment {
         DrawView pittsburghRaleigh = new DrawView(this.getContext(),pittsburgh,raleigh, Color.GRAY,"pittsburghRaleigh");
         allRoutes.add(pittsburghRaleigh);
         DrawView dcRaleigh = new DrawView(this.getContext(),dc,raleigh, Color.GRAY, "dcRaleigh");
-        allRoutes.add(dcRaleigh);
+        allRoutes.add(dcRaleigh);*/
 
         //TODO add double routes using overloaded DrawView function
         getActivity().setTitle(title);
@@ -308,11 +312,12 @@ public class MapFragment extends Fragment {
                 PlayerColor color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(playerId);
                 ImageView startCity = convertCityNametoImageView(city1);
                 ImageView endCity = convertCityNametoImageView(city2);
-                int routeColor = convertColorFromEnum(color);
-                String removedRoute = removeRouteFromView(startCity, endCity);
-                DrawView claimedRoute = new DrawView(this.getContext(), startCity, endCity, routeColor, removedRoute);
+                removeRouteFromView(route);
+                DrawView claimedRoute = new DrawView(this.getContext(), route, startCity, endCity);
                 claimedRoute.isOwned(true);
+                route.setOwned(true);
                 claimedRoute.setBackgroundColor(Color.TRANSPARENT);
+                allRoutes.add(claimedRoute);
                 relativeLayout.addView(claimedRoute, 2500, 1800);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -322,33 +327,49 @@ public class MapFragment extends Fragment {
         });
     }
 
-    private String removeRouteFromView(ImageView startCity, ImageView endCity) {
+    private void removeRouteFromView(Route route) {
         for (DrawView dr : allRoutes) {
             //TODO add a check for double routes
-            if((dr.getStartView().equals(startCity) && dr.getEndView().equals(endCity)) ||
-                    (dr.getStartView().equals(endCity) && dr.getEndView().equals(startCity)))
-            {
+            if((dr.getRoute().equals(route))) {
                 relativeLayout.removeView(dr);
-                return dr.getName();
+                allRoutes.remove(dr);
             }
         }
-        return "";
     }
 
-    private int convertColorFromEnum(PlayerColor color) {
-        switch (color) {
-            case GREEN:
-                return Color.GREEN;
-            case RED:
-                return Color.RED;
-            case BLACK:
-                return Color.BLACK;
-            case BLUE:
-                return Color.BLUE;
-            case YELLOW:
-                return Color.YELLOW;
+    public static void disableHardwareRendering(View v) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            v.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-        return Color.BLUE;
+    }
+
+    public void update() {
+        Set<Route> newRoutes = ClientModelRoot.board.getAllClaimedRoutes().stream().filter((Route route) -> {
+            boolean alreadyExists = allClaimedRoutes.stream().filter((Route drawn) -> {
+                return route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer());
+            }).count() > 0;
+            return !alreadyExists;
+        }).collect(Collectors.toSet());
+        newRoutes.forEach((Route route) -> claimRoute(route));
+        allClaimedRoutes.addAll(newRoutes);
+
+        allTheGameRoutes = ClientModelRoot.board.getAllRoutes();
+
+        for(Route rt : allTheGameRoutes) {
+            DrawView dr = new DrawView(this.getContext(), rt, convertCityNametoImageView(rt.getCity1()),
+                    convertCityNametoImageView(rt.getCity2()));
+            allRoutes.add(dr);
+        }
+        drawTheRoutes();
+    }
+
+    private void drawTheRoutes() {
+
+        for (DrawView imRoute : allRoutes) {
+            imRoute.setBackgroundColor(Color.TRANSPARENT);
+            mapView.addRouteToMap(imRoute);
+        }
+        relativeLayout.addView(mapView, 2500, 1800);
     }
 
     private ImageView convertCityNametoImageView(CityName cityName) {
@@ -429,32 +450,4 @@ public class MapFragment extends Fragment {
         return seattle;
     }
 
-    public static void disableHardwareRendering(View v) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-            v.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
-    }
-
-    private Set<Route> allClaimedRoutes = new HashSet<Route>();
-
-    public void update() {
-        Set<Route> newRoutes = ClientModelRoot.board.getAllClaimedRoutes().stream().filter((Route route) -> {
-            boolean alreadyExists = allClaimedRoutes.stream().filter((Route drawn) -> {
-                return route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer());
-            }).count() > 0;
-            return !alreadyExists;
-        }).collect(Collectors.toSet());
-        newRoutes.forEach((Route route) -> claimRoute(route));
-        allClaimedRoutes.addAll(newRoutes);
-        drawTheRoutes();
-    }
-
-    private void drawTheRoutes() {
-
-        for (DrawView imRoute : allRoutes) {
-            imRoute.setBackgroundColor(Color.TRANSPARENT);
-            mapView.addRouteToMap(imRoute);
-        }
-        relativeLayout.addView(mapView, 2500, 1800);
-    }
 }

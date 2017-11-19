@@ -22,7 +22,14 @@ import java.util.Observer;
 import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.client.board.Board;
+import teamseth.cs340.common.models.client.cards.CurrentCards;
+import teamseth.cs340.common.models.client.cards.FaceUpCards;
+import teamseth.cs340.common.models.client.cards.OtherPlayerCards;
+import teamseth.cs340.common.models.client.carts.PlayerCarts;
 import teamseth.cs340.common.models.client.chat.CurrentChat;
+import teamseth.cs340.common.models.client.games.GameModel;
+import teamseth.cs340.common.models.client.history.CommandHistory;
+import teamseth.cs340.common.models.client.points.PlayerPoints;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
@@ -250,6 +257,9 @@ public class MapActivity extends AppCompatActivity implements Observer {
         ClientModelRoot.board.addObserver(this);
         ClientModelRoot.points.addObserver(this);
         ClientModelRoot.carts.addObserver(this);
+        ClientModelRoot.cards.faceUp.addObserver(this);
+        ClientModelRoot.cards.others.addObserver(this);
+        ClientModelRoot.games.addObserver(this);
     }
 
     @Override
@@ -261,26 +271,35 @@ public class MapActivity extends AppCompatActivity implements Observer {
         ClientModelRoot.board.deleteObserver(this);
         ClientModelRoot.points.deleteObserver(this);
         ClientModelRoot.carts.deleteObserver(this);
+        ClientModelRoot.cards.faceUp.deleteObserver(this);
+        ClientModelRoot.cards.others.deleteObserver(this);
+        ClientModelRoot.games.deleteObserver(this);
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable observable, Object arg) {
         if (fragment instanceof IUpdatableFragment) {
             IUpdatableFragment updateFragment = (IUpdatableFragment) fragment;
             if (updateFragment instanceof MapFragment) {
-                if (o instanceof Board) updateFragment.update();
+                if (observable instanceof Board) updateFragment.update();
             } else if (updateFragment instanceof ChatFragment) {
-                if (o instanceof CurrentChat) updateFragment.update();
+                if (observable instanceof CurrentChat) updateFragment.update();
             } else if (updateFragment instanceof GameInfoFragment) {
-
+                if (observable instanceof OtherPlayerCards) updateFragment.update();
+                if (observable instanceof FaceUpCards) updateFragment.update();
+                if (observable instanceof GameModel) updateFragment.update();
             } else if (updateFragment instanceof HistoryFragment) {
-
+                if (observable instanceof CommandHistory) updateFragment.update();
             } else if (updateFragment instanceof OtherPlayersFragment) {
-
+                if (observable instanceof PlayerPoints) updateFragment.update();
+                if (observable instanceof OtherPlayerCards) updateFragment.update();
+                if (observable instanceof PlayerCarts) updateFragment.update();
             } else if (updateFragment instanceof PlayerFragment) {
-
+                if (observable instanceof CurrentCards) updateFragment.update();
+                if (observable instanceof PlayerPoints) updateFragment.update();
+                if (observable instanceof PlayerCarts) updateFragment.update();
+                if (observable instanceof PlayerPoints) updateFragment.update();
             } else if (updateFragment instanceof DemoFragment) {
-
             }
         }
     }

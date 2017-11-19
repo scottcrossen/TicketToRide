@@ -3,6 +3,7 @@ package teamseth.cs340.common.models.client.cards;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Optional;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -13,7 +14,7 @@ import teamseth.cs340.common.models.server.cards.ResourceColor;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class FaceUpCards implements IModel {
+public class FaceUpCards extends Observable implements IModel {
     private static FaceUpCards instance;
 
     public static FaceUpCards getInstance() {

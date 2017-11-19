@@ -26,21 +26,9 @@ public class HistoryFragment extends Fragment implements IUpdatableFragment {
         // Empty constructor required for fragment subclasses
     }
 
+    ListView listview;
 
     public void update() {
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Toast.makeText(this.getContext(), "CommandHistory", Toast.LENGTH_SHORT).show();
-        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
-        int i = getArguments().getInt(ARG_TAB_NUMBER);
-        String title = getResources().getStringArray(R.array.tabs_array)[i];
-
-        ListView listview = (ListView) rootView.findViewById(R.id.history_list);
-
         List<String> history = null;
         try {
             history = ClientModelRoot.getInstance().history.getHistory();
@@ -56,6 +44,19 @@ public class HistoryFragment extends Fragment implements IUpdatableFragment {
                 historyList);
 
         listview.setAdapter(listViewAdapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Toast.makeText(this.getContext(), "CommandHistory", Toast.LENGTH_SHORT).show();
+        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
+        int i = getArguments().getInt(ARG_TAB_NUMBER);
+        String title = getResources().getStringArray(R.array.tabs_array)[i];
+
+        listview = (ListView) rootView.findViewById(R.id.history_list);
+
+        update();
 
         getActivity().setTitle(title);
         return rootView;

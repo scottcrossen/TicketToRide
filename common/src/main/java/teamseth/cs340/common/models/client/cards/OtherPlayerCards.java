@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.client.cards;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.IModel;
@@ -10,7 +11,7 @@ import teamseth.cs340.common.models.IModel;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class OtherPlayerCards implements IModel {
+public class OtherPlayerCards extends Observable implements IModel {
     private static OtherPlayerCards instance;
 
     public static OtherPlayerCards getInstance() {

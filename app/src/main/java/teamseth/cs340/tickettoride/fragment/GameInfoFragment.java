@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
-import teamseth.cs340.common.commands.server.UpdateAllClientsCommand;
+import teamseth.cs340.common.commands.server.NextTurnCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import java.util.UUID;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.util.client.Login;
@@ -43,9 +43,29 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     ImageView card5;
     private boolean isTurn = false;
     private int cardsDrawn = Login.getInstance().getCardsDrawn();
+    TextView trainCardsLeft;
+    TextView destCardsLeft;
+    TextView playerName;
 
     public void update() {
 
+        trainCardsLeft.setText(Integer.toString(
+                110 - ClientModelRoot.cards.others.getResourceAmountUsed() - 5 - ClientModelRoot.cards.getResourceCards().size()
+        ));
+        destCardsLeft.setText(Integer.toString(
+                30 - ClientModelRoot.cards.others.getDestinationAmountUsed() - ClientModelRoot.cards.getDestinationCards().size()
+        ));
+        try {
+            UUID currentPlayerTurn = ClientModelRoot.games.getActive().getWhosTurnItIs().get();
+            playerName.setText(ClientModelRoot.games.getActive().getPlayerNames().get(currentPlayerTurn));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        setImage(1);
+        setImage(2);
+        setImage(3);
+        setImage(4);
+        setImage(5);
     }
 
     public GameInfoFragment() {
@@ -85,30 +105,14 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         card5 = (ImageView) rootView.findViewById(R.id.card5);
         ImageView trainCardDeck = (ImageView) rootView.findViewById(R.id.card_back_train);
         ImageView destinationCardDeck = (ImageView) rootView.findViewById(R.id.destination_card_back);
-        TextView trainCardsLeft = (TextView) rootView.findViewById(R.id.cards_in_deck);
-        TextView destCardsLeft = (TextView) rootView.findViewById(R.id.destination_cards_in_deck);
-        TextView playerName = (TextView) rootView.findViewById(R.id.player_name);
+        trainCardsLeft = (TextView) rootView.findViewById(R.id.cards_in_deck);
+        destCardsLeft = (TextView) rootView.findViewById(R.id.destination_cards_in_deck);
+        playerName = (TextView) rootView.findViewById(R.id.player_name);
 
         //TODO set these to random cards
-        setImage(1);
-        setImage(2);
-        setImage(3);
-        setImage(4);
-        setImage(5);
 
         //TODO set the text to the number of cards left in the respective decks
-
-        trainCardsLeft.setText(Integer.toString(
-                110 - ClientModelRoot.getInstance().cards.others.getResourceAmountUsed() - 5 - ClientModelRoot.getInstance().cards.getResourceCards().size()
-        ));
-        destCardsLeft.setText(Integer.toString(
-                30 - ClientModelRoot.getInstance().cards.others.getDestinationAmountUsed() - ClientModelRoot.getInstance().cards.getDestinationCards().size()
-        ));
-        try {
-            playerName.setText(ClientModelRoot.getInstance().games.getActive().getPlayerNames().get(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        update();
 
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +202,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                     if (Login.getInstance().getCardsDrawn() == 0){
                         isTurn = false;
                         new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
-                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                        new CommandTask(this.getContext()).execute(new NextTurnCommand());
                     } else {
                         Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                     }
@@ -227,7 +231,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     private void checkChangeTurn() {
         if (Login.getInstance().getCardsDrawn() > 1 || !isTurn){
             try {
-                new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                new CommandTask(this.getContext()).execute(new NextTurnCommand());
             } catch (ResourceNotFoundException e) {
                 e.printStackTrace();
             }
@@ -253,7 +257,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 card = card5;
                 break;
         }
-        if (card != null && cardNum <= ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().size()) {
+        if (card != null && cardNum <= ClientModelRoot.cards.faceUp.getFaceUpCards().size()) {
             card.setImageResource(chooseColor(cardNum - 1));
         } else if (card != null) {
             card.setVisibility(View.INVISIBLE);
@@ -261,7 +265,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     }
 
     private int chooseColor(int pos){
-        switch (ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(pos)) {
+        switch (ClientModelRoot.cards.faceUp.getFaceUpCards().get(pos)) {
             case PURPLE:
                 return purpleCard;
             case GREEN:

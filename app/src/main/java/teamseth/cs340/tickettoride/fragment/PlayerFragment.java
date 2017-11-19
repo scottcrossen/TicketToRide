@@ -27,12 +27,21 @@ import teamseth.cs340.tickettoride.R;
 public class PlayerFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
 
-    public void update() {
-
-    }
     public PlayerFragment() {
         // Empty constructor required for fragment subclasses
     }
+    TextView yellowCardText;
+    TextView blackCardText;
+    TextView blueCardText;
+    TextView greenCardText;
+    TextView redCardText;
+    TextView purpleCardText;
+    TextView orangeCardText;
+    TextView locomotiveCardText;
+    TextView whiteCardText;
+    TextView scoreText;
+    TextView trainCarsRemainingText;
+    ListView listview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,51 +51,47 @@ public class PlayerFragment extends Fragment implements IUpdatableFragment {
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
 
-        TextView yellowCardText = (TextView) rootView.findViewById(R.id.yellowTrainCardsLeft);
-        yellowCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.YELLOW)).count()));
-        yellowCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView blackCardText = (TextView) rootView.findViewById(R.id.blackTrainCardsLeft);
-        blackCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.BLACK)).count()));
-        blackCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView blueCardText = (TextView) rootView.findViewById(R.id.blueTrainCardsLeft);
-        blueCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.BLUE)).count()));
-        blueCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView greenCardText = (TextView) rootView.findViewById(R.id.greenTrainCardsLeft);
-        greenCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.GREEN)).count()));
-        greenCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView redCardText = (TextView) rootView.findViewById(R.id.redTrainCardsLeft);
-        redCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.RED)).count()));
-        redCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView purpleCardText = (TextView) rootView.findViewById(R.id.purpleTrainCardsLeft);
-        purpleCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.PURPLE)).count()));
-        purpleCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView orangeCardText = (TextView) rootView.findViewById(R.id.orangeTrainCardsLeft);
-        orangeCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.ORANGE)).count()));
-        orangeCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView locomotiveCardText = (TextView) rootView.findViewById(R.id.locomotiveCardsLeft);
-        locomotiveCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count()));
-        locomotiveCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView whiteCardText = (TextView) rootView.findViewById(R.id.whiteTrainCardsLeft);
-        whiteCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.WHITE)).count()));
-        whiteCardText.setShadowLayer(15, 0, 0, Color.BLACK);
-
-        TextView scoreText = (TextView) rootView.findViewById(R.id.currentScore);
-        scoreText.setText(Integer.toString(ClientModelRoot.getInstance().points.getTotalPlayerPoints(Login.getUserId())));
-
-        TextView trainCarsRemainingText = (TextView) rootView.findViewById(R.id.trainCarsRemaining);
-        trainCarsRemainingText.setText(Integer.toString(ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId())));
+        yellowCardText = (TextView) rootView.findViewById(R.id.yellowTrainCardsLeft);
+        blackCardText = (TextView) rootView.findViewById(R.id.blackTrainCardsLeft);
+        blueCardText = (TextView) rootView.findViewById(R.id.blueTrainCardsLeft);
+        greenCardText = (TextView) rootView.findViewById(R.id.greenTrainCardsLeft);
+        redCardText = (TextView) rootView.findViewById(R.id.redTrainCardsLeft);
+        purpleCardText = (TextView) rootView.findViewById(R.id.purpleTrainCardsLeft);
+        orangeCardText = (TextView) rootView.findViewById(R.id.orangeTrainCardsLeft);
+        locomotiveCardText = (TextView) rootView.findViewById(R.id.locomotiveCardsLeft);
+        whiteCardText = (TextView) rootView.findViewById(R.id.whiteTrainCardsLeft);
+        scoreText = (TextView) rootView.findViewById(R.id.currentScore);
+        trainCarsRemainingText = (TextView) rootView.findViewById(R.id.trainCarsRemaining);
+        listview = (ListView) rootView.findViewById(R.id.destination_card_list);
 
         getActivity().setTitle(title);
 
-        ListView listview = (ListView) rootView.findViewById(R.id.destination_card_list);
+        update();
+
+        return rootView;
+    }
+
+    public void update() {
+        yellowCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.YELLOW)).count()));
+        yellowCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        blackCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.BLACK)).count()));
+        blackCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        blueCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.BLUE)).count()));
+        blueCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        greenCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.GREEN)).count()));
+        greenCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        redCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.RED)).count()));
+        redCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        purpleCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.PURPLE)).count()));
+        purpleCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        orangeCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.ORANGE)).count()));
+        orangeCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        locomotiveCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count()));
+        locomotiveCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        whiteCardText.setText(Long.toString(ClientModelRoot.getInstance().cards.getResourceCards().stream().filter((ResourceColor color) -> color.equals(ResourceColor.WHITE)).count()));
+        whiteCardText.setShadowLayer(15, 0, 0, Color.BLACK);
+        scoreText.setText(Integer.toString(ClientModelRoot.getInstance().points.getTotalPlayerPoints(Login.getUserId())));
+        trainCarsRemainingText.setText(Integer.toString(ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId())));
         List<String> destinationCards = ClientModelRoot.getInstance().cards.getDestinationCards().stream().map((DestinationCard card) -> card.toString()).collect(Collectors.toList());
         String[] destinationCardList = new String[destinationCards.size()];
         destinationCards.toArray(destinationCardList);
@@ -98,6 +103,5 @@ public class PlayerFragment extends Fragment implements IUpdatableFragment {
 
         listview.setAdapter(listViewAdapter);
 
-        return rootView;
     }
 }

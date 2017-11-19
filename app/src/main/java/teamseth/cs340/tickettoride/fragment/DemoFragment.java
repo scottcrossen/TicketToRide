@@ -125,7 +125,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     break;
                 case R.id.change_turn:
                     if (ClientModelRoot.getInstance().cards.getDestinationCards().size() > 0) {
-                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));;
+                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
                         Toast.makeText(this.getContext(), ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().toString(), Toast.LENGTH_SHORT).show();
                     }
                     break;

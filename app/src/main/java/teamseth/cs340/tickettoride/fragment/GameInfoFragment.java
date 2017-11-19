@@ -1,6 +1,8 @@
 package teamseth.cs340.tickettoride.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import teamseth.cs340.common.commands.client.ChangeTurnCommand;
+import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
+import teamseth.cs340.common.commands.server.UpdateAllClientsCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
  * Created by Seth on 10/14/2017.
@@ -32,6 +41,8 @@ public class GameInfoFragment extends Fragment {
     ImageView card3;
     ImageView card4;
     ImageView card5;
+    private boolean isTurn = false;
+    private int cardsDrawn = Login.getInstance().getCardsDrawn();
 
     public GameInfoFragment() {
         // Empty constructor required for fragment subclasses
@@ -49,6 +60,19 @@ public class GameInfoFragment extends Fragment {
 
         //TODO set up the cards to update according to what is shown
         //TODO set onclicklisteners for the deck drawing, dest card drawing, and individual card picking
+
+        try {
+            if (ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
+                isTurn = true;
+                Login.getInstance().setCardsDrawn(0);
+            } else
+            {
+                isTurn = false;
+            }
+
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
 
         card1 = (ImageView) rootView.findViewById(R.id.card1);
         card2 = (ImageView) rootView.findViewById(R.id.card2);
@@ -85,40 +109,60 @@ public class GameInfoFragment extends Fragment {
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add card to players hand, and change for a new card from the top of the deck
-                setImage(1);
+                int cardIndex = 0;
+                try {
+                    drawCard(cardIndex);
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add card to players hand, and change for a new card from the top of the deck
-                setImage(2);
+                int cardIndex = 1;
+                try {
+                    drawCard(cardIndex);
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         card3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add card to players hand, and change for a new card from the top of the deck
-                setImage(3);
+                int cardIndex = 2;
+                try {
+                    drawCard(cardIndex);
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         card4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add card to players hand, and change for a new card from the top of the deck
-                setImage(4);
+                int cardIndex = 3;
+                try {
+                    drawCard(cardIndex);
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         card5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add card to players hand, and change for a new card from the top of the deck
-                setImage(5);
+                int cardIndex = 4;
+                try {
+                    drawCard(cardIndex);
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -140,6 +184,50 @@ public class GameInfoFragment extends Fragment {
         //TODO do a check to ensure there are not 3 locomotives facing up at the same time
 
         return rootView;
+    }
+
+    private void drawCard(int cardIndex) throws ResourceNotFoundException {
+        if(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
+            try {
+//                Toast.makeText(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() + ResourceColor.RAINBOW.toString() , Toast.LENGTH_SHORT).show();
+                if (ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() == ResourceColor.RAINBOW.toString()) {
+                    if (Login.getInstance().getCardsDrawn() == 0){
+                        isTurn = false;
+                        new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
+                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    } else {
+                        Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Login.getInstance().setCardsDrawn(Login.getInstance().getCardsDrawn() + 1);
+//                    Toast.makeText(getContext(), Login.getInstance().getCardsDrawn() , Toast.LENGTH_SHORT).show();
+                    new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
+                }
+//                this.getView().invalidate();
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+            checkChangeTurn();
+            setImage(1);
+            setImage(2);
+            setImage(3);
+            setImage(4);
+            setImage(5);
+        } else
+        {
+            Toast.makeText(getContext(), "It's not your turn! You can't cheat in electronic board games!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkChangeTurn() {
+        if (Login.getInstance().getCardsDrawn() > 1 || !isTurn){
+            try {
+                new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setImage(int cardNum) {
@@ -190,5 +278,8 @@ public class GameInfoFragment extends Fragment {
                 return blueCard;
         }
         return orangeCard;
+    }
+
+    private void refreshView(){
     }
 }

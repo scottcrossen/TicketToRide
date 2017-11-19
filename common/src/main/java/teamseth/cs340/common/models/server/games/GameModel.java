@@ -37,7 +37,7 @@ import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
-import teamseth.cs340.common.util.server.LongestPathSolver;
+import teamseth.cs340.common.util.RouteCalculator;
 
 /**
  * @author Scott Leland Crossen
@@ -211,7 +211,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         int longestPath = -1;
         for (UUID playerId : game.getPlayers()) {
             Set<Route> routes = ServerModelRoot.getInstance().board.getByPlayer(game.getRoutes(), playerId);
-            int playerPathScore = LongestPathSolver.calculateLongestPath(routes);
+            int playerPathScore = RouteCalculator.calculateLongestPath(routes);
             if (playerPathScore > longestPath) {
                 longestPathPlayer = playerId;
                 longestPath = playerPathScore;

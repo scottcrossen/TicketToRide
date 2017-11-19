@@ -155,4 +155,8 @@ public class Routes implements Serializable, IModel<Route> {
     public Set<Route> getAllClaimed() {
         return routes.stream().filter((Route current) -> current.getClaimedPlayer().isPresent()).collect(Collectors.toSet());
     }
+
+    public Set<Route> getAllByPlayer(UUID playerId) {
+        return routes.stream().filter((Route current) -> current.getClaimedPlayer().map((UUID claimedPlayer) -> claimedPlayer.equals(playerId)).orElseGet(() -> false)).collect(Collectors.toSet());
+    }
 }

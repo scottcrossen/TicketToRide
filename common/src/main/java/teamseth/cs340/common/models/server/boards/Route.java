@@ -116,4 +116,8 @@ public class Route implements Serializable {
     public String toString() {
         return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString();
     }
+
+    public boolean hasCity(CityName city) {
+        return (getCity1().equals(city) || getCity2().equals(city));
+    }
 }

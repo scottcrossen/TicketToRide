@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.server.boards;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -59,6 +60,10 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
             routeSet.claimRoute(token.getUser(), city1, city2, colors);
             return matchingRoute.getLength();
         }
+    }
+
+    public Set<Route> getByPlayer(UUID routeSetId, UUID playerId) throws ResourceNotFoundException {
+        return getRoutes(routeSetId).getAllByPlayer(playerId);
     }
 
 }

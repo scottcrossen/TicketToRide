@@ -25,6 +25,7 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.boards.Routes;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.DestinationDeck;
@@ -36,6 +37,7 @@ import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
+import teamseth.cs340.common.util.server.LongestPathSolver;
 
 /**
  * @author Scott Leland Crossen
@@ -206,9 +208,14 @@ public class GameModel extends AuthAction implements IModel<Game> {
             }
         }
         UUID longestPathPlayer = null;
-        int longestPath = 0;
+        int longestPath = -1;
         for (UUID playerId : game.getPlayers()) {
-            // set longestPathPlayer to player with longest path.
+            Set<Route> routes = ServerModelRoot.getInstance().board.getByPlayer(game.getRoutes(), playerId);
+            int playerPathScore = LongestPathSolver.calculateLongestPath(routes);
+            if (playerPathScore > longestPath) {
+                longestPathPlayer = playerId;
+                longestPath = playerPathScore;
+            }
         }
         ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new SetPlayerLongestPathCommand(game.getPlayers(), longestPathPlayer), token);
         game.setState(GameState.FINISHED);

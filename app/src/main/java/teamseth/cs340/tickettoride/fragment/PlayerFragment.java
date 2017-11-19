@@ -24,9 +24,12 @@ import teamseth.cs340.tickettoride.R;
  * Created by Seth on 10/14/2017.
  */
 
-public class PlayerFragment extends Fragment {
+public class PlayerFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
 
+    public void update() {
+
+    }
     public PlayerFragment() {
         // Empty constructor required for fragment subclasses
     }

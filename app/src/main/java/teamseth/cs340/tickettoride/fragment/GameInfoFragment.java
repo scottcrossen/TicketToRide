@@ -25,7 +25,7 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
  * Created by Seth on 10/14/2017.
  */
 
-public class GameInfoFragment extends Fragment {
+public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
     private final int blackCard = R.drawable.black_train_card;
     private final int greenCard = R.drawable.green_train_card;
@@ -43,6 +43,10 @@ public class GameInfoFragment extends Fragment {
     ImageView card5;
     private boolean isTurn = false;
     private int cardsDrawn = Login.getInstance().getCardsDrawn();
+
+    public void update() {
+
+    }
 
     public GameInfoFragment() {
         // Empty constructor required for fragment subclasses

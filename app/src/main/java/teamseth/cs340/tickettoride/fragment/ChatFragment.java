@@ -24,7 +24,7 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
  * Created by Seth on 10/14/2017.
  */
 
-public class ChatFragment extends Fragment implements View.OnClickListener{
+public class ChatFragment extends Fragment implements View.OnClickListener, IUpdatableFragment {
 
     private LinearLayoutManager mLinearLayoutManager;
     private ChatAdapter mAdapter;

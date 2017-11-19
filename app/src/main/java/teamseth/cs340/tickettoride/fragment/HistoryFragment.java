@@ -19,11 +19,16 @@ import teamseth.cs340.tickettoride.R;
  * Created by Seth on 10/14/2017.
  */
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
 
     public HistoryFragment() {
         // Empty constructor required for fragment subclasses
+    }
+
+
+    public void update() {
+
     }
 
     @Override

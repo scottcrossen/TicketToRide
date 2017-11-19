@@ -30,6 +30,7 @@ import teamseth.cs340.tickettoride.fragment.ChatFragment;
 import teamseth.cs340.tickettoride.fragment.DemoFragment;
 import teamseth.cs340.tickettoride.fragment.GameInfoFragment;
 import teamseth.cs340.tickettoride.fragment.HistoryFragment;
+import teamseth.cs340.tickettoride.fragment.IUpdatableFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
@@ -243,41 +244,44 @@ public class MapActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
-        //ClientModelRoot.cards.addObserver(this);
+        ClientModelRoot.cards.addObserver(this);
         ClientModelRoot.chat.addObserver(this);
-        //ClientModelRoot.history.addObserver(this);
+        ClientModelRoot.history.addObserver(this);
         ClientModelRoot.board.addObserver(this);
-        //ClientModelRoot.points.addObserver(this);
-        //ClientModelRoot.carts.addObserver(this);
+        ClientModelRoot.points.addObserver(this);
+        ClientModelRoot.carts.addObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //ClientModelRoot.cards.deleteObserver(this);
+        ClientModelRoot.cards.deleteObserver(this);
         ClientModelRoot.chat.deleteObserver(this);
-        //ClientModelRoot.history.deleteObserver(this);
+        ClientModelRoot.history.deleteObserver(this);
         ClientModelRoot.board.deleteObserver(this);
-        //ClientModelRoot.points.deleteObserver(this);
-        //ClientModelRoot.carts.deleteObserver(this);
+        ClientModelRoot.points.deleteObserver(this);
+        ClientModelRoot.carts.deleteObserver(this);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        if (fragment instanceof MapFragment) {
-            if (o instanceof Board) ((MapFragment) fragment).update();
-        } else if (fragment instanceof ChatFragment) {
-            if (o instanceof CurrentChat) ((ChatFragment) fragment).update();
-        } else if (fragment instanceof GameInfoFragment) {
+        if (fragment instanceof IUpdatableFragment) {
+            IUpdatableFragment updateFragment = (IUpdatableFragment) fragment;
+            if (updateFragment instanceof MapFragment) {
+                if (o instanceof Board) updateFragment.update();
+            } else if (updateFragment instanceof ChatFragment) {
+                if (o instanceof CurrentChat) updateFragment.update();
+            } else if (updateFragment instanceof GameInfoFragment) {
 
-        } else if (fragment instanceof HistoryFragment) {
+            } else if (updateFragment instanceof HistoryFragment) {
 
-        } else if (fragment instanceof OtherPlayersFragment) {
+            } else if (updateFragment instanceof OtherPlayersFragment) {
 
-        } else if (fragment instanceof PlayerFragment) {
+            } else if (updateFragment instanceof PlayerFragment) {
 
-        } else if (fragment instanceof DemoFragment) {
+            } else if (updateFragment instanceof DemoFragment) {
 
+            }
         }
     }
 }

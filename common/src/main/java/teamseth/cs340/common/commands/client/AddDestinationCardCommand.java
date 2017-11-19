@@ -42,6 +42,8 @@ public class AddDestinationCardCommand implements IClientCommand, IHistoricalCom
         return players;
     }
 
+    public DestinationCard getDestinationCard() { return card; }
+
     public UUID playerOwnedby() {
         return owner;
     }

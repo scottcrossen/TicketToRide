@@ -27,7 +27,7 @@ import teamseth.cs340.tickettoride.util.MapView;
  * Created by Seth on 10/14/2017.
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
     static final int PINK = Color.rgb(255,182,193);
     static final int ORANGE = Color.rgb(255,140,0);

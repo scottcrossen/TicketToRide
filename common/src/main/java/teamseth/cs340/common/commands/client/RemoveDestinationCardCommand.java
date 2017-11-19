@@ -47,6 +47,8 @@ public class RemoveDestinationCardCommand implements IHistoricalCommand {
         return owner;
     }
 
+    public DestinationCard getDestinationCard() { return card; }
+
     public IHistoricalCommand getAlternate() {
         return new DecrementPlayerDestinationCardsCommands(this);
     }

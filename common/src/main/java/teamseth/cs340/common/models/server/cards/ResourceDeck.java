@@ -70,4 +70,20 @@ public class ResourceDeck implements Deck<ResourceColor> {
         }
         throw new ResourceNotFoundException();
     }
+
+    public List<ResourceColor> checkAndResuffleFaceUpCards() {
+        if (faceUp.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count() >= 3 && deck.size() + faceUp.size() > 5) {
+            faceUp.stream().forEach((ResourceColor color) -> returnCard(color));
+            int amntRainbows = (int) deck.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count();
+            for (int i = 0; i < 5; i++) {
+                faceUp.add(deck.popRandom());
+            }
+            if (deck.size() + faceUp.size() - amntRainbows >= 3) {
+                checkAndResuffleFaceUpCards();
+            }
+            return getFaceUp();
+        } else {
+            return new LinkedList<>();
+        }
+    }
 }

@@ -63,7 +63,7 @@ public class ClientFacade implements IClient {
 
     public void removePlayerResourceCard(UUID playerId) { model.cards.others.removePlayerResourceCard(playerId);}
 
-    public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException { model.board.claimRouteByPlayer(userId, city1, city2, color); }
+    public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors) throws ModelActionException { model.board.claimRouteByPlayer(userId, city1, city2, colors); }
 
     public void seedCards(List<ResourceColor> cards) { model.cards.faceUp.seedCards(cards); }
 
@@ -76,5 +76,11 @@ public class ClientFacade implements IClient {
     public void removePlayerTrainCarts(UUID playerId, int amount)  {model.carts.decrementPlayerCarts(playerId, amount); }
 
     public void nextTurn() throws ResourceNotFoundException{ model.games.getActive().nextTurn(); }
+
+    public void updatePlayerPointsByDestinationCard(UUID playerId, DestinationCard card) throws ResourceNotFoundException{ model.points.updatePlayerPointsByDestinationCard(playerId, card); }
+
+    public void setPlayerLongestPath(UUID playerId) {
+        model.points.setPlayerWithLongestPath(playerId);
+    }
 }
 

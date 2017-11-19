@@ -125,8 +125,8 @@ public class Routes implements Serializable, IModel<Route> {
       routes.add(new Route(CityName.Seattle, CityName.Vancouver, ResourceColor.RAINBOW, 1,-20,-20,0,0));
     }
 
-    public void claimRoute(UUID userId, CityName city1, CityName city2, ResourceColor color) throws ModelActionException {
-        List<Route> matchedRoutes = getMatchingRoutes(city1, city2, color);
+    public void claimRoute(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors) throws ModelActionException {
+        List<Route> matchedRoutes = getMatchingRoutes(city1, city2, colors);
         if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1)))) {
             throw new ModelActionException(); // not correctly specified
         } else {
@@ -146,13 +146,17 @@ public class Routes implements Serializable, IModel<Route> {
         }
     }
 
-    public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {
-        return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, color)).collect(Collectors.toList());
+    public List<Route> getMatchingRoutes(CityName city1, CityName city2, List<ResourceColor> colors) {
+        return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, colors)).collect(Collectors.toList());
     }
 
     public Set<Route> getAll() {return routes;}
 
     public Set<Route> getAllClaimed() {
         return routes.stream().filter((Route current) -> current.getClaimedPlayer().isPresent()).collect(Collectors.toSet());
+    }
+
+    public Set<Route> getAllByPlayer(UUID playerId) {
+        return routes.stream().filter((Route current) -> current.getClaimedPlayer().map((UUID claimedPlayer) -> claimedPlayer.equals(playerId)).orElseGet(() -> false)).collect(Collectors.toSet());
     }
 }

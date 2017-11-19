@@ -19,7 +19,7 @@ import teamseth.cs340.common.util.client.Login;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class SendMessageCommand extends QueueCommand implements IServerCommand {
+public class SendMessageCommand extends QueueOffTurnCommand implements IServerCommand {
 
     private Message message;
     private UUID chatRoom;

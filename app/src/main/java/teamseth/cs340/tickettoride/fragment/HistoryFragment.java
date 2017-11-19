@@ -19,23 +19,16 @@ import teamseth.cs340.tickettoride.R;
  * Created by Seth on 10/14/2017.
  */
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
 
     public HistoryFragment() {
         // Empty constructor required for fragment subclasses
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Toast.makeText(this.getContext(), "CommandHistory", Toast.LENGTH_SHORT).show();
-        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
-        int i = getArguments().getInt(ARG_TAB_NUMBER);
-        String title = getResources().getStringArray(R.array.tabs_array)[i];
+    ListView listview;
 
-        ListView listview = (ListView) rootView.findViewById(R.id.history_list);
-
+    public void update() {
         List<String> history = null;
         try {
             history = ClientModelRoot.getInstance().history.getHistory();
@@ -51,6 +44,19 @@ public class HistoryFragment extends Fragment {
                 historyList);
 
         listview.setAdapter(listViewAdapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Toast.makeText(this.getContext(), "CommandHistory", Toast.LENGTH_SHORT).show();
+        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
+        int i = getArguments().getInt(ARG_TAB_NUMBER);
+        String title = getResources().getStringArray(R.array.tabs_array)[i];
+
+        listview = (ListView) rootView.findViewById(R.id.history_list);
+
+        update();
 
         getActivity().setTitle(title);
         return rootView;

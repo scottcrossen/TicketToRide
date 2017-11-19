@@ -22,7 +22,7 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
  * Created by mike on 10/4/17.
  */
 
-public class GameListFragment extends Fragment implements View.OnClickListener
+public class GameListFragment extends Fragment implements View.OnClickListener, IUpdatableFragment
 {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;

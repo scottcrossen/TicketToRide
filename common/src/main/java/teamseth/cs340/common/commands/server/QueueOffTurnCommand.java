@@ -14,16 +14,14 @@ import teamseth.cs340.common.util.client.Login;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public abstract class QueueCommand implements IServerCommand {
+public abstract class QueueOffTurnCommand implements IServerCommand {
     private static final long serialVersionUID = -7346493926381505176L;
 
     UUID historyId;
-    UUID gameId;
     private AuthToken token = Login.getInstance().getToken();
 
-    public QueueCommand() throws ResourceNotFoundException {
+    public QueueOffTurnCommand() throws ResourceNotFoundException {
         this.historyId = ClientModelRoot.games.getActive().getHistory();
-        this.gameId = ClientModelRoot.games.getActive().getId();
     }
 
     public abstract IHistoricalCommand clientCommand() throws Exception;
@@ -33,7 +31,7 @@ public abstract class QueueCommand implements IServerCommand {
             IHistoricalCommand historicalCommand = clientCommand();
             if (historicalCommand != null) {
                 System.out.println("Queuing historical command: " + historicalCommand.toString());
-                ServerFacade.getInstance().addCommandToHistory(gameId, historyId, historicalCommand, token);
+                ServerFacade.getInstance().forceAddCommandToHistory(historyId, historicalCommand, token);
                 System.out.println("Successfully queued command");
             }
             return null;

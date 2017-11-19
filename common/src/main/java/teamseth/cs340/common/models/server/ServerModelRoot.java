@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.server;
 
 import teamseth.cs340.common.models.server.boards.BoardModel;
 import teamseth.cs340.common.models.server.cards.CardModel;
+import teamseth.cs340.common.models.server.carts.CartModel;
 import teamseth.cs340.common.models.server.chat.ChatModel;
 import teamseth.cs340.common.models.server.games.GameModel;
 import teamseth.cs340.common.models.server.history.HistoryModel;
@@ -27,4 +28,5 @@ public class ServerModelRoot {
     public static final CardModel cards = CardModel.getInstance();
     public static final HistoryModel history = HistoryModel.getInstance();
     public static final BoardModel board = BoardModel.getInstance();
+    public static final CartModel carts = CartModel.getInstance();
 }

@@ -1,6 +1,8 @@
 package teamseth.cs340.common.models.server.boards;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -95,18 +97,27 @@ public class Route implements Serializable {
 
     public void claimBy(UUID playerId) { this.claimedBy = playerId;}
 
-    public boolean equals(CityName city1, CityName city2, ResourceColor color) {
+    public boolean equals(CityName city1, CityName city2, List<ResourceColor> colors) {
+
         return (
-            ((this.city1 == city1 && this.city2 == city2) || (this.city1 == city2 && this.city2 == city1)) &&
-            (this.color == ResourceColor.RAINBOW || color == ResourceColor.RAINBOW || this.color == color)
-            );
+            ((this.city1.equals(city1) && this.city2.equals(city2)) || (this.city1.equals(city2) && this.city2.equals(city1))) &&
+            (this.length == colors.size()) &&
+            colors.stream().allMatch((ResourceColor color) -> (this.color.equals(ResourceColor.RAINBOW) || color.equals(ResourceColor.RAINBOW) || this.color.equals(color)))
+        );
     }
 
     public boolean compareCitiesAndColor(Route o) {
-        return equals(o.city1, o.city2, o.color);
+        List<ResourceColor> otherColors = new ArrayList<>();
+        otherColors.add(o.color);
+        return equals(o.city1, o.city2, otherColors);
     }
+
 
     public String toString() {
         return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString();
+    }
+
+    public boolean hasCity(CityName city) {
+        return (getCity1().equals(city) || getCity2().equals(city));
     }
 }

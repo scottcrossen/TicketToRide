@@ -4,13 +4,16 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
+import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
+import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.chat.Message;
@@ -34,7 +37,7 @@ public interface IServer {
     public void leaveGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException;
     public Optional<Game> getGameAfter(UUID gameId, Instant instant) throws ResourceNotFoundException;
     public boolean attemptStartGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;
-
+    public void nextPlayerTurn(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException;
 
     // User model methods
     public AuthToken login(UserCreds creds) throws ResourceNotFoundException, UnauthorizedException;
@@ -46,14 +49,22 @@ public interface IServer {
     public void returnResourceCard(UUID deckId, ResourceColor card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException;
     public void returnDestinationCard(UUID deckId, DestinationCard card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException;
     public Optional<ResourceColor> drawFaceUpCard(UUID deckId, ResourceColor card, AuthToken token) throws ModelActionException, ResourceNotFoundException, UnauthorizedException;
+    public List<ResourceColor> checkAndResuffleFaceUpCards(UUID deckId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
 
     // Chat model methods
     public void sendMessage(UUID room, Message message, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
     public ArrayList<Message> getMessages(UUID room) throws ResourceNotFoundException;
     public ArrayList<Message> getMessagesAfter(UUID room, int size) throws ResourceNotFoundException;
 
-
     // History model methods
     public LinkedList<IHistoricalCommand> getCommandsAfter(UUID historyId, Optional<UUID> afterId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
-    public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException;
+    public void addCommandToHistory(UUID gameId, UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException, NotYourTurnException;
+    public void forceAddCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException;
+
+    // Board methods
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException;
+
+    // Cart methods
+    public void decrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;
+    public void incrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;
 }

@@ -7,7 +7,7 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class UpdateAllClientsCommand extends QueueCommand implements IServerCommand {
+public class UpdateAllClientsCommand extends QueueOffTurnCommand implements IServerCommand {
 
     IHistoricalCommand command;
 

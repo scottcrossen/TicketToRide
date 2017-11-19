@@ -56,6 +56,8 @@ public class InitialChooseDestinationCardCommand implements IHistoricalCommand {
         return owner;
     }
 
+    public DestinationCard getDestinationCard() { return card; }
+
     public IHistoricalCommand getAlternate() {
         return new AlternativeHistoryCommand(this);
     }

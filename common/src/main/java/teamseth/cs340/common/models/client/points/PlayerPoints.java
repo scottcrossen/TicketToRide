@@ -28,6 +28,8 @@ public class PlayerPoints extends Observable implements IModel {
 
     public void resetModel() {
         playerPoints = new HashMap<>();
+        setChanged();
+        notifyObservers();
     }
 
     private Map<UUID, Integer> playerPoints = new HashMap<>();
@@ -61,10 +63,14 @@ public class PlayerPoints extends Observable implements IModel {
 
     public void incrementPlayerPoints(UUID playerId, int points) {
         playerPoints.put(playerId, playerPoints.get(playerId) + points);
+        setChanged();
+        notifyObservers();
     }
 
     public void decrementPlayerPoints(UUID playerId, int points) {
         playerPoints.put(playerId, playerPoints.get(playerId) - points);
+        setChanged();
+        notifyObservers();
     }
 
     public void updatePlayerPointsByDestinationCard(UUID playerId, DestinationCard card) {
@@ -77,6 +83,8 @@ public class PlayerPoints extends Observable implements IModel {
             playerPoints.put(playerId, playerPoints.get(playerId) - points);
             decrementPlayerPoints(playerId, points);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public void setPlayerWithLongestPath(UUID playerId) {

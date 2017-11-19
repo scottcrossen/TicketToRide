@@ -29,6 +29,8 @@ public class CommandHistory extends Observable {
 
     public void resetModel() {
         history = new LinkedList<>();
+        setChanged();
+        notifyObservers();
     }
 
     private List<IHistoricalCommand> history = new LinkedList<>();

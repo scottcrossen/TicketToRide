@@ -24,6 +24,8 @@ public class OtherPlayerCards extends Observable implements IModel {
     public void resetModel() {
         playerResourceCards = new HashMap<>();
         playerDestinationCards = new HashMap<>();
+        setChanged();
+        notifyObservers();
     }
 
     private Map<UUID, Integer> playerResourceCards = new HashMap<>();
@@ -43,12 +45,16 @@ public class OtherPlayerCards extends Observable implements IModel {
         } else {
             playerDestinationCards.put(playerId, 1);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public void removePlayerDestinationCard(UUID playerId) {
         if(playerDestinationCards.containsKey(playerId)) {
             playerDestinationCards.put(playerId, playerDestinationCards.get(playerId) - 1);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public int getPlayerResourceCards(UUID playerId) {
@@ -65,12 +71,16 @@ public class OtherPlayerCards extends Observable implements IModel {
         } else {
             playerResourceCards.put(playerId, 1);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public void removePlayerResourceCard(UUID playerId) {
         if(playerResourceCards.containsKey(playerId)) {
             playerResourceCards.put(playerId, playerResourceCards.get(playerId) - 1);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public int getResourceAmountUsed() {

@@ -31,6 +31,8 @@ public class Board extends Observable implements IModel {
 
     public void resetModel() {
         routes = new Routes();
+        setChanged();
+        notifyObservers();
     }
 
     public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors) throws ModelActionException {

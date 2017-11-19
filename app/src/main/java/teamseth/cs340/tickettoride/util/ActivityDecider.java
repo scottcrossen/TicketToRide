@@ -14,7 +14,7 @@ import teamseth.cs340.tickettoride.activity.MapActivity;
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
 public class ActivityDecider {
-    public static Class next() {
+    public static Class<?> next() {
         if (Login.getInstance().getToken() == null)
             return LoginActivity.class;
         try {

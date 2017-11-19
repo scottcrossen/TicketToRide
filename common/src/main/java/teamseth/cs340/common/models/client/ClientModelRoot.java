@@ -37,5 +37,6 @@ public class ClientModelRoot {
         board.resetModel();
         points.resetModel();
         cards.resetModel();
+        carts.resetModel();
     }
 }

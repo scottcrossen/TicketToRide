@@ -70,59 +70,60 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
 
         startBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
-        try {
-            setFields(ClientModelRoot.games.getActive());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        update();
 
         return v;
     }
 
-    public void setFields(Game activeGame) {
-        if (activeGame != null) {
-            HashMap<UUID, String> playerNames = activeGame.getPlayerNames();
-            UUID[] players = activeGame.getPlayers().toArray(new UUID[activeGame.getPlayers().size()]);
-            startBtn.setEnabled(true);
-
-            if (players.length > 0) {
-                player1Name.setText(playerNames.get(players[0]));
-                player1Status.setText("Ready");
-                //startBtn.setEnabled(false);
-            } else {
-                player1Name.setText("Player 1");
-                player1Status.setText("Waiting on Player 1");
-                //startBtn.setEnabled(false);
-            }
-            if (players.length > 1) {
-                player2Name.setText(playerNames.get(players[1]));
-                player2Status.setText("Ready");
+    public void update() {
+        try {
+            Game activeGame = ClientModelRoot.games.getActive();
+            if (activeGame != null) {
+                HashMap<UUID, String> playerNames = activeGame.getPlayerNames();
+                UUID[] players = activeGame.getPlayers().toArray(new UUID[activeGame.getPlayers().size()]);
                 startBtn.setEnabled(true);
-            } else {
-                player2Name.setText("Player 2");
-                player2Status.setText("Waiting on Player 2");
+
+                if (players.length > 0) {
+                    player1Name.setText(playerNames.get(players[0]));
+                    player1Status.setText("Ready");
+                    //startBtn.setEnabled(false);
+                } else {
+                    player1Name.setText("Player 1");
+                    player1Status.setText("Waiting on Player 1");
+                    //startBtn.setEnabled(false);
+                }
+                if (players.length > 1) {
+                    player2Name.setText(playerNames.get(players[1]));
+                    player2Status.setText("Ready");
+                    startBtn.setEnabled(true);
+                } else {
+                    player2Name.setText("Player 2");
+                    player2Status.setText("Waiting on Player 2");
+                }
+                if (players.length > 2) {
+                    player3Name.setText(playerNames.get(players[2]));
+                    player3Status.setText("Ready");
+                } else {
+                    player3Name.setText("Player 3");
+                    player3Status.setText("Waiting on Player 3");
+                }
+                if (players.length > 3) {
+                    player4Name.setText(playerNames.get(players[3]));
+                    player4Status.setText("Ready");
+                } else {
+                    player4Name.setText("Player 4");
+                    player4Status.setText("Waiting on Player 4");
+                }
+                if (players.length > 4) {
+                    player5Name.setText(playerNames.get(players[4]));
+                    player5Status.setText("Ready");
+                } else {
+                    player5Name.setText("Player 5");
+                    player5Status.setText("Waiting on Player 5");
+                }
             }
-            if (players.length > 2) {
-                player3Name.setText(playerNames.get(players[2]));
-                player3Status.setText("Ready");
-            } else {
-                player3Name.setText("Player 3");
-                player3Status.setText("Waiting on Player 3");
-            }
-            if (players.length > 3) {
-                player4Name.setText(playerNames.get(players[3]));
-                player4Status.setText("Ready");
-            } else {
-                player4Name.setText("Player 4");
-                player4Status.setText("Waiting on Player 4");
-            }
-            if (players.length > 4) {
-                player5Name.setText(playerNames.get(players[4]));
-                player5Status.setText("Ready");
-            } else {
-                player5Name.setText("Player 5");
-                player5Status.setText("Waiting on Player 5");
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

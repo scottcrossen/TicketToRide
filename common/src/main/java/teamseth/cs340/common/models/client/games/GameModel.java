@@ -27,6 +27,8 @@ public class GameModel extends Observable implements IModel<Game> {
 
     public void resetModel() {
         state = new InactiveGameState();
+        setChanged();
+        notifyObservers();
     }
 
     private IGameModelState state = new InactiveGameState();
@@ -85,6 +87,12 @@ public class GameModel extends Observable implements IModel<Game> {
         return state.getActive();
     }
 
+    public void nextTurn() {
+        state.nextTurn();
+        setChanged();
+        notifyObservers();
+    }
+
     public boolean hasActive() {
         return this.state.hasActive();
     }
@@ -94,6 +102,7 @@ public class GameModel extends Observable implements IModel<Game> {
         void setActive(Game active);
         void setInactive();
         boolean hasActive();
+        void nextTurn();
         void addGames(Set<Game> newGames);
         HashSet<Game> getAll();
     }
@@ -115,6 +124,7 @@ public class GameModel extends Observable implements IModel<Game> {
         public boolean hasActive() {
             return true;
         }
+        public void nextTurn() { active.nextTurn(); }
         public void addGames(Set<Game> newGames) {
             return;
         }
@@ -141,6 +151,7 @@ public class GameModel extends Observable implements IModel<Game> {
         public boolean hasActive() {
             return false;
         }
+        public void nextTurn() { }
         public void addGames(Set<Game> newGames) {
             int addSize = newGames.size();
             // Overwrite old data with new data on uuid.

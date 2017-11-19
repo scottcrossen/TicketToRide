@@ -21,6 +21,8 @@ public class CurrentChat extends Observable {
 
     public void resetModel() {
         messages = new ArrayList<>();
+        setChanged();
+        notifyObservers();
     }
 
     private ArrayList<Message> messages = new ArrayList<>();

@@ -26,6 +26,8 @@ public class FaceUpCards extends Observable implements IModel {
 
     public void resetModel() {
         resourceCards = new LinkedList<>();
+        setChanged();
+        notifyObservers();
     }
 
     private List<ResourceColor> resourceCards = new LinkedList<>();
@@ -33,6 +35,8 @@ public class FaceUpCards extends Observable implements IModel {
 
     public void seedCards(List<ResourceColor> cards) {
         this.resourceCards = cards;
+        setChanged();
+        notifyObservers();
     }
     public void replaceCard(ResourceColor oldCard, Optional<ResourceColor> newCard) throws ResourceNotFoundException {
         Iterator<ResourceColor> iterator = resourceCards.iterator();
@@ -44,6 +48,8 @@ public class FaceUpCards extends Observable implements IModel {
                     resourceCards.add(newColor);
                     return newColor;
                 });
+                setChanged();
+                notifyObservers();
                 return;
             }
         }

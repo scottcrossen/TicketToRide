@@ -26,6 +26,8 @@ public class CurrentCards extends Observable {
         resourceCards = new LinkedList<>();
         others.resetModel();
         faceUp.resetModel();
+        setChanged();
+        notifyObservers();
     }
 
     private LinkedList<DestinationCard> destinationCards = new LinkedList<>();

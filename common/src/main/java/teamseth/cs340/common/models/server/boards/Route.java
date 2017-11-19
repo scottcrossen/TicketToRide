@@ -98,7 +98,6 @@ public class Route implements Serializable {
     public void claimBy(UUID playerId) { this.claimedBy = playerId;}
 
     public boolean equals(CityName city1, CityName city2, List<ResourceColor> colors) {
-
         return (
             ((this.city1.equals(city1) && this.city2.equals(city2)) || (this.city1.equals(city2) && this.city2.equals(city1))) &&
             (this.length == colors.size()) &&
@@ -111,7 +110,6 @@ public class Route implements Serializable {
         otherColors.add(o.color);
         return equals(o.city1, o.city2, otherColors);
     }
-
 
     public String toString() {
         return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString();

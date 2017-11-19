@@ -33,4 +33,11 @@ public class DestinationCard implements Serializable {
     public String toString() {
         return city1.toString() + " to " + city2.toString() + " (" + Integer.toString(value) + ")";
     }
+
+    public boolean compareCitiesAndValue(DestinationCard otherCard) {
+        return (this.value == otherCard.getValue() && (
+                (this.getCity1().equals(otherCard.getCity1()) && this.getCity2().equals(otherCard.getCity2())) ||
+                (this.getCity1().equals(otherCard.getCity2()) && this.getCity2().equals(otherCard.getCity1()))
+                ));
+    }
 }

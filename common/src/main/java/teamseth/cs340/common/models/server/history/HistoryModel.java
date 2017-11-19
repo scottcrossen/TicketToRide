@@ -10,6 +10,7 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -45,7 +46,17 @@ public class HistoryModel extends AuthAction implements IModel<CommandHistory> {
         return get(historyId).getAll();
     }
 
-    public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+    public void addCommandToHistory(UUID gameId, UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        UUID playerId = token.getUser();
+        boolean isPlayersTurn = ServerModelRoot.getInstance().games.get(gameId).getWhosTurnItIs().map((UUID currentPlayer) -> currentPlayer.equals(playerId)).orElseGet(() -> true);
+        if (isPlayersTurn) {
+            forceAddCommandToHistory(historyId, command, token);
+        } else {
+            throw new ModelActionException();
+        }
+    }
+
+    public void forceAddCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
         AuthAction.user(token);
         CommandHistory history = get(historyId);
         history.insert(command);

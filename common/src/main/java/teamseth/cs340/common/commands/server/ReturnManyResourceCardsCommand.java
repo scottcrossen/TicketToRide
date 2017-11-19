@@ -25,10 +25,12 @@ public class ReturnManyResourceCardsCommand implements IServerCommand {
     private AuthToken token;
     private ArrayList<ResourceColor> cards;
     private UUID historyId;
+    private UUID gameId;
 
-    public ReturnManyResourceCardsCommand(ArrayList<ResourceColor> cards, UUID deckId, UUID historyId, AuthToken token) throws ResourceNotFoundException {
+    public ReturnManyResourceCardsCommand(ArrayList<ResourceColor> cards, UUID gameId, UUID deckId, UUID historyId, AuthToken token) throws ResourceNotFoundException {
         this.deckId = deckId;
         this.cards = cards;
+        this.gameId = gameId;
         this.historyId = historyId;
         this.token = token;
     }
@@ -47,7 +49,7 @@ public class ReturnManyResourceCardsCommand implements IServerCommand {
         return new Result(() -> {
             List<IHistoricalCommand> historicalCommands = clientCommand();
             for (IHistoricalCommand command : historicalCommands) {
-                ServerFacade.getInstance().addCommandToHistory(historyId, command, token);
+                ServerFacade.getInstance().addCommandToHistory(gameId, historyId, command, token);
             }
             return null;
         });

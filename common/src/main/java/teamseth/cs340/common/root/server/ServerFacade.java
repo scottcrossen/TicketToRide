@@ -102,8 +102,11 @@ public final class ServerFacade implements IServer {
     public LinkedList<IHistoricalCommand> getCommandsAfter(UUID historyId, Optional<UUID> afterId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException {
         return model.history.getCommandsAfter(historyId, afterId, token);
     }
-    public void addCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
-        model.history.addCommandToHistory(historyId, command, token);
+    public void addCommandToHistory(UUID gameId, UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        model.history.addCommandToHistory(gameId, historyId, command, token);
+    }
+    public void forceAddCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        model.history.forceAddCommandToHistory(historyId, command, token);
     }
 
     // Board methods

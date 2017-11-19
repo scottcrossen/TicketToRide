@@ -97,7 +97,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         game.setHistory(history.getId());
         game.setRoutes(routes.getId());
         game.setCarts(cartSet.getId());
-        ServerModelRoot.history.addCommandToHistory(history.getId(), new SeedFaceUpCardsCommand(newResDeck.getFaceUp(), game.getPlayers(), token.getUser()), token);
+        ServerModelRoot.history.forceAddCommandToHistory(history.getId(), new SeedFaceUpCardsCommand(newResDeck.getFaceUp(), game.getPlayers(), token.getUser()), token);
         seedGame(game, token);
         game.setState(GameState.START);
     }
@@ -112,11 +112,11 @@ public class GameModel extends AuthAction implements IModel<Game> {
             UUID playerId = iterator.next();
             for (int i = 0; i < 4; i++) {
                 ResourceColor newCard = ServerModelRoot.cards.drawResourceCard(resourceDeck, token);
-                ServerModelRoot.history.addCommandToHistory(historyId, new AddResourceCardCommand(newCard, playerId), token);
+                ServerModelRoot.history.forceAddCommandToHistory(historyId, new AddResourceCardCommand(newCard, playerId), token);
             }
             for (int i = 0; i < 3; i++) {
                 DestinationCard newCard = ServerModelRoot.cards.drawDestinationCard(destinationDeck, token);
-                ServerModelRoot.history.addCommandToHistory(historyId, new AddDestinationCardCommand(newCard, playerId), token);
+                ServerModelRoot.history.forceAddCommandToHistory(historyId, new AddDestinationCardCommand(newCard, playerId), token);
             }
         }
     }
@@ -202,7 +202,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         Set<UUID> allPlayers = game.getPlayers();
         for (UUID playerId : playerDestinationCards.keySet()) {
             for (DestinationCard card : playerDestinationCards.get(playerId)) {
-                ServerModelRoot.getInstance().history.addCommandToHistory(historyId, new UpdatePlayerPointsByDestinationCardCommand(card, allPlayers, playerId), token);
+                ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new UpdatePlayerPointsByDestinationCardCommand(card, allPlayers, playerId), token);
             }
         }
         UUID longestPathPlayer = null;
@@ -210,7 +210,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         for (UUID playerId : game.getPlayers()) {
             // set longestPathPlayer to player with longest path.
         }
-        ServerModelRoot.getInstance().history.addCommandToHistory(historyId, new SetPlayerLongestPathCommand(game.getPlayers(), longestPathPlayer), token);
+        ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new SetPlayerLongestPathCommand(game.getPlayers(), longestPathPlayer), token);
         game.setState(GameState.FINISHED);
     }
 

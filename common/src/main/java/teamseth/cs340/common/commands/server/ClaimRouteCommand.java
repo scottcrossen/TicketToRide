@@ -50,10 +50,10 @@ public class ClaimRouteCommand implements IServerCommand {
         return new Result<>(() -> {
             int cost = ServerFacade.getInstance().claimRoute(this.routeId, this.city1, this.city2, this.colors, token);
             ServerFacade.getInstance().decrementPlayerCarts(cartId, cost, token);
-            ServerFacade.getInstance().addCommandToHistory(historyId, new ClaimRouteByPlayerCommand(city1, city2, colors, players, token.getUser()), token);
-            ServerFacade.getInstance().addCommandToHistory(historyId, new RemoveTrainCartsCommand(cost, players, token.getUser()), token);
-            ServerFacade.getInstance().addCommandToHistory(historyId, new IncrementPlayerPointsCommand(getPointsFromLength(cost), players, token.getUser()), token);
-            return new ReturnManyResourceCardsCommand(this.colors, resourceDeckId, historyId, token);
+            ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new ClaimRouteByPlayerCommand(city1, city2, colors, players, token.getUser()), token);
+            ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new RemoveTrainCartsCommand(cost, players, token.getUser()), token);
+            ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new IncrementPlayerPointsCommand(getPointsFromLength(cost), players, token.getUser()), token);
+            return new ReturnManyResourceCardsCommand(this.colors, gameId, resourceDeckId, historyId, token);
         });
     }
 

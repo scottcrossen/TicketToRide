@@ -31,11 +31,13 @@ public class DrawFaceUpCardCommand implements IServerCommand {
     private ResourceColor card;
     private UUID historyId;
     private Set<UUID> players = ClientModelRoot.games.getActive().getPlayers();
+    private UUID gameId;
 
     public DrawFaceUpCardCommand(ResourceColor card) throws ResourceNotFoundException {
         this.deckId = ClientModelRoot.games.getActive().getResourceDeck();
         this.card = card;
         this.historyId = ClientModelRoot.games.getActive().getHistory();
+        this.gameId = ClientModelRoot.games.getActive().getId();
     }
 
     public List<IHistoricalCommand> clientCommand() throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
@@ -56,7 +58,7 @@ public class DrawFaceUpCardCommand implements IServerCommand {
         return new Result(() -> {
             List<IHistoricalCommand> historicalCommands = clientCommand();
             for (IHistoricalCommand command : historicalCommands) {
-                ServerFacade.getInstance().addCommandToHistory(historyId, command, token);
+                ServerFacade.getInstance().addCommandToHistory(gameId, historyId, command, token);
             }
             return null;
         });

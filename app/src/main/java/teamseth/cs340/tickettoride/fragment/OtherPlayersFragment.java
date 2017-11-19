@@ -130,7 +130,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer1Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
             otherPlayer1TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer1DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
-            otherPlayer1Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
+            otherPlayer1Score.setText(Integer.toString(otherPlayerPoints.getTotalPlayerPoints(nextPlayer)));
             otherPlayer1View.setVisibility(rootView.VISIBLE);
         }
         if (iterator.hasNext()) {
@@ -139,7 +139,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer2Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
             otherPlayer2TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer2DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
-            otherPlayer2Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
+            otherPlayer2Score.setText(Integer.toString(otherPlayerPoints.getTotalPlayerPoints(nextPlayer)));
             otherPlayer2View.setVisibility(rootView.VISIBLE);
         }
         if (iterator.hasNext()) {
@@ -148,7 +148,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer3Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
             otherPlayer3TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer3DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
-            otherPlayer3Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
+            otherPlayer3Score.setText(Integer.toString(otherPlayerPoints.getTotalPlayerPoints(nextPlayer)));
             otherPlayer3View.setVisibility(rootView.VISIBLE);
         }
         if (iterator.hasNext()) {
@@ -157,7 +157,7 @@ public class OtherPlayersFragment extends Fragment {
             otherPlayer4Cards.setText(Integer.toString(otherPlayerCards.getPlayerResourceCards(nextPlayer)));
             otherPlayer4TrainCars.setText(Integer.toString(otherPlayerCarts.getPlayerCarts(nextPlayer)));
             otherPlayer4DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
-            otherPlayer4Score.setText(Integer.toString(otherPlayerPoints.getPlayerPoints(nextPlayer)));
+            otherPlayer4Score.setText(Integer.toString(otherPlayerPoints.getTotalPlayerPoints(nextPlayer)));
             otherPlayer4View.setVisibility(rootView.VISIBLE);
         }
     }

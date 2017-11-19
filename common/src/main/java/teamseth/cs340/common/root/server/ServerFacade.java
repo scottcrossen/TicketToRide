@@ -55,6 +55,9 @@ public final class ServerFacade implements IServer {
     public void leaveGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {model.games.leave(gameId, token);}
     public Optional<Game> getGameAfter(UUID gameId, Instant instant) throws ResourceNotFoundException {return model.games.getAfter(gameId, instant);}
     public boolean attemptStartGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException { return model.games.attemptPlayGame(gameId, token); }
+    public void nextPlayerTurn(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        model.games.nextPlayerTurn(gameId, token);
+    }
 
     // User model methods
     public AuthToken login(UserCreds creds) throws ResourceNotFoundException, UnauthorizedException {
@@ -108,6 +111,11 @@ public final class ServerFacade implements IServer {
         return model.board.claimRoute(routeSetId, city1, city2, colors, token);
     }
 
-
-
+    // Cart methods
+    public void decrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+        model.carts.decrementPlayerCarts(cartId, carts, token);
+    }
+    public void incrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+        model.carts.incrementPlayerCarts(cartId, carts, token);
+    }
 }

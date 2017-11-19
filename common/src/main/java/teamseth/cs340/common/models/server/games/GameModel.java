@@ -1,8 +1,11 @@
 package teamseth.cs340.common.models.server.games;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,7 +16,10 @@ import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
+import teamseth.cs340.common.commands.client.RemoveDestinationCardCommand;
 import teamseth.cs340.common.commands.client.SeedFaceUpCardsCommand;
+import teamseth.cs340.common.commands.client.SetPlayerLongestPathCommand;
+import teamseth.cs340.common.commands.client.UpdatePlayerPointsByDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
@@ -24,6 +30,7 @@ import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.DestinationDeck;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.cards.ResourceDeck;
+import teamseth.cs340.common.models.server.carts.CartSet;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
 import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
@@ -77,16 +84,19 @@ public class GameModel extends AuthAction implements IModel<Game> {
         ResourceDeck newResDeck = new ResourceDeck();
         CommandHistory history = new CommandHistory();
         Routes routes = new Routes();
+        CartSet cartSet = new CartSet();
         ServerModelRoot.chat.upsert(newRoom, token);
         ServerModelRoot.cards.upsert(newDestDeck, token);
         ServerModelRoot.cards.upsert(newResDeck, token);
         ServerModelRoot.history.upsert(history, token);
         ServerModelRoot.board.upsert(routes, token);
+        ServerModelRoot.carts.upsert(cartSet, token);
         game.setChatRoom(newRoom.getId());
         game.setDestinationDeck(newDestDeck.getId());
         game.setResourceDeck(newResDeck.getId());
         game.setHistory(history.getId());
         game.setRoutes(routes.getId());
+        game.setCarts(cartSet.getId());
         ServerModelRoot.history.addCommandToHistory(history.getId(), new SeedFaceUpCardsCommand(newResDeck.getFaceUp(), game.getPlayers(), token.getUser()), token);
         seedGame(game, token);
         game.setState(GameState.START);
@@ -155,5 +165,75 @@ public class GameModel extends AuthAction implements IModel<Game> {
 
     private boolean playerInGame(UUID userId) {
         return games.stream().anyMatch(game -> game.hasPlayer(userId));
+    }
+
+    private void endGame(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        Game game = get(gameId);
+        List<IHistoricalCommand> destinationCardCommands = ServerModelRoot.getInstance().history.getAllCommands(game.getHistory());
+        Map<UUID, Set<DestinationCard>> playerDestinationCards = new HashMap<>();
+        destinationCardCommands.forEach((IHistoricalCommand command) -> {
+            UUID playerId = command.getId();
+            if (command instanceof AddDestinationCardCommand) {
+                DestinationCard card = ((AddDestinationCardCommand) command).getDestinationCard();
+                try {
+                    playerDestinationCards.get(playerId).add(card);
+                } catch (Exception e) {
+                    Set<DestinationCard> cards = new HashSet<DestinationCard>();
+                    cards.add(card);
+                    playerDestinationCards.put(playerId, cards);
+                }
+            } else if (command instanceof InitialChooseDestinationCardCommand) {
+                DestinationCard card = ((InitialChooseDestinationCardCommand) command).getDestinationCard();
+                try {
+                    playerDestinationCards.get(playerId).remove(card);
+                } catch (Exception e) {
+                    System.out.println("Error: Historical state incorrectly ordered.");
+                }
+            } else if (command instanceof RemoveDestinationCardCommand) {
+                DestinationCard card = ((RemoveDestinationCardCommand) command).getDestinationCard();
+                try {
+                    playerDestinationCards.get(playerId).remove(card);
+                } catch (Exception e) {
+                    System.out.println("Error: Historical state incorrectly ordered.");
+                }
+            }
+        });
+        UUID historyId = game.getHistory();
+        Set<UUID> allPlayers = game.getPlayers();
+        for (UUID playerId : playerDestinationCards.keySet()) {
+            for (DestinationCard card : playerDestinationCards.get(playerId)) {
+                ServerModelRoot.getInstance().history.addCommandToHistory(historyId, new UpdatePlayerPointsByDestinationCardCommand(card, allPlayers, playerId), token);
+            }
+        }
+        UUID longestPathPlayer = null;
+        int longestPath = 0;
+        for (UUID playerId : game.getPlayers()) {
+            // set longestPathPlayer to player with longest path.
+        }
+        ServerModelRoot.getInstance().history.addCommandToHistory(historyId, new SetPlayerLongestPathCommand(game.getPlayers(), longestPathPlayer), token);
+        game.setState(GameState.FINISHED);
+    }
+
+    private void attemptEndGame(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        UUID currentPlayerId = token.getUser();
+        Game game = get(gameId);
+        Optional<UUID> nextPlayerIdOption = game.getWhosTurnItIsNextById(currentPlayerId);
+        UUID cartId = game.getCarts();
+        boolean nextPlayerHasNoCarts = nextPlayerIdOption.map((UUID nextPlayerId) -> {
+            try {
+                return ServerModelRoot.getInstance().carts.getPlayerCartsById(cartId, nextPlayerId, token) == 0;
+            } catch (Exception e) {
+                return false;
+            }
+        }).orElseGet(() -> false);
+        if (nextPlayerHasNoCarts) {
+            endGame(gameId, token);
+        }
+    }
+
+    public void nextPlayerTurn(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
+        AuthAction.user(token);
+        attemptEndGame(gameId, token);
+        get(gameId).nextTurn();
     }
 }

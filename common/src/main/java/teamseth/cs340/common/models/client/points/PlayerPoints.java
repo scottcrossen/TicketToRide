@@ -3,6 +3,7 @@ package teamseth.cs340.common.models.client.points;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.IModel;
@@ -32,8 +33,9 @@ public class PlayerPoints extends Observable implements IModel {
     private Map<UUID, Integer> playerPoints = new HashMap<>();
     private Map<UUID, Integer> playerUnmetDestinationPoints = new HashMap<>();
     private Map<UUID, Integer> playerDestinationPoints = new HashMap<>();
+    private UUID playerWithLongestPath = null;
 
-    public int getPlayerPoints(UUID playerId) {
+    public int getTotalPlayerPoints(UUID playerId) {
         try {
             return playerPoints.get(playerId);
         } catch (Exception e) {
@@ -61,13 +63,31 @@ public class PlayerPoints extends Observable implements IModel {
         playerPoints.put(playerId, playerPoints.get(playerId) + points);
     }
 
+    public void decrementPlayerPoints(UUID playerId, int points) {
+        playerPoints.put(playerId, playerPoints.get(playerId) - points);
+    }
+
     public void updatePlayerPointsByDestinationCard(UUID playerId, DestinationCard card) {
         boolean playerControlsRoute = ClientModelRoot.getInstance().board.getMatchingRoutes(card.getCity1(), card.getCity2(), ResourceColor.RAINBOW).stream().findFirst().flatMap((Route route) -> route.getClaimedPlayer()).map((UUID routePlayerId) -> routePlayerId.equals(playerId)).orElse(false);
         int points = card.getValue();
         if (playerControlsRoute) {
             playerPoints.put(playerId, playerPoints.get(playerId) + points);
+            incrementPlayerPoints(playerId, points);
         } else {
             playerPoints.put(playerId, playerPoints.get(playerId) - points);
+            decrementPlayerPoints(playerId, points);
         }
+    }
+
+    public void setPlayerWithLongestPath(UUID playerId) {
+        if (playerWithLongestPath != null) {
+            decrementPlayerPoints(playerWithLongestPath, 10);
+        }
+        incrementPlayerPoints(playerId, 10);
+        playerWithLongestPath = playerId;
+    }
+
+    public Optional<UUID> getPlayerWithLongestPath() {
+        return Optional.ofNullable(playerWithLongestPath);
     }
 }

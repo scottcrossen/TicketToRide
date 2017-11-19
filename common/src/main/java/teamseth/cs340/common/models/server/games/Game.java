@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -30,6 +31,7 @@ public class Game implements Serializable, Comparable<Game> {
     private UUID resourceDeck;
     private UUID history;
     private UUID routes;
+    private UUID carts;
     private int turn = 0;
 
     public void addPlayer(User user) throws ModelActionException {
@@ -80,6 +82,10 @@ public class Game implements Serializable, Comparable<Game> {
         this.routes = id;
         updateTime();
     }
+    public void setCarts(UUID id){
+        this.carts = id;
+        updateTime();
+    }
 
     public GameState getState() {
         return state;
@@ -96,7 +102,9 @@ public class Game implements Serializable, Comparable<Game> {
     public UUID getResourceDeck() { return resourceDeck; }
     public UUID getHistory() { return history; }
     public UUID getRoutes() { return routes; }
+    public UUID getCarts() { return carts; }
     public Map<UUID, PlayerColor> getPlayerColors() { return playerColors; }
+
     @Override
     public int compareTo(Game game) {
         return this.id.compareTo(game.id);
@@ -125,7 +133,27 @@ public class Game implements Serializable, Comparable<Game> {
         this.turn = (this.turn + 1) % this.getPlayers().size();
     };
 
-    public UUID getWhosTurnItIs() {
-        return playerTurns.get(this.turn);
+    public Optional<UUID> getWhosTurnItIs() {
+        if (getState().equals(GameState.PLAYING)) {
+            return Optional.of(playerTurns.get(this.turn));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<UUID> getWhosTurnItIsNext() {
+        if (getState().equals(GameState.PLAYING)) {
+            return Optional.of(playerTurns.get((turn + 1) % playerTurns.size()));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<UUID> getWhosTurnItIsNextById(UUID playerId) {
+        if (getState().equals(GameState.PLAYING)) {
+            return Optional.of(playerTurns.get((playerTurns.indexOf(playerId) + 1) % playerTurns.size()));
+        } else {
+            return Optional.empty();
+        }
     }
 }

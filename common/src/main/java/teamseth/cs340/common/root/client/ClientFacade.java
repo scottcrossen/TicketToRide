@@ -76,5 +76,11 @@ public class ClientFacade implements IClient {
     public void removePlayerTrainCarts(UUID playerId, int amount)  {model.carts.decrementPlayerCarts(playerId, amount); }
 
     public void nextTurn() throws ResourceNotFoundException{ model.games.getActive().nextTurn(); }
+
+    public void updatePlayerPointsByDestinationCard(UUID playerId, DestinationCard card) throws ResourceNotFoundException{ model.points.updatePlayerPointsByDestinationCard(playerId, card); }
+
+    public void setPlayerLongestPath(UUID playerId) {
+        model.points.setPlayerWithLongestPath(playerId);
+    }
 }
 

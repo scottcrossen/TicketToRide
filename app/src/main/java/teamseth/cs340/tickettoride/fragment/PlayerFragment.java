@@ -76,7 +76,7 @@ public class PlayerFragment extends Fragment {
         whiteCardText.setShadowLayer(15, 0, 0, Color.BLACK);
 
         TextView scoreText = (TextView) rootView.findViewById(R.id.currentScore);
-        scoreText.setText(Integer.toString(ClientModelRoot.getInstance().points.getPlayerPoints(Login.getUserId())));
+        scoreText.setText(Integer.toString(ClientModelRoot.getInstance().points.getTotalPlayerPoints(Login.getUserId())));
 
         TextView trainCarsRemainingText = (TextView) rootView.findViewById(R.id.trainCarsRemaining);
         trainCarsRemainingText.setText(Integer.toString(ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId())));

@@ -150,6 +150,14 @@ public class Routes implements Serializable, IModel<Route> {
         return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, colors)).collect(Collectors.toList());
     }
 
+    public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {
+        return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, color)).collect(Collectors.toList());
+    }
+
+    public List<Route> getMatchingRoutes(CityName city1, CityName city2) {
+        return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, ResourceColor.RAINBOW)).collect(Collectors.toList());
+    }
+
     public Set<Route> getAll() {return routes;}
 
     public Set<Route> getAllClaimed() {

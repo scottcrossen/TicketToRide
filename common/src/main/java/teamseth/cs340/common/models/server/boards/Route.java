@@ -1,7 +1,6 @@
 package teamseth.cs340.common.models.server.boards;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -105,11 +104,18 @@ public class Route implements Serializable {
         );
     }
 
-    public boolean compareCitiesAndColor(Route o) {
-        List<ResourceColor> otherColors = new ArrayList<>();
-        otherColors.add(o.color);
-        return equals(o.city1, o.city2, otherColors);
+    public boolean equals(CityName city1, CityName city2, ResourceColor color) {
+        return (
+                ((this.city1.equals(city1) && this.city2.equals(city2)) || (this.city1.equals(city2) && this.city2.equals(city1))) &&
+                        (this.color.equals(ResourceColor.RAINBOW) || color.equals(ResourceColor.RAINBOW) || this.color.equals(color))
+        );
     }
+
+    public boolean compareCitiesAndColor(Route o) {
+        return equals(o.city1, o.city2, o.color);
+    }
+
+
 
     public String toString() {
         return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString();

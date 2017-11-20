@@ -17,7 +17,6 @@ import java.util.Map;
 
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
-import teamseth.cs340.common.models.server.cards.ResourceColor;
 
 /**
  * Created by Seth on 10/28/2017.
@@ -91,9 +90,9 @@ public class MapView extends View {
                         //if(dr.getRoute().isDouble()) then go to the choose which route screen
                         //else go immediately to the choose which cards to use screen
                         listDoubleRoute = ClientModelRoot.board.getMatchingRoutes(dr.getRoute().getCity1(),
-                                dr.getRoute().getCity2(), ResourceColor.RAINBOW);
+                                dr.getRoute().getCity2());
                         for( Route rt : listDoubleRoute) {
-                            Toast.makeText(getContext(), "Clicked on " + rt, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "found match on " + rt, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

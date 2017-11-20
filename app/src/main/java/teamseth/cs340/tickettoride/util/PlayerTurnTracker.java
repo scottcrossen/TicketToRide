@@ -215,6 +215,12 @@ public class PlayerTurnTracker implements Observer {
         }
     }
 
+    public void clearObserber() {
+        if (currentObserver != null) {
+            currentObserver.deleteObserver(this);
+        }
+    }
+
     private TurnState state = new NotTurnState();
 
     private void setState(TurnState newState) {

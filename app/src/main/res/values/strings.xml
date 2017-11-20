@@ -28,4 +28,6 @@
     <string name="longestRoute">Longest Route:</string>
     <string name="pointsFromClaimedRoutes">Points From Claimed Routes:</string>
     <string name="pointsFromUnclaimedRoutes">Unclaimed Points From Routes:</string>
+    <string name="loading2">Loading Winner...</string>
+    <string name="wins">wins!</string>
 </resources>

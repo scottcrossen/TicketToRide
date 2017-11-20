@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Ticket To Ride</string>
-        <string name="drawer_open">Open navigation drawer</string>
-        <string name="drawer_close">Close navigation drawer</string>
-        <string name="action_websearch">Web search</string>
-        <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="score_text"><u>Score:</u></string>
     <string name="destination_cards_text"><u>Destination Cards:</u></string>
     <string name="train_cars_text"><u>Train Cars Remaining:</u></string>
@@ -21,4 +21,11 @@
     <string name="otherPlayerDestCards"><u>Destination Cards</u></string>
     <string name="otherPlayerScore"><u>Score</u></string>
     <string name="testNumbers">0</string>
+    <string name="loading">Loading...</string>
+    <string name="playerName">Player Name:</string>
+    <string name="score">Score:</string>
+    <string name="cartsLeft">Carts Left:</string>
+    <string name="longestRoute">Longest Route:</string>
+    <string name="pointsFromClaimedRoutes">Points From Claimed Routes:</string>
+    <string name="pointsFromUnclaimedRoutes">Unclaimed Points From Routes:</string>
 </resources>

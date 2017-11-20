@@ -2,6 +2,7 @@ package teamseth.cs340.common.util;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import teamseth.cs340.common.models.server.boards.Route;
@@ -57,7 +58,12 @@ public class RouteCalculator {
     private static Stream<Stream<CityName>> getCityClusters(Stream<Route> routes) {
         Stream<Stream<CityName>> collectionAddTo = Stream.empty();
         Stream<Stream<CityName>> collectionToAdd = routes.map((Route route) -> Stream.concat(Stream.of(route.getCity1()), Stream.of(route.getCity2())));
-        return combineCollections(collectionToAdd, collectionAddTo);
+        //Stream<Stream<CityName>> output = combineCollections(collectionToAdd, collectionAddTo);
+        // Why is there no fold function? This is stupid.
+        for (Stream<CityName> cluster : collectionToAdd.collect(Collectors.toList())) {
+            collectionAddTo = addClusterToCollection(collectionAddTo, cluster);
+        }
+        return collectionAddTo;
     }
 
     private static Stream<Stream<CityName>> addClusterToCollection(Stream<Stream<CityName>> clusters, Stream<CityName> clusterToAdd) {
@@ -74,6 +80,7 @@ public class RouteCalculator {
     }
 
     private static Stream<Stream<CityName>> combineCollections(Stream<Stream<CityName>> collectionToAdd, Stream<Stream<CityName>> collectionAddTo) {
+        // This might not work because of it's weird recursive nature.
         Stream<Stream<CityName>> output = collectionToAdd.reduce(collectionAddTo, (Stream<Stream<CityName>> clusters, Stream<CityName> cluster) -> addClusterToCollection(clusters, cluster),
                 (Stream<Stream<CityName>> clusters1, Stream<Stream<CityName>> clusters2) -> combineCollections(clusters1, clusters2));
         return output;

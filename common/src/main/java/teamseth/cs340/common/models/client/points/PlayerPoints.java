@@ -1,16 +1,18 @@
 package teamseth.cs340.common.models.client.points;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
-import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.util.RouteCalculator;
 
 /**
  * @author Scott Leland Crossen
@@ -34,8 +36,10 @@ public class PlayerPoints extends Observable implements IModel {
 
     private Map<UUID, Integer> playerPoints = new HashMap<>();
     private Map<UUID, Integer> playerUnmetDestinationPoints = new HashMap<>();
-    private Map<UUID, Integer> playerDestinationPoints = new HashMap<>();
+    private Map<UUID, Integer> playerMetDestinationPoints = new HashMap<>();
     private UUID playerWithLongestPath = null;
+    private Map<UUID, Set<DestinationCard>> playerDestinationCardsMet = new HashMap<>();
+    private Map<UUID, Set<DestinationCard>> playerDestinationCardsUnmet = new HashMap<>();
 
     public int getTotalPlayerPoints(UUID playerId) {
         try {
@@ -45,9 +49,9 @@ public class PlayerPoints extends Observable implements IModel {
         }
     }
 
-    public int getPlayerDestinationCardPoints(UUID playerId) {
+    public int getPlayerMetDestinationCardPoints(UUID playerId) {
         try {
-            return playerDestinationPoints.get(playerId);
+            return playerMetDestinationPoints.get(playerId);
         } catch (Exception e) {
             return 0;
         }
@@ -61,26 +65,61 @@ public class PlayerPoints extends Observable implements IModel {
         }
     }
 
+    public Set<DestinationCard> getPlayerMetDestinationCards(UUID playerId) {
+        try {
+            return playerDestinationCardsMet.get(playerId);
+        } catch (Exception e) {
+            Set<DestinationCard> output = new HashSet<>();
+            playerDestinationCardsMet.put(playerId, output);
+            return output;
+        }
+    }
+
+    public Set<DestinationCard> getPlayerUnmetDestinationCards(UUID playerId) {
+        try {
+            return playerDestinationCardsUnmet.get(playerId);
+        } catch (Exception e) {
+            Set<DestinationCard> output = new HashSet<>();
+            playerDestinationCardsUnmet.put(playerId, output);
+            return output;
+        }
+    }
+
+    public Optional<UUID> getPlayerWithLongestPath() {
+        return Optional.ofNullable(playerWithLongestPath);
+    }
+
+    private void addMetDestinationCard(UUID playerId, DestinationCard card) {
+        getPlayerMetDestinationCards(playerId).add(card);
+    }
+
+    private void addUnmetDestinationCard(UUID playerId, DestinationCard card) {
+        getPlayerUnmetDestinationCards(playerId).add(card);
+    }
+
     public void incrementPlayerPoints(UUID playerId, int points) {
-        playerPoints.put(playerId, playerPoints.get(playerId) + points);
+        playerPoints.put(playerId, getTotalPlayerPoints(playerId) + points);
         setChanged();
         notifyObservers();
     }
 
     public void decrementPlayerPoints(UUID playerId, int points) {
-        playerPoints.put(playerId, playerPoints.get(playerId) - points);
+        playerPoints.put(playerId, getTotalPlayerPoints(playerId) - points);
         setChanged();
         notifyObservers();
     }
 
     public void updatePlayerPointsByDestinationCard(UUID playerId, DestinationCard card) {
-        boolean playerControlsRoute = ClientModelRoot.getInstance().board.getMatchingRoutes(card.getCity1(), card.getCity2(), ResourceColor.RAINBOW).stream().findFirst().flatMap((Route route) -> route.getClaimedPlayer()).map((UUID routePlayerId) -> routePlayerId.equals(playerId)).orElse(false);
+        Set<Route> routesOwnedByPlayer = ClientModelRoot.getInstance().board.getAllByPlayer(playerId);
+        boolean playerControlsRoute = RouteCalculator.citiesConnected(card.getCity1(), card.getCity2(), routesOwnedByPlayer);
         int points = card.getValue();
         if (playerControlsRoute) {
-            playerPoints.put(playerId, playerPoints.get(playerId) + points);
+            addMetDestinationCard(playerId, card);
+            playerMetDestinationPoints.put(playerId, getPlayerMetDestinationCardPoints(playerId) + points);
             incrementPlayerPoints(playerId, points);
         } else {
-            playerPoints.put(playerId, playerPoints.get(playerId) - points);
+            addUnmetDestinationCard(playerId, card);
+            playerUnmetDestinationPoints.put(playerId, getPlayerUnmetDestinationCardPoints(playerId) - points);
             decrementPlayerPoints(playerId, points);
         }
         setChanged();
@@ -93,9 +132,5 @@ public class PlayerPoints extends Observable implements IModel {
         }
         incrementPlayerPoints(playerId, 10);
         playerWithLongestPath = playerId;
-    }
-
-    public Optional<UUID> getPlayerWithLongestPath() {
-        return Optional.ofNullable(playerWithLongestPath);
     }
 }

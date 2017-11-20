@@ -5,7 +5,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
+
+import teamseth.cs340.common.models.server.boards.Route;
 
 /**
  * Created by Seth on 11/20/2017.
@@ -15,19 +16,22 @@ public class SelectRouteFragment extends DialogFragment {
 
 
     private String[] routes;
+    private Route[] actRoutes;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final String[] route = {null};
+        final Route[] actRoute = {null};
+        final int[] selection = {0};
         builder.setTitle("Select Route")
                 .setSingleChoiceItems(routes, 0, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         // TODO Auto-generated method stub
-                        route[0] = routes[arg1];
+                        selection[0] = arg1;
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -38,22 +42,22 @@ public class SelectRouteFragment extends DialogFragment {
 
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO do the choosing of the dialog box here
-                        Toast.makeText(getContext(), "Chose on " + route[0], Toast.LENGTH_SHORT).show();
-                        String route1 = "ooBoyooo";
-                        String route2 = "kktttkkkk";
-                        String[] rts = new String[2];
-                        rts[0] = route1;
-                        rts[1] = route2;
+                        actRoute[0] = actRoutes[selection[0]];
                         SelectCardsFragment newFragment = new SelectCardsFragment();
-                        newFragment.setArray(rts);
-                        newFragment.show(getActivity().getFragmentManager(), "datePicker");
+                        newFragment.setRoute(actRoute);
+                        newFragment.show(getActivity().getFragmentManager(), "Choose Cards");
                     }
-                });
+                })
+                ;
         // Create the AlertDialog object and return it
         return builder.create();
     }
 
     public void setArray(String[] rts) {
         routes = rts;
+    }
+
+    public void setRoutes(Route[] actRoutes) {
+        this.actRoutes = actRoutes;
     }
 }

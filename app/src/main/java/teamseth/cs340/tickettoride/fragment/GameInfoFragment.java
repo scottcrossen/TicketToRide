@@ -1,8 +1,6 @@
 package teamseth.cs340.tickettoride.fragment;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
+import java.util.UUID;
+
 import teamseth.cs340.common.commands.server.NextTurnCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
-import java.util.UUID;
 import teamseth.cs340.common.models.client.ClientModelRoot;
-import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
@@ -80,7 +77,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         View rootView = inflater.inflate(R.layout.fragment_game_info, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
-
         getActivity().setTitle(title);
 
         //TODO set up the cards to update according to what is shown

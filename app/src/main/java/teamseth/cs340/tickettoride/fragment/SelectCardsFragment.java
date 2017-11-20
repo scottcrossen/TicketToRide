@@ -5,6 +5,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -38,43 +40,80 @@ public class SelectCardsFragment extends DialogFragment {
 
         final RadioGroup cardColor = view.findViewById(R.id.card_selected_to_use);
         final CheckBox useLocomotive = view.findViewById(R.id.choose_rainbow_cards);
+        final RadioButton blackBtn = view.findViewById(R.id.choose_black_cards);
+        final RadioButton blueBtn = view.findViewById(R.id.choose_blue_cards);
+        final RadioButton orangeBtn = view.findViewById(R.id.choose_orange_cards);
+        final RadioButton yellowBtn = view.findViewById(R.id.choose_yellow_cards);
+        final RadioButton whiteBtn = view.findViewById(R.id.choose_white_cards);
+        final RadioButton greenBtn = view.findViewById(R.id.choose_green_cards);
+        final RadioButton purpleBtn = view.findViewById(R.id.choose_purple_cards);
+        final RadioButton redBtn = view.findViewById(R.id.choose_red_cards);
+        final RadioButton locoBtn = view.findViewById(R.id.choose_no_colored_cards);
+        final EditText number = (EditText) view.findViewById(R.id.number_rainbow_cards_to_use);
+
         ResourceColor color = claimThisRoute[0].getColor();
         switch (color) {
             case RAINBOW:
-                break;
-            case BLACK:
-                final RadioButton blackBtn = view.findViewById(R.id.choose_black_cards);
                 blackBtn.setVisibility(View.VISIBLE);
-                break;
-            case BLUE:
-                final RadioButton blueBtn = view.findViewById(R.id.choose_blue_cards);
+                blackBtn.setChecked(true);
                 blueBtn.setVisibility(View.VISIBLE);
-                break;
-            case ORANGE:
-                final RadioButton orangeBtn = view.findViewById(R.id.choose_orange_cards);
                 orangeBtn.setVisibility(View.VISIBLE);
-                break;
-            case YELLOW:
-                final RadioButton yellowBtn = view.findViewById(R.id.choose_yellow_cards);
                 yellowBtn.setVisibility(View.VISIBLE);
-                break;
-            case WHITE:
-                final RadioButton whiteBtn = view.findViewById(R.id.choose_white_cards);
                 whiteBtn.setVisibility(View.VISIBLE);
-                break;
-            case GREEN:
-                final RadioButton greenBtn = view.findViewById(R.id.choose_green_cards);
                 greenBtn.setVisibility(View.VISIBLE);
-                break;
-            case PURPLE:
-                final RadioButton purpleBtn = view.findViewById(R.id.choose_purple_cards);
                 purpleBtn.setVisibility(View.VISIBLE);
-                break;
-            case RED:
-                final RadioButton redBtn = view.findViewById(R.id.choose_red_cards);
                 redBtn.setVisibility(View.VISIBLE);
                 break;
+            case BLACK:
+                blackBtn.setVisibility(View.VISIBLE);
+                blackBtn.setChecked(true);
+                break;
+            case BLUE:
+                blueBtn.setVisibility(View.VISIBLE);
+                blueBtn.setChecked(true);
+                break;
+            case ORANGE:
+                orangeBtn.setVisibility(View.VISIBLE);
+                orangeBtn.setChecked(true);
+                break;
+            case YELLOW:
+                yellowBtn.setVisibility(View.VISIBLE);
+                yellowBtn.setChecked(true);
+                break;
+            case WHITE:
+                whiteBtn.setVisibility(View.VISIBLE);
+                whiteBtn.setChecked(true);
+                break;
+            case GREEN:
+                greenBtn.setVisibility(View.VISIBLE);
+                greenBtn.setChecked(true);
+                break;
+            case PURPLE:
+                purpleBtn.setVisibility(View.VISIBLE);
+                purpleBtn.setChecked(true);
+                break;
+            case RED:
+                redBtn.setVisibility(View.VISIBLE);
+                redBtn.setChecked(true);
+                break;
         }
+
+        number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                useLocomotive.setChecked(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         builder.setTitle("Choose Cards")
                 //.setView(R.layout.dialog_select_cards)
@@ -102,8 +141,10 @@ public class SelectCardsFragment extends DialogFragment {
                         //TODO Claim the route here
                         //this is the route-> claimThisRoute[0];
                         if(useLocomotive.isChecked()) {
-                            EditText number = (EditText) view.findViewById(R.id.number_rainbow_cards_to_use);
-                            int numRainbowToUse = Integer.parseInt(number.getText().toString());
+                            String num = number.getText().toString();
+                            if(!num.isEmpty()) {
+                                int numRainbowToUse = Integer.parseInt(num);
+                            }
                         }
                     }
                 });

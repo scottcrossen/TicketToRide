@@ -4,6 +4,7 @@ import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.activity.ChooseDestCardsActivity;
+import teamseth.cs340.tickettoride.activity.GameFinishActivity;
 import teamseth.cs340.tickettoride.activity.GameListActivity;
 import teamseth.cs340.tickettoride.activity.GameLobbyActivity;
 import teamseth.cs340.tickettoride.activity.LoginActivity;
@@ -26,6 +27,8 @@ public class ActivityDecider {
                     return ChooseDestCardsActivity.class;
                 case PLAYING:
                     return MapActivity.class;
+                case FINISHED:
+                    return GameFinishActivity.class;
                 default:
                     return GameListActivity.class;
             }

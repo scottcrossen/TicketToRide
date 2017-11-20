@@ -29,8 +29,7 @@ public class DrawView extends View {
     private Float offsetXend;
     private Route route;
 
-    //TODO add an int offset for startView and EndView, useful for double routes
-    public DrawView(Context context, Route rt, View startView, View endView) {//String name) {//, int routeLength) {
+    public DrawView(Context context, Route rt, View startView, View endView) {
         super(context);
         setWillNotDraw(false);
         paint.setStrokeWidth(15);

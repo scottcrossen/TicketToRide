@@ -1,6 +1,5 @@
 package teamseth.cs340.common.models.client.board;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
@@ -42,9 +41,11 @@ public class Board extends Observable implements IModel {
     }
 
     public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {
-        List<ResourceColor> colors = new ArrayList<>();
-        colors.add(color);
-        return routes.getMatchingRoutes(city1, city2, colors);
+        return routes.getMatchingRoutes(city1, city2, color);
+    }
+
+    public List<Route> getMatchingRoutes(CityName city1, CityName city2) {
+        return routes.getMatchingRoutes(city1, city2);
     }
 
     public Set<Route> getAllClaimedRoutes() {

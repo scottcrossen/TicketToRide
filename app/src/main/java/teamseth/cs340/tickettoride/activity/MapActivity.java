@@ -2,6 +2,7 @@ package teamseth.cs340.tickettoride.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.client.board.Board;
 import teamseth.cs340.common.models.client.cards.CurrentCards;
@@ -30,6 +32,7 @@ import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.common.models.client.games.GameModel;
 import teamseth.cs340.common.models.client.history.CommandHistory;
 import teamseth.cs340.common.models.client.points.PlayerPoints;
+import teamseth.cs340.common.models.server.games.GameState;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
@@ -42,6 +45,8 @@ import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
 import teamseth.cs340.tickettoride.fragment.SingleTextFragment;
+import teamseth.cs340.tickettoride.util.ActivityDecider;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * Created by Seth on 10/13/2017.
@@ -278,29 +283,38 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object arg) {
-        if (fragment instanceof IUpdatableFragment) {
-            IUpdatableFragment updateFragment = (IUpdatableFragment) fragment;
-            if (updateFragment instanceof MapFragment) {
-                if (observable instanceof Board) updateFragment.update();
-            } else if (updateFragment instanceof ChatFragment) {
-                if (observable instanceof CurrentChat) updateFragment.update();
-            } else if (updateFragment instanceof GameInfoFragment) {
-                if (observable instanceof OtherPlayerCards) updateFragment.update();
-                if (observable instanceof FaceUpCards) updateFragment.update();
-                if (observable instanceof GameModel) updateFragment.update();
-            } else if (updateFragment instanceof HistoryFragment) {
-                if (observable instanceof CommandHistory) updateFragment.update();
-            } else if (updateFragment instanceof OtherPlayersFragment) {
-                if (observable instanceof PlayerPoints) updateFragment.update();
-                if (observable instanceof OtherPlayerCards) updateFragment.update();
-                if (observable instanceof PlayerCarts) updateFragment.update();
-            } else if (updateFragment instanceof PlayerFragment) {
-                if (observable instanceof CurrentCards) updateFragment.update();
-                if (observable instanceof PlayerPoints) updateFragment.update();
-                if (observable instanceof PlayerCarts) updateFragment.update();
-                if (observable instanceof PlayerPoints) updateFragment.update();
-            } else if (updateFragment instanceof DemoFragment) {
+        try {
+            if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PLAYING)) {
+                Poller.getInstance(this.getApplicationContext()).reset();
+                this.runOnUiThread(() -> Toaster.getInstance().makeToast(this.getApplicationContext(), "Game finished."));
+                startActivity(new Intent(this, ActivityDecider.next()));
+                this.finish();
+            } else if (fragment instanceof IUpdatableFragment) {
+                IUpdatableFragment updateFragment = (IUpdatableFragment) fragment;
+                if (updateFragment instanceof MapFragment) {
+                    if (observable instanceof Board) updateFragment.update();
+                } else if (updateFragment instanceof ChatFragment) {
+                    if (observable instanceof CurrentChat) updateFragment.update();
+                } else if (updateFragment instanceof GameInfoFragment) {
+                    if (observable instanceof OtherPlayerCards) updateFragment.update();
+                    if (observable instanceof FaceUpCards) updateFragment.update();
+                    if (observable instanceof GameModel) updateFragment.update();
+                } else if (updateFragment instanceof HistoryFragment) {
+                    if (observable instanceof CommandHistory) updateFragment.update();
+                } else if (updateFragment instanceof OtherPlayersFragment) {
+                    if (observable instanceof PlayerPoints) updateFragment.update();
+                    if (observable instanceof OtherPlayerCards) updateFragment.update();
+                    if (observable instanceof PlayerCarts) updateFragment.update();
+                } else if (updateFragment instanceof PlayerFragment) {
+                    if (observable instanceof CurrentCards) updateFragment.update();
+                    if (observable instanceof PlayerPoints) updateFragment.update();
+                    if (observable instanceof PlayerCarts) updateFragment.update();
+                    if (observable instanceof PlayerPoints) updateFragment.update();
+                } else if (updateFragment instanceof DemoFragment) {
+                }
             }
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

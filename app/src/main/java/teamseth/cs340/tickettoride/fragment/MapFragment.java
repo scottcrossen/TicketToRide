@@ -126,7 +126,6 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         saultStMarie = (ImageView) rootView.findViewById(R.id.saultStMarieCity);
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
-        //TODO add double routes using overloaded DrawView function
         getActivity().setTitle(title);
 
         allClaimedRoutes = new HashSet<Route>();
@@ -159,7 +158,6 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
 
     private void removeRouteFromView(Route route) {
         for (DrawView dr : allRoutes) {
-            //TODO add a check for double routes
             if((dr.getRoute().equals(route))) {
                 relativeLayout.removeView(dr);
                 allRoutes.remove(dr);

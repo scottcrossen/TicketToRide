@@ -10,11 +10,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 
 /**
@@ -23,16 +24,13 @@ import teamseth.cs340.common.models.server.boards.Route;
 
 public class MapView extends View {
     private Paint paint = new Paint();
-    private Set<DrawView> routeNames;
-    private Boolean routeOwned = false;
+    private List<DrawView> routeNames;
     private Map<Route, RectF> rectFList = new HashMap<>();
-    //TODO print length of route here, do it in center of route
 
-    //TODO add an int offset for startView and EndView, useful for double routes
     public MapView(Context context) {
         super(context);
         setWillNotDraw(false);
-        routeNames = new HashSet<DrawView>();
+        routeNames = new ArrayList<>();
     }
 
 
@@ -75,6 +73,8 @@ public class MapView extends View {
         }
     }
 
+    List<Route> listDoubleRoute = new ArrayList<>();
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -85,9 +85,15 @@ public class MapView extends View {
             case MotionEvent.ACTION_UP:
                 for(DrawView dr : routeNames) {
                     if (rectFList.get(dr.getRoute()).contains(touchX, touchY)) {
+                        Toast.makeText(getContext(), "Clicked on " + dr.getRoute(), Toast.LENGTH_SHORT).show();
+
                         //if(dr.getRoute().isDouble()) then go to the choose which route screen
                         //else go immediately to the choose which cards to use screen
-                        Toast.makeText(getContext(), "Clicked on " + dr.getRoute(), Toast.LENGTH_SHORT).show();
+                        listDoubleRoute = ClientModelRoot.board.getMatchingRoutes(dr.getRoute().getCity1(),
+                                dr.getRoute().getCity2());
+                        for( Route rt : listDoubleRoute) {
+                            Toast.makeText(getContext(), "found match on " + rt, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 break;

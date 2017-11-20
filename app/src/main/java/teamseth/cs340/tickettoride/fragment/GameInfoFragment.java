@@ -20,6 +20,7 @@ import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 /**
  * Created by Seth on 10/14/2017.
@@ -86,7 +87,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         //TODO set onclicklisteners for the deck drawing, dest card drawing, and individual card picking
 
         try {
-            if (ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
+            if (ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().get().equals(Login.getUserId())){
                 isTurn = true;
                 Login.getInstance().setCardsDrawn(0);
             } else
@@ -117,60 +118,90 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int cardIndex = 0;
-                try {
-                    drawCard(cardIndex);
-                } catch (ResourceNotFoundException e) {
-                    e.printStackTrace();
+                String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(0).toString().toLowerCase();
+                if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(0))){
+                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
+//                int cardIndex = 0;
+//                try {
+//                    drawCard(cardIndex);
+//                } catch (ResourceNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int cardIndex = 1;
-                try {
-                    drawCard(cardIndex);
-                } catch (ResourceNotFoundException e) {
-                    e.printStackTrace();
+                String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1).toString().toLowerCase();
+                if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1))){
+                    Toast.makeText(getContext(), "You drew a " + cardColor + "card. Nice.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
+//                int cardIndex = 1;
+//                try {
+//                    drawCard(cardIndex);
+//                } catch (ResourceNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
         card3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int cardIndex = 2;
-                try {
-                    drawCard(cardIndex);
-                } catch (ResourceNotFoundException e) {
-                    e.printStackTrace();
+                String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2).toString().toLowerCase();
+                if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2))){
+                    Toast.makeText(getContext(), "You drew a " + cardColor + "card. Nice.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
+//                int cardIndex = 2;
+//                try {
+//                    drawCard(cardIndex);
+//                } catch (ResourceNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
         card4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int cardIndex = 3;
-                try {
-                    drawCard(cardIndex);
-                } catch (ResourceNotFoundException e) {
-                    e.printStackTrace();
+                String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3).toString().toLowerCase();
+                if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3))){
+                    Toast.makeText(getContext(), "You drew a " + cardColor + "card. Nice.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
+//                int cardIndex = 3;
+//                try {
+//                    drawCard(cardIndex);
+//                } catch (ResourceNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
         card5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int cardIndex = 4;
-                try {
-                    drawCard(cardIndex);
-                } catch (ResourceNotFoundException e) {
-                    e.printStackTrace();
+                String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(4).toString().toLowerCase();
+                if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(4))){
+                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
+//                int cardIndex = 4;
+//                try {
+//                    drawCard(cardIndex);
+//                } catch (ResourceNotFoundException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -186,6 +217,12 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             @Override
             public void onClick(View v) {
                 //TODO add top card to players hand, traindeck decrements
+//                String cardColor = ClientModelRoot.getInstance()
+                if (PlayerTurnTracker.getInstance().drawFaceDownResourceCard(getContext())){
+                    Toast.makeText(getContext(), "You drew a card from the deck. You're cool.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -194,39 +231,39 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         return rootView;
     }
 
-    private void drawCard(int cardIndex) throws ResourceNotFoundException {
-        if(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
-            try {
-//                Toast.makeText(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() + ResourceColor.RAINBOW.toString() , Toast.LENGTH_SHORT).show();
-                if (ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() == ResourceColor.RAINBOW.toString()) {
-                    if (Login.getInstance().getCardsDrawn() == 0){
-                        isTurn = false;
-                        new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
-                        new CommandTask(this.getContext()).execute(new NextTurnCommand());
-                    } else {
-                        Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Login.getInstance().setCardsDrawn(Login.getInstance().getCardsDrawn() + 1);
-//                    Toast.makeText(getContext(), Login.getInstance().getCardsDrawn() , Toast.LENGTH_SHORT).show();
-                    new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
-                }
-//                this.getView().invalidate();
-            } catch (ResourceNotFoundException e) {
-                e.printStackTrace();
-            }
-            checkChangeTurn();
-            setImage(1);
-            setImage(2);
-            setImage(3);
-            setImage(4);
-            setImage(5);
-        } else
-        {
-            Toast.makeText(getContext(), "It's not your turn! You can't cheat in electronic board games!", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void drawCard(int cardIndex) throws ResourceNotFoundException {
+//        if(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
+//            try {
+////                Toast.makeText(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() + ResourceColor.RAINBOW.toString() , Toast.LENGTH_SHORT).show();
+//                if (ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() == ResourceColor.RAINBOW.toString()) {
+//                    if (Login.getInstance().getCardsDrawn() == 0){
+//                        isTurn = false;
+//                        new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
+//                        new CommandTask(this.getContext()).execute(new NextTurnCommand());
+//                    } else {
+//                        Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                } else {
+//                    Login.getInstance().setCardsDrawn(Login.getInstance().getCardsDrawn() + 1);
+////                    Toast.makeText(getContext(), Login.getInstance().getCardsDrawn() , Toast.LENGTH_SHORT).show();
+//                    new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
+//                }
+////                this.getView().invalidate();
+//            } catch (ResourceNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            checkChangeTurn();
+//            setImage(1);
+//            setImage(2);
+//            setImage(3);
+//            setImage(4);
+//            setImage(5);
+//        } else
+//        {
+//            Toast.makeText(getContext(), "It's not your turn! You can't cheat in electronic board games!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void checkChangeTurn() {
         if (Login.getInstance().getCardsDrawn() > 1 || !isTurn){

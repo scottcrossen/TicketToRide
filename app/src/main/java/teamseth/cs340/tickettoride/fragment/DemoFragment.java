@@ -134,6 +134,12 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(this.getContext(), ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().get().toString(), Toast.LENGTH_SHORT).show();
                     }
                     break;
+                case R.id.reduce_carts_zero:
+                    int num_carts = ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId());
+                    if (num_carts > 0) {
+                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new RemoveTrainCartsCommand(num_carts, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    }
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

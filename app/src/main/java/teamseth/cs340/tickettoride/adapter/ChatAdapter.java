@@ -73,11 +73,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public void update() {
         ArrayList<Message> oldList = messageList;
-        System.out.println(messageList.size());
         ArrayList<Message> newMessageList = (ArrayList<Message>) ClientModelRoot.chat.getMessages().clone();
-        System.out.println(newMessageList.size());
         messageList = newMessageList;
-        System.out.println(messageList.size());
         if (oldList.size() != messageList.size()) activity.runOnUiThread(() -> notifyDataSetChanged());
     }
 

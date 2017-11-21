@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.auth.AuthToken;
 
 /**
@@ -20,7 +21,13 @@ public class Login extends Observable implements Serializable {
         }
         return instance;
     }
-
+    private Login() {
+        if (debug) {
+            Logger.getInstance().setVerbosity(6);
+        } else {
+            Logger.getInstance().setVerbosity(3);
+        }
+    }
     public static final boolean debug = true;
     private static AuthToken token;
     private static String serverPort = "8081";

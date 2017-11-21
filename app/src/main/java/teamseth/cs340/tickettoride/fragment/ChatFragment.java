@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,7 +41,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, IUpd
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Toast.makeText(this.getContext(), "Chat", Toast.LENGTH_SHORT).show();
         View v = inflater.inflate(R.layout.fragment_chat, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         sendBtn = v.findViewById(R.id.send_chat);

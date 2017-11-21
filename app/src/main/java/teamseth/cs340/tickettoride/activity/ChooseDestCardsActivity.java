@@ -16,7 +16,6 @@ import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChooseDestCardsFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
-import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * Created by ajols on 10/14/2017.
@@ -99,7 +98,6 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
         try {
             if (!ClientModelRoot.games.getActive().getState().equals(GameState.START) ) {
                 Poller.getInstance(this.getApplicationContext()).reset();
-                this.runOnUiThread(() -> Toaster.getInstance().makeToast(this.getApplicationContext(), "Starting."));
                 startActivity(new Intent(this, ActivityDecider.next()));
                 this.finish();
             }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -19,6 +18,7 @@ import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * Created by Seth on 10/14/2017.
@@ -75,7 +75,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Toast.makeText(this.getContext(), "Game Info", Toast.LENGTH_SHORT).show();
         View rootView = inflater.inflate(R.layout.fragment_game_info, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
@@ -118,9 +117,9 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(0).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(0))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                    if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
                 } else {
-                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 0;
 //                try {
@@ -136,9 +135,9 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                    if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
                 } else {
-                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 1;
 //                try {
@@ -154,9 +153,9 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                    if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
                 } else {
-                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 2;
 //                try {
@@ -172,9 +171,9 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                    if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
                 } else {
-                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 3;
 //                try {
@@ -190,9 +189,9 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(4).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(4))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
+                    if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
                 } else {
-                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 4;
 //                try {
@@ -226,9 +225,9 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 //TODO add top card to players hand, traindeck decrements
 //                String cardColor = ClientModelRoot.getInstance()
                 if (PlayerTurnTracker.getInstance().drawFaceDownResourceCard(getContext())){
-                    Toast.makeText(getContext(), "You drew a card from the deck. You're cool.", Toast.LENGTH_SHORT).show();
+                    if (Login.debug) Toaster.shortT(getContext(), "You drew a random card.");
                 } else {
-                    Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
+                    Toaster.shortT(getContext(), "It's not your turn.");
                 }
             }
         });
@@ -241,19 +240,16 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 //    private void drawCard(int cardIndex) throws ResourceNotFoundException {
 //        if(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
 //            try {
-////                Toast.makeText(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() + ResourceColor.RAINBOW.toString() , Toast.LENGTH_SHORT).show();
 //                if (ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() == ResourceColor.RAINBOW.toString()) {
 //                    if (Login.getInstance().getCardsDrawn() == 0){
 //                        isTurn = false;
 //                        new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
 //                        new CommandTask(this.getContext()).execute(new NextTurnCommand());
 //                    } else {
-//                        Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
 //                    }
 //
 //                } else {
 //                    Login.getInstance().setCardsDrawn(Login.getInstance().getCardsDrawn() + 1);
-////                    Toast.makeText(getContext(), Login.getInstance().getCardsDrawn() , Toast.LENGTH_SHORT).show();
 //                    new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
 //                }
 ////                this.getView().invalidate();
@@ -268,7 +264,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 //            setImage(5);
 //        } else
 //        {
-//            Toast.makeText(getContext(), "It's not your turn! You can't cheat in electronic board games!", Toast.LENGTH_SHORT).show();
 //        }
 //    }
 

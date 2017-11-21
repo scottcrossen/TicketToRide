@@ -69,9 +69,6 @@ public class PlayerTurnTracker implements Observer {
      */
     public boolean drawFaceUpResourceCard(Context context, ResourceColor color) {
         try {
-//            System.out.println(isPlayerTurn());
-//            System.out.println(ClientModelRoot.cards.faceUp.getFaceUpCards().size());
-//            System.out.println(ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color)));
             if (isPlayerTurn() &&
                     ClientModelRoot.cards.faceUp.getFaceUpCards().size() > 0 &&
                     ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color))
@@ -237,8 +234,6 @@ public class PlayerTurnTracker implements Observer {
     public boolean isPlayerTurn() {
         boolean output;
         try {
-//            System.out.println(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().map((UUID turnId) -> turnId.equals(Login.getUserId())).orElseGet(() -> false));
-//            System.out.println(Login.getUserId());
             output = ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().map((UUID turnId) -> turnId.equals(Login.getUserId())).orElseGet(() -> false);
         } catch (Exception e) {
             output = false;
@@ -248,7 +243,6 @@ public class PlayerTurnTracker implements Observer {
         } else if ((state instanceof NotTurnState) && output) {
             this.setState(new DecideActionState());
         }
-//        System.out.println(output);
         return output;
     }
 

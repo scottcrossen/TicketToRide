@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +22,7 @@ import teamseth.cs340.common.commands.server.UpdateAllClientsCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
@@ -59,7 +59,6 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Toast.makeText(this.getContext(), "Demonstrations", Toast.LENGTH_SHORT).show();
         View rootView = inflater.inflate(R.layout.fragment_demo, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
 
@@ -119,7 +118,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     break;
                 case R.id.add_train_carts:
                     //new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new AddTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
-                    System.out.println("Deprecated method access attempted.");
+                    Logger.warn("Deprecated method access attempted.");
                     break;
                 case R.id.remove_train_carts:
                     new CommandTask(this.getContext()).execute(new DecrementPlayerCartsCommand(1));
@@ -134,7 +133,6 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                 case R.id.change_turn:
                     if (ClientModelRoot.getInstance().cards.getDestinationCards().size() > 0) {
                         new CommandTask(this.getContext()).execute(new NextTurnCommand());
-                        Toast.makeText(this.getContext(), ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().get().toString(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.reduce_carts_zero:

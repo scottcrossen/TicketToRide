@@ -54,7 +54,6 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void update(Observable o, Object arg) {
-        //ClientModelRoot.getInstance().cards.getDestinationCards().stream().forEach((DestinationCard card) -> System.out.println(card.toString()));
         if (PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size() > 0) {
             setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
         } else {
@@ -128,7 +127,6 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
 //
 ////        setDestinationCards(ClientModelRoot.getInstance().cards.getDestinationCards());
 //
-////                System.out.println(ClientModelRoot.cards.getDestinationCards());
 //        test.add(new DestinationCard(CityName.Vancouver, CityName.SaltLakeCity, 90));
 //        test.add(new DestinationCard(CityName.Calgary, CityName.Raleigh, 90));
 //        test.add(new DestinationCard(CityName.Toronto, CityName.SantaFe, 90));

@@ -2,6 +2,7 @@ package teamseth.cs340.server.main;
 
 import java.util.concurrent.TimeUnit;
 
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.server.communicator.ServerCommunicator;
 
 /**
@@ -14,7 +15,7 @@ public class Main {
         int failCount = 0;
         while (!fail && failCount < 10) {
             try {
-                System.out.println("Starting fail-safe monitor.");
+                Logger.info("Starting fail-safe monitor.");
                 ServerCommunicator server = new ServerCommunicator();
                 String[] inputArgs = {"8081"};
                 for (int i = 0; i < args.length; i++) {
@@ -26,7 +27,7 @@ public class Main {
                 server.main(inputArgs);
                 fail=true;
             } catch (Exception e) {
-                System.out.println("Server failure caught by monitor.");
+                Logger.error("Server failure caught by monitor.");
                 e.printStackTrace();
                 failCount ++;
                 try {

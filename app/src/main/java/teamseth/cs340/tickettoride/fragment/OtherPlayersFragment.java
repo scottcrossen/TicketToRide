@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -73,7 +72,6 @@ public class OtherPlayersFragment extends Fragment implements IUpdatableFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Toast.makeText(this.getContext(), "Other Players", Toast.LENGTH_SHORT).show();
         rootView = inflater.inflate(R.layout.fragment_other_players_info, container, false);
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];

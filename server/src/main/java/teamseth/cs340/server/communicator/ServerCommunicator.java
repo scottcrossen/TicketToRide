@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import teamseth.cs340.common.models.server.ServerModelRoot;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.server.Config;
 import teamseth.cs340.server.communicator.controllers.CommandHandler;
 
@@ -26,7 +27,7 @@ public class ServerCommunicator {
 
     private void run(String portNumber) {
 
-        System.out.println("Initializing HTTP Server on port " + portNumber.toString());
+        Logger.info("Initializing HTTP Server on port " + portNumber.toString());
 
         try {
             server = HttpServer.create(new InetSocketAddress(Integer.parseInt(portNumber)), MAX_WAITING_CONNECTIONS);
@@ -37,19 +38,19 @@ public class ServerCommunicator {
 
         server.setExecutor(null);
 
-        System.out.println("Creating models and globals");
+        Logger.info("Creating models and globals");
 
         ServerModelRoot serverFacade = ServerModelRoot.getInstance();
         Config config = Config.getInstance();
 
-        System.out.println("Creating contexts");
+        Logger.info("Creating contexts");
 
         server.createContext("/command", new CommandHandler());
 
-        System.out.println("Starting server");
+        Logger.info("Starting server");
 
         server.start();
 
-        System.out.println("Server started");
+        Logger.info("Server started");
     }
 }

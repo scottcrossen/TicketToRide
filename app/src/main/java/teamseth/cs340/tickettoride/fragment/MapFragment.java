@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -82,7 +81,6 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Toast.makeText(this.getContext(), "Map", Toast.LENGTH_SHORT).show();
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         disableHardwareRendering(rootView);
         int i = getArguments().getInt(ARG_TAB_NUMBER);

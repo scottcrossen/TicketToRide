@@ -20,7 +20,6 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.GameLobbyFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
-import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * @author Scott Leland Crossen
@@ -120,7 +119,6 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
                 this.finish();
             } else if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PREGAME)) {
                 Poller.getInstance(this.getApplicationContext()).reset();
-                this.runOnUiThread(() -> Toaster.getInstance().makeToast(this.getApplicationContext(), "New game started."));
                 startActivity(new Intent(this, ActivityDecider.next()));
                 this.finish();
             } else {

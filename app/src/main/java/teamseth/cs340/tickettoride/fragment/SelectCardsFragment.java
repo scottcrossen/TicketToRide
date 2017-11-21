@@ -13,14 +13,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 import static teamseth.cs340.common.models.server.cards.ResourceColor.RAINBOW;
 
@@ -180,10 +181,10 @@ public class SelectCardsFragment extends DialogFragment {
                         }
                         if(PlayerTurnTracker.getInstance().claimRoute(getContext(),claimThisRoute[0],colors))
                         {
-                            Toast.makeText(getContext(), "Claimed Route", Toast.LENGTH_SHORT).show();
+                            if (Login.debug) Toaster.shortT(getContext(), "Claimed a Route");
                         }
                         else {
-                            Toast.makeText(getContext(), "Cannot Claim Route", Toast.LENGTH_SHORT).show();
+                            Toaster.shortT(getContext(), "Cannot Claim Route");
                         }
                     }
                 });

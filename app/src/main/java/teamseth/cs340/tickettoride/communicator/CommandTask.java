@@ -8,6 +8,7 @@ import java.util.Arrays;
 import teamseth.cs340.common.commands.ICommand;
 import teamseth.cs340.common.commands.client.IClientCommand;
 import teamseth.cs340.common.commands.server.IServerCommand;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.tickettoride.util.Toaster;
 
@@ -30,20 +31,20 @@ public class CommandTask extends AsyncTask<ICommand, Void, String> {
                 try {
                     Result result = new Result(() -> null);
                     if (currentObject instanceof IServerCommand) {
-                        System.out.println("Executing server-side command: " + currentObject.toString());
+                        Logger.debug("Executing server-side command: " + currentObject.toString());
                         result = (Result) ClientCommunicator.post((IServerCommand) currentObject);
-                        System.out.println("Successfully executed server-side command");
+                        Logger.debug("Successfully executed server-side command");
                     } else if (currentObject instanceof IClientCommand) {
-                        System.out.println("Executing client-side command: " + currentObject.toString());
+                        Logger.debug("Executing client-side command: " + currentObject.toString());
                         result = (Result) ((IClientCommand) currentObject).call();
-                        System.out.println("Successfully executed client-side command");
+                        Logger.debug("Successfully executed client-side command");
                     } else {
-                        System.err.println("You screwed something up");
+                        Logger.error("You screwed something up");
                     }
                     currentObject = result.get();
                 } catch (Exception e) {
-                    System.out.println("An error occured while executing command " + currentCommand.toString());
-                    System.out.println(e.toString());
+                    Logger.error("An error occured while executing command " + currentCommand.toString());
+                    e.printStackTrace();
                     currentObject = e;
                 }
             }
@@ -53,8 +54,7 @@ public class CommandTask extends AsyncTask<ICommand, Void, String> {
     }
 
     protected void onPostExecute(String output) {
-        System.out.println(output);
-        if (output != "") Toaster.getInstance().makeToast(this.context, output);
+        if (output != "") Toaster.longT(this.context, output);
     }
 
 }

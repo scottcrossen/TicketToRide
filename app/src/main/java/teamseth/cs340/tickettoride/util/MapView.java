@@ -103,7 +103,7 @@ public class MapView extends View {
                         /*listDoubleRoute = ClientModelRoot.board.getMatchingRoutes(dr.getRoute().getCity1(),
                                 dr.getRoute().getCity2());
                         for( Route rt : listDoubleRoute) {
-                            Toast.makeText(getContext(), "found match on " + rt, Toast.LENGTH_SHORT).show();
+                            Toaster.shortT(getContext(), "found match on " + rt);
                         }*/
                             }
                         }

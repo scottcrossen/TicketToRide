@@ -17,7 +17,17 @@ public class Toaster {
         return instance;
     }
 
-    public void makeToast(Context context, String message) {
+    public static final void toast(Context context, String message) {
+        longT(context, message);
+    }
+
+    public static final void longT(Context context, String message) {
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static final void shortT(Context context, String message) {
         if (context != null) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }

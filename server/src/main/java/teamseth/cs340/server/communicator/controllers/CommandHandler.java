@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
 import teamseth.cs340.common.commands.ICommand;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.common.util.Serializer;
 
@@ -31,7 +32,7 @@ public class CommandHandler implements HttpHandler {
             if (exchange.getRequestMethod().toLowerCase().equals("post")) {
 
                 ICommand reqCommand = (ICommand) Serializer.getInstance().read(exchange.getRequestBody());
-                System.out.println("Executing Command: " + reqCommand.toString());
+                Logger.debug("Executing Command: " + reqCommand.toString());
                 Result result = reqCommand.call();
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

@@ -45,7 +45,6 @@ import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
-import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
  * Created by Seth on 10/13/2017.
@@ -280,12 +279,9 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object arg) {
-        //System.out.println("Printing select routes");
-        //ClientModelRoot.getInstance().board.getMatchingRoutes(CityName.Seattle, CityName.Vancouver).stream().forEach((Route route)-> System.out.println(route.toString()));
         try {
             if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PLAYING)) {
                 Poller.getInstance(this.getApplicationContext()).reset();
-                this.runOnUiThread(() -> Toaster.getInstance().makeToast(this.getApplicationContext(), "Game finished."));
                 startActivity(new Intent(this, ActivityDecider.next()));
                 this.finish();
             } else if (fragment instanceof IUpdatableFragment) {

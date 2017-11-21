@@ -14,6 +14,7 @@ import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.users.UserCreds;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
@@ -37,17 +38,17 @@ public class DebugCommandShortcut implements Runnable {
     }
 
     public void run() {
-        System.out.println("Starting command queue");
-        System.out.println("Running register command");
+        Logger.debug("Starting command queue");
+        Logger.debug("Running register command");
         String username = Long.toString(new Random().nextLong());
         String password = Long.toString(new Random().nextLong());
         new CommandTask(this.context).execute(new RegisterCommand(new UserCreds(username, password)));
         while (Login.getInstance().getToken() == null) pause();
-        System.out.println("Running create game command");
+        Logger.debug("Running create game command");
         new CommandTask(this.context).execute(new CreateGameCommand());
         while (!ClientModelRoot.games.hasActive()) pause();
         try {
-            System.out.println("Running start game command");
+            Logger.debug("Running start game command");
             new CommandTask(this.context).execute(new StartGameCommand(ClientModelRoot.games.getActive().getId()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,20 +62,20 @@ public class DebugCommandShortcut implements Runnable {
             }
         }
         try {
-            System.out.println("Running destination card return command");
+            Logger.debug("Running destination card return command");
             new CommandTask(this.context).execute(new InitialReturnDestinationCardCommand(Optional.empty()));
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
         try {
-        System.out.println("Giving tons of cards to player");
+        Logger.debug("Giving tons of cards to player");
             for (int i=0; i<=40; i++) {
                 new CommandTask(this.context).execute(new DrawResourceCardCommand());
             }
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("Finished command queue");
+        Logger.debug("Finished command queue");
     }
 
     private void pause() {

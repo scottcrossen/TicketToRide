@@ -9,8 +9,9 @@ import java.util.Random;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class RandomList<A> extends ArrayList<A> implements Serializable {
+    private static final Random random = new Random();
     public A popRandom() {
-        int pos = new Random().nextInt(super.size());
+        int pos = random.nextInt(super.size());
         A item = super.get(pos);
         super.remove(pos);
         return item;

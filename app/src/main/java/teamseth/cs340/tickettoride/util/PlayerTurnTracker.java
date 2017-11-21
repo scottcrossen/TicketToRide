@@ -71,7 +71,8 @@ public class PlayerTurnTracker implements Observer {
         try {
             if (isPlayerTurn() &&
                     ClientModelRoot.cards.faceUp.getFaceUpCards().size() > 0 &&
-                    ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color))
+                    ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color)) &&
+                    cardsDrawn < 2
             ) {
                 return state.drawFaceUpResourceCard(context, color);
             } else {
@@ -279,6 +280,9 @@ public class PlayerTurnTracker implements Observer {
     }
 
     private class DecideActionState implements TurnState {
+        public DecideActionState() {
+            cardsDrawn = 0;
+        }
         public boolean drawFaceDownResourceCard(Context context) throws Exception {
             setState(new DrawResourceState());
             return state.drawFaceDownResourceCard(context);
@@ -304,17 +308,18 @@ public class PlayerTurnTracker implements Observer {
         public void update() {}
     }
 
+    private int cardsDrawn = 0;
     private class DrawResourceState implements TurnState {
-        private int cardsDrawn = 0;
         private Context destroyContext = null;
         private boolean awaitingDestruction = false;
         private int initialAmountOfCards = ClientModelRoot.cards.getResourceCards().size();
         private boolean actionAllowed() {
-            return cardsDrawn == 0 || (!awaitingDestruction && initialAmountOfCards != ClientModelRoot.cards.getResourceCards().size());
+            return (!awaitingDestruction && (cardsDrawn == 0 ||  initialAmountOfCards != ClientModelRoot.cards.getResourceCards().size()));
         }
         public boolean drawFaceDownResourceCard(Context context) throws ResourceNotFoundException {
             if (actionAllowed()) {
-                if (++cardsDrawn == 2) {
+                cardsDrawn++;
+                if (cardsDrawn == 2) {
                     destroyContext = context;
                     awaitingDestruction = true;
                     registerObserver(ClientModelRoot.cards);
@@ -327,7 +332,8 @@ public class PlayerTurnTracker implements Observer {
         }
         public boolean drawFaceUpResourceCard(Context context, ResourceColor color) throws Exception {
             if (actionAllowed() && (!color.equals(ResourceColor.RAINBOW) || cardsDrawn == 0)) {
-                if (++cardsDrawn == 2 || color.equals(ResourceColor.RAINBOW)) {
+                cardsDrawn++;
+                if (cardsDrawn == 2 || color.equals(ResourceColor.RAINBOW)) {
                     destroyContext = context;
                     awaitingDestruction = true;
                     registerObserver(ClientModelRoot.cards);

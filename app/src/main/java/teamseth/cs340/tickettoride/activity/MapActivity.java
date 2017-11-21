@@ -30,9 +30,9 @@ import teamseth.cs340.common.models.client.cards.OtherPlayerCards;
 import teamseth.cs340.common.models.client.carts.PlayerCarts;
 import teamseth.cs340.common.models.client.chat.CurrentChat;
 import teamseth.cs340.common.models.client.games.GameModel;
-import teamseth.cs340.common.models.client.history.CommandHistory;
 import teamseth.cs340.common.models.client.points.PlayerPoints;
 import teamseth.cs340.common.models.server.games.GameState;
+import teamseth.cs340.common.models.client.history.CommandHistory;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
@@ -291,27 +291,30 @@ public class MapActivity extends AppCompatActivity implements Observer {
                 this.finish();
             } else if (fragment instanceof IUpdatableFragment) {
                 IUpdatableFragment updateFragment = (IUpdatableFragment) fragment;
-                if (updateFragment instanceof MapFragment) {
-                    if (observable instanceof Board) updateFragment.update();
-                } else if (updateFragment instanceof ChatFragment) {
-                    if (observable instanceof CurrentChat) updateFragment.update();
-                } else if (updateFragment instanceof GameInfoFragment) {
-                    if (observable instanceof OtherPlayerCards) updateFragment.update();
-                    if (observable instanceof FaceUpCards) updateFragment.update();
-                    if (observable instanceof GameModel) updateFragment.update();
-                } else if (updateFragment instanceof HistoryFragment) {
-                    if (observable instanceof CommandHistory) updateFragment.update();
-                } else if (updateFragment instanceof OtherPlayersFragment) {
-                    if (observable instanceof PlayerPoints) updateFragment.update();
-                    if (observable instanceof OtherPlayerCards) updateFragment.update();
-                    if (observable instanceof PlayerCarts) updateFragment.update();
-                } else if (updateFragment instanceof PlayerFragment) {
-                    if (observable instanceof CurrentCards) updateFragment.update();
-                    if (observable instanceof PlayerPoints) updateFragment.update();
-                    if (observable instanceof PlayerCarts) updateFragment.update();
-                    if (observable instanceof PlayerPoints) updateFragment.update();
-                } else if (updateFragment instanceof DemoFragment) {
-                }
+                this.runOnUiThread(() -> {
+                    if (updateFragment instanceof MapFragment) {
+                        if (observable instanceof Board) updateFragment.update();
+                    } else if (updateFragment instanceof ChatFragment) {
+                        if (observable instanceof CurrentChat) updateFragment.update();
+                    } else if (updateFragment instanceof GameInfoFragment) {
+                        if (observable instanceof OtherPlayerCards) updateFragment.update();
+                        else if (observable instanceof FaceUpCards) updateFragment.update();
+                        else if (observable instanceof GameModel) updateFragment.update();
+                        else if (observable instanceof CurrentCards) updateFragment.update();
+                    } else if (updateFragment instanceof HistoryFragment) {
+                        if (observable instanceof CommandHistory) updateFragment.update();
+                    } else if (updateFragment instanceof OtherPlayersFragment) {
+                        if (observable instanceof PlayerPoints) updateFragment.update();
+                        else if (observable instanceof OtherPlayerCards) updateFragment.update();
+                        else if (observable instanceof PlayerCarts) updateFragment.update();
+                    } else if (updateFragment instanceof PlayerFragment) {
+                        if (observable instanceof CurrentCards) updateFragment.update();
+                        else if (observable instanceof PlayerPoints) updateFragment.update();
+                        else if (observable instanceof PlayerCarts) updateFragment.update();
+                        else if (observable instanceof PlayerPoints) updateFragment.update();
+                    } else if (updateFragment instanceof DemoFragment) {
+                    }
+                });
             }
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();

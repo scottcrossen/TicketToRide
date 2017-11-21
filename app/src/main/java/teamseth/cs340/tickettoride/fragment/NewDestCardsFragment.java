@@ -1,7 +1,7 @@
 package teamseth.cs340.tickettoride.fragment;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,32 +20,32 @@ import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 /**
- * Created by ajols on 10/14/2017.
+ * Created by macrow7 on 11/20/17.
  */
 
-public class ChooseDestCardsFragment extends Fragment implements View.OnClickListener {
+public class NewDestCardsFragment extends Fragment implements View.OnClickListener {
 
-    private CheckBox checkBox1;
-    private CheckBox checkBox2;
-    private CheckBox checkBox3;
-    private Button chooseDestCardsBtn;
-    private Optional<Caller> parent;
+private CheckBox checkBox1;
+private CheckBox checkBox2;
+private CheckBox checkBox3;
+private Button chooseDestCardsBtn;
+private Optional<Caller> parent;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+@Override
+public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         try {
-            parent = Optional.of((Caller) getActivity());
+        parent = Optional.of((Caller) getActivity());
         } catch (Exception e) {
-            parent = Optional.empty();
+        parent = Optional.empty();
         }
         //chooseDestCardsBtn.setEnabled(false);
-    }
+        }
 
-    public interface Caller {
-        void onFragmentSuccess();
-    }
+public interface Caller {
+    void onFragmentSuccess();
+}
 
     public void setDestinationCards(List<DestinationCard> cards) {
         Iterator<DestinationCard> iterator = cards.iterator();
@@ -116,7 +116,7 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         }
 
         new CommandTask(getContext()).execute(new InitialReturnDestinationCardCommand(Optional.ofNullable(returnCard)));
-        parent.map((Caller caller) -> { caller.onFragmentSuccess(); return caller; });
+        parent.map((NewDestCardsFragment.Caller caller) -> { caller.onFragmentSuccess(); return caller; });
     }
 
     public void enableButton() {

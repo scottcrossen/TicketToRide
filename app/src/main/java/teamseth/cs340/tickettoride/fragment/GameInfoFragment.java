@@ -1,6 +1,7 @@
 package teamseth.cs340.tickettoride.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +15,15 @@ import android.widget.Toast;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
 import teamseth.cs340.common.commands.server.NextTurnCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+
+import java.util.LinkedList;
 import java.util.UUID;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.activity.ChooseDestCardsActivity;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
@@ -210,6 +215,23 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 //TODO give player option of 3 destination cards, player must keep 1-3 of these
                 //TODO unused cards return to bottom of deck
+                NewDestCardsFragment prepDestCards = new NewDestCardsFragment();
+////                try {
+////                    prepDestCards.setDestinationCards(ClientModelRoot.cards.getDestinationCards());
+////                } catch (ResourceNotFoundException e) {
+////                    e.printStackTrace();
+////                }
+                LinkedList<DestinationCard> test = ClientModelRoot.cards.getDestinationCards();
+                System.out.println(ClientModelRoot.cards.getDestinationCards());
+                prepDestCards.setDestinationCards(ClientModelRoot.cards.getDestinationCards());
+                Fragment getDestCards = prepDestCards;
+//                Fragment getDestCards = new Fragment();
+//                getDestCards.show()
+//                ((NewDestCardsFragment) getDestCards).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, getDestCards).commit();
+//                Intent intent = new Intent(getActivity(), ChooseDestCardsActivity.class);
+//                getActivity().startActivity(intent);
             }
         });
 

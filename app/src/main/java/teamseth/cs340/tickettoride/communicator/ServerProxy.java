@@ -131,7 +131,6 @@ public class ServerProxy {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //new CommandTask(context).execute(new Chat)
     }
 
     public static boolean canDoChat(Context context, String makeChat) {

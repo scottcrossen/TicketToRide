@@ -52,6 +52,7 @@ import teamseth.cs340.tickettoride.util.Toaster;
  */
 
 public class MapActivity extends AppCompatActivity implements Observer {
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -60,6 +61,14 @@ public class MapActivity extends AppCompatActivity implements Observer {
     private CharSequence mTitle;
     private String[] mTabTitles;
     private Fragment fragment;
+
+    public void disableDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void enableDrawer() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +153,8 @@ public class MapActivity extends AppCompatActivity implements Observer {
         }
         // Handle action buttons
         switch(item.getItemId()) {
+            case (android.R.id.home):
+                return false;
             default:
                 return super.onOptionsItemSelected(item);
         }

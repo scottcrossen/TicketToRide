@@ -281,6 +281,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object arg) {
+        //ClientModelRoot.getInstance().board.getMatchingRoutes(CityName.Seattle, CityName.Vancouver).stream().forEach((Route route)-> System.out.println(route.toString()));
         try {
             if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PLAYING)) {
                 Poller.getInstance(this.getApplicationContext()).reset();

@@ -23,8 +23,6 @@ import teamseth.cs340.tickettoride.R;
 
 public class GameFinishFragment extends Fragment {
 
-    public static final String ARG_TAB_NUMBER = "tab_number";
-
     private TextView winner;
 
     private LinearLayout player3Info;
@@ -77,8 +75,7 @@ public class GameFinishFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game_finish, container, false);
-        int i = getArguments().getInt(ARG_TAB_NUMBER);
-        String title = getResources().getStringArray(R.array.tabs_array)[i];
+        String title = "Game Summary Activity";
 
         winner = v.findViewById(R.id.winner);
 

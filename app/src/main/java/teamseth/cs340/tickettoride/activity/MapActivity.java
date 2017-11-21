@@ -67,8 +67,6 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
         // use this to skip out on all the earlier activities.
 
-        //DebugCommandShortcut.getInstance(getApplicationContext()).run();
-
         super.onCreate(savedInstanceState);
 
 

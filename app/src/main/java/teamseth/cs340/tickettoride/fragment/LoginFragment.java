@@ -15,7 +15,9 @@ import teamseth.cs340.common.commands.server.RegisterCommand;
 import teamseth.cs340.common.models.server.users.UserCreds;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.activity.LoginActivity;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
+import teamseth.cs340.tickettoride.util.DebugCommandShortcut;
 
 /**
  * @author Scott Leland Crossen
@@ -77,7 +79,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void enableButtons() {
-        if(userNameTextIn != null && passwordTextIn != null && serverHostTextIn != null && serverPortTextIn != null) {
+        if (Login.debug) {
+            signInBtn.setEnabled(true);
+            registerBtn.setEnabled(false);
+        } else if(userNameTextIn != null && passwordTextIn != null && serverHostTextIn != null && serverPortTextIn != null) {
             if (userNameTextIn.getText().toString().trim().length() != 0 &&
                     passwordTextIn.getText().toString().trim().length() != 0 &&
                     serverHostTextIn.getText().toString().trim().length() != 0 &&
@@ -113,8 +118,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         serverHostTextIn.setText(Login.getInstance().getServerHost());
         serverPortTextIn = v.findViewById(R.id.portEditText);
         serverPortTextIn.setText(Login.getInstance().getServerPort());
-
-        enableButtons();
 
         userNameTextIn.addTextChangedListener(new TextWatcher() {
             @Override
@@ -157,6 +160,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void afterTextChanged(Editable editable) {}
         });
 
+
+        enableButtons();
+
         return v;
     }
 
@@ -189,6 +195,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String serverP = serverPortTextIn.getText().toString();
         if (serverH != null) Login.getInstance().setServerHost(serverH);
         if (serverP != null) Login.getInstance().setServerPort(serverP);
-        new CommandTask(this.getContext()).execute(new LoginCommand(new UserCreds(userN, passW)));
+        if (!Login.debug) {
+            new CommandTask(this.getContext()).execute(new LoginCommand(new UserCreds(userN, passW)));
+        } else {
+            DebugCommandShortcut.getInstance(this.getContext()).run();
+            ((LoginActivity) this.getActivity()).update(null, null);
+        }
     }
 }

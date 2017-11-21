@@ -38,6 +38,10 @@ public class MapView extends View {
         routeNames.add(dr);
     }
 
+    public void removeAllRoutes() {
+        routeNames.clear();
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
         // draw the line
@@ -70,10 +74,15 @@ public class MapView extends View {
                 paint2.setShadowLayer(5.0f, 5.0f, 5.0f, Color.BLACK);
                 canvas.drawText(length,centerOnX,centerOnY,paint2);
             }
+            else {
+                centerOnX = 0;
+                centerOnY = 0;
+                rectLine.moveTo(-5,-5);
+                rectLine.moveTo(-5, -5);
+                rectFList.put(dr.getRoute(), rectF);
+            }
         }
     }
-
-    List<Route> listDoubleRoute = new ArrayList<>();
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -83,44 +92,47 @@ public class MapView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-                List<DrawView> tempSetRoutes = new ArrayList<>();
-                for(DrawView dr : routeNames) {
-                    if (rectFList.get(dr.getRoute()).contains(touchX, touchY)) {
-                        tempSetRoutes.add(dr);
-                        //if(dr.getRoute().isDouble()) then go to the choose which route screen
-                        //else go immediately to the choose which cards to use screen
+                if(!routeNames.isEmpty() && !rectFList.isEmpty()) {
+                    List<DrawView> tempSetRoutes = new ArrayList<>();
+                    for (DrawView dr : routeNames) {
+                        if (!rectFList.get(dr.getRoute()).isEmpty()) {
+                            if (rectFList.get(dr.getRoute()).contains(touchX, touchY)) {
+                                tempSetRoutes.add(dr);
+                                //if(dr.getRoute().isDouble()) then go to the choose which route screen
+                                //else go immediately to the choose which cards to use screen
                         /*listDoubleRoute = ClientModelRoot.board.getMatchingRoutes(dr.getRoute().getCity1(),
                                 dr.getRoute().getCity2());
                         for( Route rt : listDoubleRoute) {
                             Toast.makeText(getContext(), "found match on " + rt, Toast.LENGTH_SHORT).show();
                         }*/
+                            }
+                        }
                     }
-                }
-                if(!tempSetRoutes.isEmpty()){
-                    if(tempSetRoutes.size() > 1) {
-                        String route1 = tempSetRoutes.get(0).getRoute().toString();
-                        String route2 = tempSetRoutes.get(1).getRoute().toString();
-                        String[] rts = new String[2];
-                        rts[0] = route1;
-                        rts[1] = route2;
-                        SelectRouteFragment newFragment = new SelectRouteFragment();
-                        newFragment.setArray(rts);
-                        Route[] arrayRoutes = new Route[2];
-                        arrayRoutes[0] = tempSetRoutes.get(0).getRoute();
-                        arrayRoutes[1] = tempSetRoutes.get(1).getRoute();
-                        newFragment.setRoutes(arrayRoutes);
-                        newFragment.show(((Activity) getContext()).getFragmentManager(), "Select Route");
-                    }
-                    else {
-                        String route1 = tempSetRoutes.get(0).getRoute().toString();
-                        String[] rts = new String[1];
-                        rts[0] = route1;
-                        SelectRouteFragment newFragment = new SelectRouteFragment();
-                        newFragment.setArray(rts);
-                        Route[] arrayRoutes = new Route[1];
-                        arrayRoutes[0] = tempSetRoutes.get(0).getRoute();
-                        newFragment.setRoutes(arrayRoutes);
-                        newFragment.show(((Activity) getContext()).getFragmentManager(), "Select Route");
+                    if (!tempSetRoutes.isEmpty()) {
+                        if (tempSetRoutes.size() > 1) {
+                            String route1 = tempSetRoutes.get(0).getRoute().toString();
+                            String route2 = tempSetRoutes.get(1).getRoute().toString();
+                            String[] rts = new String[2];
+                            rts[0] = route1;
+                            rts[1] = route2;
+                            SelectRouteFragment newFragment = new SelectRouteFragment();
+                            newFragment.setArray(rts);
+                            Route[] arrayRoutes = new Route[2];
+                            arrayRoutes[0] = tempSetRoutes.get(0).getRoute();
+                            arrayRoutes[1] = tempSetRoutes.get(1).getRoute();
+                            newFragment.setRoutes(arrayRoutes);
+                            newFragment.show(((Activity) getContext()).getFragmentManager(), "Select Route");
+                        } else {
+                            String route1 = tempSetRoutes.get(0).getRoute().toString();
+                            String[] rts = new String[1];
+                            rts[0] = route1;
+                            SelectRouteFragment newFragment = new SelectRouteFragment();
+                            newFragment.setArray(rts);
+                            Route[] arrayRoutes = new Route[1];
+                            arrayRoutes[0] = tempSetRoutes.get(0).getRoute();
+                            newFragment.setRoutes(arrayRoutes);
+                            newFragment.show(((Activity) getContext()).getFragmentManager(), "Select Route");
+                        }
                     }
                 }
                 break;

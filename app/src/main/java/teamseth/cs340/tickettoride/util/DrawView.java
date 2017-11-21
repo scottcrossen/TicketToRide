@@ -6,6 +6,9 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.view.View;
 
+import java.util.Map;
+import java.util.UUID;
+
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
@@ -44,9 +47,12 @@ public class DrawView extends View {
         if(route.getClaimedPlayer().isPresent()) {
             //draw solid line if route is claimed
             PlayerColor colo = PlayerColor.BLACK;
+            paint.setStrokeWidth(7);
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
             try {
-                colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(rt.getClaimedPlayer());
+                Map<UUID, PlayerColor> coooooo = ClientModelRoot.getInstance().games.getActive().getPlayerColors();
+                UUID testID = rt.getClaimedPlayer().get();
+                colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(rt.getClaimedPlayer().get());
             } catch (ResourceNotFoundException e) {
                 e.printStackTrace();
             }

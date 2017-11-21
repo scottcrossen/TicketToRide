@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Optional;
 
 import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
@@ -20,12 +22,13 @@ import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 /**
  * Created by macrow7 on 11/20/17.
  */
 
-public class NewDestCardsFragment extends Fragment implements View.OnClickListener {
+public class NewDestCardsFragment extends Fragment implements View.OnClickListener, Observer {
 
 private CheckBox checkBox1;
 private CheckBox checkBox2;
@@ -46,7 +49,31 @@ public void onCreate(Bundle savedInstanceState) {
         //chooseDestCardsBtn.setEnabled(false);
         }
 
-public interface Caller {
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size());
+        if (PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size() > 0){
+            setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
+        } else {
+            checkBox1.setText("Loading...");
+            checkBox2.setText("Loading...");
+            checkBox3.setText("Loading...");
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ClientModelRoot.cards.addObserver(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ClientModelRoot.cards.deleteObserver(this);
+    }
+
+    public interface Caller {
     void onFragmentSuccess();
 }
 
@@ -80,16 +107,17 @@ public interface Caller {
         chooseDestCardsBtn.setOnClickListener(this);
         chooseDestCardsBtn.setEnabled(false);
 
-        test = ClientModelRoot.getInstance().cards.getDestinationCards();
+//        test = ClientModelRoot.getInstance().cards.getDestinationCards();
+//
+////        setDestinationCards(ClientModelRoot.getInstance().cards.getDestinationCards());
+//
+////                System.out.println(ClientModelRoot.cards.getDestinationCards());
+//        test.add(new DestinationCard(CityName.Vancouver, CityName.SaltLakeCity, 90));
+//        test.add(new DestinationCard(CityName.Calgary, CityName.Raleigh, 90));
+//        test.add(new DestinationCard(CityName.Toronto, CityName.SantaFe, 90));
+//        test.add(new DestinationCard(CityName.Boston, CityName.ElPaso, 90));
+//        setDestinationCards(test);
 
-        setDestinationCards(ClientModelRoot.getInstance().cards.getDestinationCards());
-
-//                System.out.println(ClientModelRoot.cards.getDestinationCards());
-        test.add(new DestinationCard(CityName.Vancouver, CityName.SaltLakeCity, 90));
-        test.add(new DestinationCard(CityName.Calgary, CityName.Raleigh, 90));
-        test.add(new DestinationCard(CityName.Toronto, CityName.SantaFe, 90));
-        test.add(new DestinationCard(CityName.Boston, CityName.ElPaso, 90));
-        setDestinationCards(test);
         return v;
     }
 
@@ -116,7 +144,7 @@ public interface Caller {
     }
 
     public void onButtonClicked() throws ResourceNotFoundException {
-        List<DestinationCard> destinationCards = test;
+        List<DestinationCard> destinationCards = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
                 //ClientModelRoot.getInstance().cards.getDestinationCards();
         DestinationCard returnCard = null;
         if (!checkBox1.isChecked()) {

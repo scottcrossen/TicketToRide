@@ -145,10 +145,10 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
             count++;
         }
 
-        if (count < 1) {
+        if (count < 2) {
             chooseDestCardsBtn.setEnabled(false);
         }
-        else if (count >= 1) {
+        else if (count >= 2) {
             chooseDestCardsBtn.setEnabled(true);
         }
     }

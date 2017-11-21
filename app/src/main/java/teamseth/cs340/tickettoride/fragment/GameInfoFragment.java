@@ -146,7 +146,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + "card. Nice.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
@@ -164,7 +164,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + "card. Nice.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }
@@ -182,7 +182,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3))){
-                    Toast.makeText(getContext(), "You drew a " + cardColor + "card. Nice.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You drew a " + cardColor + " card. Nice.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "You can't drawn this card now! Do you even know how to play TTR?!", Toast.LENGTH_SHORT).show();
                 }

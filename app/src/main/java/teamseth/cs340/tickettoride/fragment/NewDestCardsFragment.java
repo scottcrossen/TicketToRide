@@ -1,7 +1,10 @@
 package teamseth.cs340.tickettoride.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +37,13 @@ private CheckBox checkBox2;
 private CheckBox checkBox3;
 private Button chooseDestCardsBtn;
 private Optional<Caller> parent;
-    private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
+private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
 
-@Override
-public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
+        setMenuVisibility(false);
         try {
         parent = Optional.of((Caller) getActivity());
         } catch (Exception e) {
@@ -120,6 +124,8 @@ public void onCreate(Bundle savedInstanceState) {
         return v;
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -142,21 +148,27 @@ public void onCreate(Bundle savedInstanceState) {
         }
     }
 
+
+
     public void onButtonClicked() throws ResourceNotFoundException {
         List<DestinationCard> destinationCards = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
                 //ClientModelRoot.getInstance().cards.getDestinationCards();
-        DestinationCard returnCard = null;
-        if (!checkBox1.isChecked()) {
-            returnCard = destinationCards.get(0);
+        List<DestinationCard> returnCards = new LinkedList<>();
+        if(!checkBox1.isChecked()){
+            returnCards.add(destinationCards.get(0));
         }
-        if (!checkBox2.isChecked()) {
-            returnCard = destinationCards.get(0);
+        if(!checkBox2.isChecked()){
+            returnCards.add(destinationCards.get(1));
         }
-        if (!checkBox3.isChecked()) {
-            returnCard = destinationCards.get(0);
+        if(!checkBox3.isChecked()){
+            returnCards.add(destinationCards.get(2));
         }
-//mike
-        new CommandTask(getContext()).execute(new InitialReturnDestinationCardCommand(Optional.ofNullable(returnCard)));
+        PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
+//        android.app.FragmentManager fm = getFragmentManager();
+//        fm.beginTransaction().replace(R.id.content_frame, new PlayerFragment());
+        getActivity().onBackPressed();
+
+
         parent.map((NewDestCardsFragment.Caller caller) -> { caller.onFragmentSuccess(); return caller; });
     }
 

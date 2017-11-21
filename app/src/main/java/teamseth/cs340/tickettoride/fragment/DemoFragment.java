@@ -45,6 +45,7 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
     private Button removeTrainCarts;
     private Button claimRoute;
     private Button changeTurn;
+    private Button removeAllCarts;
     
     public DemoFragment() {
         // Required empty public constructor
@@ -83,6 +84,8 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
         claimRoute.setOnClickListener(this);
         changeTurn = rootView.findViewById(R.id.change_turn);
         changeTurn.setOnClickListener(this);
+        removeAllCarts = rootView.findViewById(R.id.reduce_carts_zero);
+        removeAllCarts.setOnClickListener(this);
         
         
         return rootView;
@@ -136,6 +139,8 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     break;
                 case R.id.reduce_carts_zero:
                     int num_carts = ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId());
+                    System.out.println("Flag 1");
+                    System.out.println(num_carts);
                     if (num_carts > 0) {
                         new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new RemoveTrainCartsCommand(num_carts, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
                     }

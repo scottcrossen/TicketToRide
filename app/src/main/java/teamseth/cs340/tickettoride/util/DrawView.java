@@ -41,7 +41,7 @@ public class DrawView extends View {
         this.route = rt;
         paint.setColor(convertColorFromEnum(rt.getColor()));
 
-        if(route.getOwned()) {
+        if(route.getClaimedPlayer().isPresent()) {
             //draw solid line if route is claimed
             PlayerColor colo = PlayerColor.BLACK;
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));

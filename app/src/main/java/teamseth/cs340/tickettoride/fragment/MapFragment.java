@@ -127,13 +127,7 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
         getActivity().setTitle(title);
-        allTheGameRoutes = ClientModelRoot.board.getAllRoutes();
 
-        for(Route rt : allTheGameRoutes) {
-            DrawView dr = new DrawView(this.getContext(), rt, convertCityNametoImageView(rt.getCity1()),
-                    convertCityNametoImageView(rt.getCity2()));
-            allRoutes.add(dr);
-        }
         allClaimedRoutes = new HashSet<Route>();
         update();
         return rootView;
@@ -187,14 +181,20 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         newRoutes.forEach((Route route) -> claimRoute(route));
         allClaimedRoutes.addAll(newRoutes);
 
+        allTheGameRoutes = ClientModelRoot.board.getAllRoutes();
 
+        for(Route rt : allTheGameRoutes) {
+            DrawView dr = new DrawView(this.getContext(), rt, convertCityNametoImageView(rt.getCity1()),
+                    convertCityNametoImageView(rt.getCity2()));
+            allRoutes.add(dr);
+        }
 
-        for(Route rt : allClaimedRoutes) {
+        /*for(Route rt : allClaimedRoutes) {
             DrawView dr = new DrawView(this.getContext(), rt, convertCityNametoImageView(rt.getCity1()),
                     convertCityNametoImageView(rt.getCity2()));
 
             allRoutes.add(dr);
-        }
+        }*/
         drawTheRoutes();
     }
 

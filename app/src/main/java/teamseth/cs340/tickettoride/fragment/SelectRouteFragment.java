@@ -14,7 +14,6 @@ import teamseth.cs340.common.models.server.boards.Route;
 
 public class SelectRouteFragment extends DialogFragment {
 
-
     private String[] routes;
     private Route[] actRoutes;
 
@@ -30,7 +29,6 @@ public class SelectRouteFragment extends DialogFragment {
 
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO Auto-generated method stub
                         selection[0] = arg1;
                     }
                 })
@@ -41,7 +39,6 @@ public class SelectRouteFragment extends DialogFragment {
                 .setPositiveButton("Claim", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO do the choosing of the dialog box here
                         actRoute[0] = actRoutes[selection[0]];
                         SelectCardsFragment newFragment = new SelectCardsFragment();
                         newFragment.setRoute(actRoute);

@@ -12,12 +12,14 @@ import teamseth.cs340.common.commands.server.ClaimRouteCommand;
 import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
 import teamseth.cs340.common.commands.server.ReturnDestinationCardCommand;
+import teamseth.cs340.common.commands.server.SendMessageCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.models.server.chat.Message;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
@@ -122,8 +124,19 @@ public class ServerProxy {
 
     // Chat
 
-    public static void chat(Context context) {
+    public static void chat(Context context, String makeChat) {
+        Message newMessage = new Message(Login.getUserId(), makeChat);
+        try {
+            new CommandTask(context).execute(new SendMessageCommand(newMessage));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //new CommandTask(context).execute(new Chat)
+    }
+
+    public static boolean canDoChat(Context context, String makeChat) {
+        boolean chatNotEmpty = !makeChat.isEmpty();
+        return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && chatNotEmpty);
     }
 }
 

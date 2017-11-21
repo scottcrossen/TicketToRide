@@ -21,6 +21,7 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import java.util.LinkedList;
 import java.util.UUID;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.client.ClientModelRoot;
@@ -223,9 +224,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 ////                } catch (ResourceNotFoundException e) {
 ////                    e.printStackTrace();
 ////                }
-                LinkedList<DestinationCard> test = ClientModelRoot.cards.getDestinationCards();
-                System.out.println(ClientModelRoot.cards.getDestinationCards());
-                prepDestCards.setDestinationCards(ClientModelRoot.cards.getDestinationCards());
                 Fragment getDestCards = prepDestCards;
 //                Fragment getDestCards = new Fragment();
 //                getDestCards.show()

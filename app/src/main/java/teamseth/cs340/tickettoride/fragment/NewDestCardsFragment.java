@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
@@ -30,6 +32,7 @@ private CheckBox checkBox2;
 private CheckBox checkBox3;
 private Button chooseDestCardsBtn;
 private Optional<Caller> parent;
+    private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
 
 @Override
 public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,17 @@ public interface Caller {
         chooseDestCardsBtn = v.findViewById(R.id.chooseDestCardsButton);
         chooseDestCardsBtn.setOnClickListener(this);
         chooseDestCardsBtn.setEnabled(false);
+
+        test = ClientModelRoot.getInstance().cards.getDestinationCards();
+
         setDestinationCards(ClientModelRoot.getInstance().cards.getDestinationCards());
+
+//                System.out.println(ClientModelRoot.cards.getDestinationCards());
+        test.add(new DestinationCard(CityName.Vancouver, CityName.SaltLakeCity, 90));
+        test.add(new DestinationCard(CityName.Calgary, CityName.Raleigh, 90));
+        test.add(new DestinationCard(CityName.Toronto, CityName.SantaFe, 90));
+        test.add(new DestinationCard(CityName.Boston, CityName.ElPaso, 90));
+        setDestinationCards(test);
         return v;
     }
 
@@ -103,7 +116,8 @@ public interface Caller {
     }
 
     public void onButtonClicked() throws ResourceNotFoundException {
-        List<DestinationCard> destinationCards = ClientModelRoot.getInstance().cards.getDestinationCards();
+        List<DestinationCard> destinationCards = test;
+                //ClientModelRoot.getInstance().cards.getDestinationCards();
         DestinationCard returnCard = null;
         if (!checkBox1.isChecked()) {
             returnCard = destinationCards.get(0);
@@ -114,7 +128,7 @@ public interface Caller {
         if (!checkBox3.isChecked()) {
             returnCard = destinationCards.get(0);
         }
-
+//mike
         new CommandTask(getContext()).execute(new InitialReturnDestinationCardCommand(Optional.ofNullable(returnCard)));
         parent.map((NewDestCardsFragment.Caller caller) -> { caller.onFragmentSuccess(); return caller; });
     }
@@ -139,6 +153,7 @@ public interface Caller {
         }
         else if (count >= 1) {
             chooseDestCardsBtn.setEnabled(true);
-        }
+        }//hello
     }
 }
+//love andrew

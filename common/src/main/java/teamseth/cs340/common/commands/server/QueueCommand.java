@@ -6,6 +6,7 @@ import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.root.server.ServerFacade;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.common.util.auth.AuthToken;
 import teamseth.cs340.common.util.client.Login;
@@ -32,9 +33,9 @@ public abstract class QueueCommand implements IServerCommand {
         return new Result(() -> {
             IHistoricalCommand historicalCommand = clientCommand();
             if (historicalCommand != null) {
-                System.out.println("Queuing historical command: " + historicalCommand.toString());
+                Logger.debug("Queuing historical command: " + historicalCommand.toString());
                 ServerFacade.getInstance().addCommandToHistory(gameId, historyId, historicalCommand, token);
-                System.out.println("Successfully queued command");
+                Logger.debug("Successfully queued command");
             }
             return null;
         });

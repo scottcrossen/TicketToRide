@@ -25,6 +25,7 @@ public class Config {
         } catch (Exception e) {
             this.secretKey = null;
         }
+        //Logger.setVerbosity(6);
     }
 
     private SecretKey secretKey;

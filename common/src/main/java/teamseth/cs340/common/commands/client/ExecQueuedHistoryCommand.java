@@ -3,6 +3,7 @@ package teamseth.cs340.common.commands.client;
 import java.util.List;
 
 import teamseth.cs340.common.root.client.ClientFacade;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.Result;
 
 /**
@@ -20,9 +21,9 @@ public class ExecQueuedHistoryCommand implements IClientCommand {
     public Result call() {
         return new Result(() -> {
             commands.stream().forEach((command) -> {
-                System.out.println("Executing client-side historical command: " + command.toString());
+                Logger.debug("Executing client-side historical command: " + command.toString());
                 ClientFacade.getInstance().addHistory(command);
-                System.out.println("Successfully executed client-side historical command");
+                Logger.debug("Successfully executed client-side historical command");
                 command.call();
             });
             return null;

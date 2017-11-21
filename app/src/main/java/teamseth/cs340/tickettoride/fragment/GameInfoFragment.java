@@ -80,9 +80,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         String title = getResources().getStringArray(R.array.tabs_array)[i];
         getActivity().setTitle(title);
 
-        //TODO set up the cards to update according to what is shown
-        //TODO set onclicklisteners for the deck drawing, dest card drawing, and individual card picking
-
         try {
             if (ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().get().equals(Login.getUserId())){
                 isTurn = true;
@@ -107,9 +104,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         destCardsLeft = (TextView) rootView.findViewById(R.id.destination_cards_in_deck);
         playerName = (TextView) rootView.findViewById(R.id.player_name);
 
-        //TODO set these to random cards
-
-        //TODO set the text to the number of cards left in the respective decks
         update();
 
         card1.setOnClickListener(new View.OnClickListener() {
@@ -205,8 +199,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         destinationCardDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO give player option of 3 destination cards, player must keep 1-3 of these
-                //TODO unused cards return to bottom of deck
                 if (PlayerTurnTracker.getInstance().drawDestinationCard(getContext())){
                     NewDestCardsFragment prepDestCards = new NewDestCardsFragment();
                     Fragment getDestCards = prepDestCards;
@@ -222,7 +214,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         trainCardDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO add top card to players hand, traindeck decrements
 //                String cardColor = ClientModelRoot.getInstance()
                 if (PlayerTurnTracker.getInstance().drawFaceDownResourceCard(getContext())){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a random card.");
@@ -231,8 +222,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 }
             }
         });
-
-        //TODO do a check to ensure there are not 3 locomotives facing up at the same time
 
         return rootView;
     }

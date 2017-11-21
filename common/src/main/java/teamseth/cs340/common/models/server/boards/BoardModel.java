@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.server.boards;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,17 +49,36 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
 
     public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);
-        Routes routeSet = getRoutes(routeSetId);
-        List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, colors);
         UUID playerId = token.getUser();
-        boolean lessThanFourPlayers = ServerModelRoot.getInstance().games.getAll().stream().filter((Game game) -> game.getRoutes().equals(routeSetId)).findFirst().map((Game game) -> game.getPlayers().size() < 4).orElseGet(() -> true);
-        boolean routeClaimable = !matchedRoutes.stream().anyMatch((Route route) -> route.getClaimedPlayer().map((UUID claimedPlayer) -> (lessThanFourPlayers && !claimedPlayer.equals(playerId))).orElseGet(() -> true));
-        if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1))) && routeClaimable) {
-            throw new ModelActionException();
-        } else {
+        Routes routeSet = getRoutes(routeSetId);
+        Optional<Game> gameOption = ServerModelRoot.getInstance().games.getAll().stream().filter((Game game) -> game.getRoutes().equals(routeSetId)).findFirst();
+        List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, colors);
+        List<Route> neighborRoutes = routeSet.getMatchingRoutes(city1, city2);
+
+        // Begin precondition check.
+        boolean lessThanFourPlayers = gameOption.map((Game game) -> game.getPlayers().size() < 4).orElseGet(() -> true);
+        boolean nonClaimedRouteExists = matchedRoutes.stream().noneMatch((Route currentRoute) -> currentRoute.getClaimedPlayer().isPresent());
+        boolean doubleRouteRestrictionObserved = !lessThanFourPlayers ||
+                neighborRoutes.size() == 1 ||
+                neighborRoutes.stream().noneMatch((Route boardRoute) -> boardRoute.getClaimedPlayer().isPresent());
+        boolean playerHasEnoughCarts = gameOption.map((Game game) -> {
+            try {
+                return ServerModelRoot.carts.getPlayerCarts(game.getCarts(), token) >= colors.size();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }).orElseGet(() -> false);
+        boolean playerDoesntHaveBothRoutes = neighborRoutes.stream().noneMatch((Route boardRoute) -> boardRoute.getClaimedPlayer().map((UUID claimedPlayer) -> claimedPlayer.equals(playerId)).orElseGet(() -> false));
+        boolean onlyOnePossibleSelection = matchedRoutes.size() == 1 || (matchedRoutes.size() == 2 && matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1)));
+        // End of precondition check
+
+        if (nonClaimedRouteExists && doubleRouteRestrictionObserved && playerHasEnoughCarts && playerDoesntHaveBothRoutes && onlyOnePossibleSelection) {
             Route matchingRoute = matchedRoutes.get(0);
-            routeSet.claimRoute(token.getUser(), city1, city2, colors);
+            routeSet.claimRoute(playerId, city1, city2, colors);
             return matchingRoute.getLength();
+        } else {
+            throw new ModelActionException();
         }
     }
 

@@ -36,6 +36,7 @@ import teamseth.cs340.common.models.server.carts.CartSet;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
 import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
+import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.RouteCalculator;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
@@ -191,14 +192,14 @@ public class GameModel extends AuthAction implements IModel<Game> {
                 try {
                     cardOption.map((DestinationCard card) -> { playerDestinationCards.get(playerId).remove(card); return card; });
                 } catch (Exception e) {
-                    System.out.println("Error: Code 1");
+                    Logger.error("Problem tallying points (Initial)");
                 }
             } else if (command instanceof RemoveDestinationCardCommand) {
                 DestinationCard card = ((RemoveDestinationCardCommand) command).getDestinationCard();
                 try {
                     playerDestinationCards.get(playerId).remove(card);
                 } catch (Exception e) {
-                    System.out.println("Error: Code 2");
+                    Logger.error("Problem tallying points");
                 }
             }
         }
@@ -253,7 +254,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         } catch (ModelActionException e) {
             throw e;
         } catch (Exception e) {
-            System.out.println("Error: Code 3");
+            Logger.error("Problem checking end-game conditions");
         }
         get(gameId).nextTurn();
     }

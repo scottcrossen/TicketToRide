@@ -448,7 +448,11 @@ public class PlayerTurnTracker implements Observer {
             return new LinkedList<>();
         }
         public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) throws ResourceNotFoundException {
-            boolean nonClaimedRouteExists = ClientModelRoot.board.getMatchingRoutes(route.getCity1(), route.getCity2(), route.getColor()).stream().anyMatch((Route currentRoute) -> !currentRoute.getClaimedPlayer().isPresent());
+            List<Route> matchingRoutes = ClientModelRoot.board.getMatchingRoutes(route.getCity1(), route.getCity2(), route.getColor());
+            List<Route> neighborRoutes = ClientModelRoot.getInstance().board.getMatchingRoutes(route.getCity1(), route.getCity2());
+
+            // Begin precondition check.
+            boolean nonClaimedRouteExists = matchingRoutes.stream().anyMatch((Route currentRoute) -> !currentRoute.getClaimedPlayer().isPresent());
             boolean validColors = route.equals(route.getCity1(), route.getCity2(), colors);
             boolean playerHasEnoughCards = colors.stream().distinct().allMatch((ResourceColor uniqueColor) -> {
                 long amntColorToBeUsed = colors.stream().filter((ResourceColor currentColor) -> currentColor.equals(uniqueColor)).count();
@@ -456,8 +460,14 @@ public class PlayerTurnTracker implements Observer {
                 boolean playerHasEnoughColor = amntColorOwned >= amntColorToBeUsed;
                 return playerHasEnoughColor;
             });
+            boolean doubleRouteRestrictionObserved = ClientModelRoot.getInstance().games.getActive().getPlayers().size() >= 4 ||
+                    neighborRoutes.size() == 1 ||
+                    neighborRoutes.stream().noneMatch((Route boardRoute) -> boardRoute.getClaimedPlayer().isPresent());
             boolean playerHasEnoughCarts = ClientModelRoot.carts.getPlayerCarts(Login.getInstance().getUserId()) >= route.getLength();
-            if (awaitingForRouteToBeClaimed == null && nonClaimedRouteExists && validColors && playerHasEnoughCards && playerHasEnoughCarts) {
+            boolean playerDoesntHaveBothRoutes = neighborRoutes.stream().noneMatch((Route boardRoute) -> boardRoute.getClaimedPlayer().map((UUID claimedPlayer) -> claimedPlayer.equals(Login.getUserId())).orElseGet(() -> false));
+            // End of precondition check
+
+            if (awaitingForRouteToBeClaimed == null && nonClaimedRouteExists && validColors && playerHasEnoughCards && playerHasEnoughCarts && doubleRouteRestrictionObserved && playerDoesntHaveBothRoutes) {
                 destroyContext = context;
                 awaitingForRouteToBeClaimed = route;
                 registerObserver(ClientModelRoot.board);

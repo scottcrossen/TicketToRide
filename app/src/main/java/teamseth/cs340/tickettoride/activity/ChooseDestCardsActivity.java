@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Optional;
 
 import teamseth.cs340.common.commands.server.UpdateClientHistoryCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
@@ -16,7 +15,6 @@ import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChooseDestCardsFragment;
-import teamseth.cs340.tickettoride.fragment.SingleTextFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
 import teamseth.cs340.tickettoride.util.Toaster;
 
@@ -27,7 +25,6 @@ import teamseth.cs340.tickettoride.util.Toaster;
 public class ChooseDestCardsActivity extends AppCompatActivity implements Observer, ChooseDestCardsFragment.Caller {
 
     ChooseDestCardsFragment fragment;
-    SingleTextFragment.V4Fragment waitingFragment;
 
     @Override
     public void onBackPressed()
@@ -64,13 +61,10 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
         }
 
         fragment = new ChooseDestCardsFragment();
-        waitingFragment = SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...");
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.choose_dest_cards_fragment_container, waitingFragment)
                 .add(R.id.choose_dest_cards_fragment_container, fragment)
-                .hide(waitingFragment)
                 .commit();
     }
 
@@ -96,8 +90,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
         if (fragment instanceof ChooseDestCardsFragment) {
             if (ClientModelRoot.history.playerChoseInitialCards(Login.getUserId())) {
                 this.runOnUiThread(() -> {
-                    // Does not work. perhaps try new/old version of fragment.
-                    getSupportFragmentManager().beginTransaction().hide(fragment).show(waitingFragment).commit();
+                    fragment.playerChoseDestCards();
                 });
             } else {
                 ((ChooseDestCardsFragment) fragment).setDestinationCards(ClientModelRoot.cards.getDestinationCards());

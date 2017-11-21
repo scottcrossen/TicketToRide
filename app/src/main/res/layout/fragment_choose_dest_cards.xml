@@ -14,15 +14,15 @@
         android:text="@string/chooseDestCardsTitle"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        android:layout_marginBottom="25dp" />
+        android:textSize="24sp" />
 
     <CheckBox
         android:id="@+id/checkbox1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/destCard"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:layout_marginTop="10dp" />
 
     <CheckBox
         android:id="@+id/checkbox2"
@@ -44,5 +44,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/confirmDestCards" />
+
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        android:text="@string/waiting"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="48sp" />
 
 </LinearLayout>

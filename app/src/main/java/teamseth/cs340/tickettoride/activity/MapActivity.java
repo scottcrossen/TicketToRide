@@ -44,7 +44,6 @@ import teamseth.cs340.tickettoride.fragment.IUpdatableFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
-import teamseth.cs340.tickettoride.fragment.SingleTextFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
 import teamseth.cs340.tickettoride.util.Toaster;
 
@@ -181,19 +180,8 @@ public class MapActivity extends AppCompatActivity implements Observer {
                 args.putInt(PlayerFragment.ARG_TAB_NUMBER, position);
                 break;
             case 2:
-                int playerAmnt = 1;
-                try {
-                    playerAmnt = ClientModelRoot.games.getActive().getPlayers().size();
-                } catch (Exception e) {
-                }
-                if (playerAmnt != 1) {
-                    fragment = new OtherPlayersFragment();
-                    args.putInt(OtherPlayersFragment.ARG_TAB_NUMBER, position);
-                } else {
-                    fragment = new SingleTextFragment.V1Fragment();
-                    args.putString("title", getResources().getStringArray(R.array.tabs_array)[position]);
-                    args.putString("mainText", "No Other Players");
-                }
+                fragment = new OtherPlayersFragment();
+                args.putInt(OtherPlayersFragment.ARG_TAB_NUMBER, position);
                 break;
             case 3:
                 fragment = new GameInfoFragment();

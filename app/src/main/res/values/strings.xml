@@ -30,4 +30,6 @@
     <string name="pointsFromUnclaimedRoutes">Unclaimed Points From Routes:</string>
     <string name="loading2">Loading Winner...</string>
     <string name="wins">wins!</string>
+    <string name="waiting">Waiting...</string>
+    <string name="noOtherPlayers">No Other Players</string>
 </resources>

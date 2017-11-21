@@ -8,9 +8,16 @@
     tools:context=".activity.ChooseDestCardsActivity">
 
     <ScrollView
-        android:id="@+id/choose_dest_cards_fragment_container"
         android:layout_weight="2"
         android:layout_width="match_parent"
-        android:layout_height="0px" />
+        android:layout_height="0px">
+
+
+    <FrameLayout
+        android:id="@+id/choose_dest_cards_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </ScrollView>
 
 </LinearLayout>

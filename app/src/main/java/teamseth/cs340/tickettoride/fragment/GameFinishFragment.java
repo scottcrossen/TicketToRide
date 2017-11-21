@@ -25,6 +25,8 @@ public class GameFinishFragment extends Fragment {
 
     public static final String ARG_TAB_NUMBER = "tab_number";
 
+    private TextView winner;
+
     private LinearLayout player3Info;
     private LinearLayout player4Info;
     private LinearLayout player5Info;
@@ -78,6 +80,8 @@ public class GameFinishFragment extends Fragment {
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
 
+        winner = v.findViewById(R.id.winner);
+
         player3Info = v.findViewById(R.id.player3Info);
         player4Info = v.findViewById(R.id.player4Info);
         player5Info = v.findViewById(R.id.player5Info);
@@ -123,6 +127,8 @@ public class GameFinishFragment extends Fragment {
             int totalPlayers = playerNames.size();
             Iterator<UUID> playerIterator = ClientModelRoot.getInstance().games.getActive().getPlayers().iterator();
             int count = 0;
+            int highestScore = 0;
+            String winningPlayer = "";
 
             if (totalPlayers != 5) {
                 switch (totalPlayers) {
@@ -145,6 +151,12 @@ public class GameFinishFragment extends Fragment {
                 UUID player = playerIterator.next();
                 String playerName = playerNames.get(player);
                 int score = ClientModelRoot.getInstance().points.getTotalPlayerPoints(player);
+
+                if (score > highestScore) {
+                    highestScore = score;
+                    winningPlayer = playerName;
+                }
+
                 int carts = ClientModelRoot.getInstance().carts.getPlayerCarts(player);
                 String longestRoute = "Loading...";
                 Optional<UUID> tempPlayer = ClientModelRoot.getInstance().points.getPlayerWithLongestPath();
@@ -205,6 +217,8 @@ public class GameFinishFragment extends Fragment {
 
                 count++;
             }
+
+            winner.setText(winningPlayer);
 
         } catch (ResourceNotFoundException r) {
             r.printStackTrace();

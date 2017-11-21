@@ -2,8 +2,6 @@ package teamseth.cs340.tickettoride.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -28,7 +26,8 @@ import teamseth.cs340.tickettoride.util.Toaster;
 
 public class ChooseDestCardsActivity extends AppCompatActivity implements Observer, ChooseDestCardsFragment.Caller {
 
-    Fragment fragment;
+    ChooseDestCardsFragment fragment;
+    SingleTextFragment.V4Fragment waitingFragment;
 
     @Override
     public void onBackPressed()
@@ -64,15 +63,14 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
             finish();
         }
 
-        FragmentManager fm = getSupportFragmentManager();
-        fragment = fm.findFragmentById(R.id.choose_dest_cards_fragment_container);
-
-        if (fragment == null) {
-            fragment = ClientModelRoot.history.playerChoseInitialCards(Login.getUserId()) ? SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...") : new ChooseDestCardsFragment();
-            fm.beginTransaction()
-                    .add(R.id.choose_dest_cards_fragment_container, fragment)
-                    .commit();
-        }
+        fragment = new ChooseDestCardsFragment();
+        waitingFragment = SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.choose_dest_cards_fragment_container, fragment)
+                .add(R.id.choose_dest_cards_fragment_container, waitingFragment)
+                .hide(waitingFragment)
+                .commit();
     }
 
     @Override
@@ -96,12 +94,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
     public void update(Observable o, Object arg) {
         if (fragment instanceof ChooseDestCardsFragment) {
             if (ClientModelRoot.history.playerChoseInitialCards(Login.getUserId())) {
-                Fragment newFragment = SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...");
-                getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.choose_dest_cards_fragment_container, newFragment)
-                    .addToBackStack(null)
-                    .commit();
-                fragment = newFragment;
+                getSupportFragmentManager().beginTransaction().hide(fragment).show(waitingFragment).commit();
             } else {
                 ((ChooseDestCardsFragment) fragment).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
             }

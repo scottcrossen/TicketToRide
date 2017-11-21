@@ -15,6 +15,7 @@ import teamseth.cs340.common.commands.server.LeaveGameCommand;
 import teamseth.cs340.common.commands.server.StartGameCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 
@@ -86,11 +87,11 @@ public class GameLobbyFragment extends Fragment implements View.OnClickListener
                 if (players.length > 0) {
                     player1Name.setText(playerNames.get(players[0]));
                     player1Status.setText("Ready");
-                    //startBtn.setEnabled(false);
+                    if (!Login.debug) startBtn.setEnabled(false);
                 } else {
                     player1Name.setText("Player 1");
                     player1Status.setText("Waiting on Player 1");
-                    //startBtn.setEnabled(false);
+                    if (!Login.debug) startBtn.setEnabled(false);
                 }
                 if (players.length > 1) {
                     player2Name.setText(playerNames.get(players[1]));

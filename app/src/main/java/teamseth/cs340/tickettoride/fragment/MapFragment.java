@@ -183,6 +183,7 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
 
         allTheGameRoutes = ClientModelRoot.board.getAllRoutes();
 
+        allRoutes.clear();
         for(Route rt : allTheGameRoutes) {
             DrawView dr = new DrawView(this.getContext(), rt, convertCityNametoImageView(rt.getCity1()),
                     convertCityNametoImageView(rt.getCity2()));
@@ -200,6 +201,7 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
 
     private void drawTheRoutes() {
         relativeLayout.removeView(mapView);
+        mapView.removeAllRoutes();
         for (DrawView imRoute : allRoutes) {
             imRoute.setBackgroundColor(Color.TRANSPARENT);
             mapView.addRouteToMap(imRoute);

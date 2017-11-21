@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -87,6 +88,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
 
         mTitle = mDrawerTitle = getTitle();
         mTabTitles = getResources().getStringArray(R.array.tabs_array);
+        if (!Login.debug) mTabTitles = Arrays.copyOf(mTabTitles, mTabTitles.length - 1);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -204,8 +206,13 @@ public class MapActivity extends AppCompatActivity implements Observer {
                 args.putInt(ChatFragment.ARG_TAB_NUMBER, position);
                 break;
             case 6:
-                fragment = new DemoFragment();
-                args.putInt(ChatFragment.ARG_TAB_NUMBER, position);
+                if (Login.debug) {
+                    fragment = new DemoFragment();
+                    args.putInt(DemoFragment.ARG_TAB_NUMBER, position);
+                } else {
+                    fragment = new MapFragment();
+                    args.putInt(MapFragment.ARG_TAB_NUMBER, position);
+                }
                 break;
             case 0:
                 fragment = new MapFragment();

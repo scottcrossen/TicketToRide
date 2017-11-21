@@ -137,8 +137,9 @@ public class GameModel extends Observable implements IModel<Game> {
 
     private class InactiveGameState implements IGameModelState {
         public InactiveGameState() {
+            games = new HashSet<Game>();
         }
-        private HashSet<Game> games = new HashSet<Game>();
+        private HashSet<Game> games;
         public Game getActive() throws ResourceNotFoundException {
             throw new ResourceNotFoundException();
         }

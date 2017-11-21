@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".activity.ChooseDestCardsActivity"
-            android:label="Choose Destination Cards Activity"
+            android:label="Choose Destination Cards"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".activity.LoginActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"

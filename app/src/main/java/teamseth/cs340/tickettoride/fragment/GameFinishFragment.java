@@ -1,10 +1,12 @@
 package teamseth.cs340.tickettoride.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,12 +18,13 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.util.ActivityDecider;
 
 /**
  * Created by ajols on 11/11/2017.
  */
 
-public class GameFinishFragment extends Fragment {
+public class GameFinishFragment extends Fragment implements View.OnClickListener {
 
     private TextView winner;
 
@@ -64,6 +67,8 @@ public class GameFinishFragment extends Fragment {
     private TextView pointsFromUnclaimedRoutesPlayer3;
     private TextView pointsFromUnclaimedRoutesPlayer4;
     private TextView pointsFromUnclaimedRoutesPlayer5;
+
+    private Button gameFinishedButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,6 +123,9 @@ public class GameFinishFragment extends Fragment {
         pointsFromUnclaimedRoutesPlayer3 = v.findViewById(R.id.pointsFromUnclaimedRoutesPlayer3);
         pointsFromUnclaimedRoutesPlayer4 = v.findViewById(R.id.pointsFromUnclaimedRoutesPlayer4);
         pointsFromUnclaimedRoutesPlayer5 = v.findViewById(R.id.pointsFromUnclaimedRoutesPlayer5);
+
+        gameFinishedButton = v.findViewById(R.id.gameFinishedButton);
+        gameFinishedButton.setOnClickListener(this);
 
         try {
             HashMap<UUID, String> playerNames = ClientModelRoot.getInstance().games.getActive().getPlayerNames();
@@ -224,5 +232,14 @@ public class GameFinishFragment extends Fragment {
         getActivity().setTitle(title);
 
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.gameFinishedButton:
+                ClientModelRoot.getInstance().resetAll();
+                break;
+        }
     }
 }

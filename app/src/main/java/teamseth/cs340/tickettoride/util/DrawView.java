@@ -6,9 +6,12 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.view.View;
 
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.models.server.games.PlayerColor;
 
 /**
  * Created by Seth on 10/28/2017.
@@ -40,7 +43,14 @@ public class DrawView extends View {
 
         if(route.getOwned()) {
             //draw solid line if route is claimed
+            PlayerColor colo = PlayerColor.BLACK;
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
+            try {
+                colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(rt.getClaimedPlayer());
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+            }
+            paint.setColor(convertPlayerColorFromEnum(colo));
         }
         else {
             // only draws dashed line if route is unclaimed
@@ -88,6 +98,22 @@ public class DrawView extends View {
                 return ORANGE;
             case WHITE:
                 return Color.WHITE;
+        }
+        return Color.BLUE;
+    }
+
+    private int convertPlayerColorFromEnum(PlayerColor color) {
+        switch (color) {
+            case GREEN:
+                return Color.GREEN;
+            case RED:
+                return Color.RED;
+            case BLACK:
+                return Color.BLACK;
+            case BLUE:
+                return Color.BLUE;
+            case YELLOW:
+                return Color.YELLOW;
         }
         return Color.BLUE;
     }

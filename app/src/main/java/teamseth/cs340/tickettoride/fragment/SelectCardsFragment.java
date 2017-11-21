@@ -14,9 +14,16 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
+
+import teamseth.cs340.common.commands.server.ClaimRouteCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.communicator.CommandTask;
+
+import static teamseth.cs340.common.models.server.cards.ResourceColor.RAINBOW;
 
 /**
  * Created by Seth on 11/20/2017.
@@ -50,7 +57,7 @@ public class SelectCardsFragment extends DialogFragment {
         final RadioButton redBtn = view.findViewById(R.id.choose_red_cards);
         final RadioButton locoBtn = view.findViewById(R.id.choose_no_colored_cards);
         final EditText number = (EditText) view.findViewById(R.id.number_rainbow_cards_to_use);
-
+        RadioButton[] colorButtons = new RadioButton[9];
         ResourceColor color = claimThisRoute[0].getColor();
         switch (color) {
             case RAINBOW:
@@ -116,15 +123,6 @@ public class SelectCardsFragment extends DialogFragment {
         });
 
         builder.setTitle("Choose Cards")
-                //.setView(R.layout.dialog_select_cards)
-                /*.setSingleChoiceItems(routes, 0, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO Auto-generated method stub
-                        selection[0] = arg1;
-                    }
-                })*/
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -140,11 +138,63 @@ public class SelectCardsFragment extends DialogFragment {
                         //Select which color of card to use, then ask for number of RAINBOW cards they want to use
                         //TODO Claim the route here
                         //this is the route-> claimThisRoute[0];
+                        int routeLength = claimThisRoute[0].getLength();
+                        ArrayList<ResourceColor> colors = new ArrayList<ResourceColor>();
+                        ResourceColor col = ResourceColor.RAINBOW;
                         if(useLocomotive.isChecked()) {
                             String num = number.getText().toString();
                             if(!num.isEmpty()) {
                                 int numRainbowToUse = Integer.parseInt(num);
+                                if(numRainbowToUse > routeLength)
+                                {
+                                    numRainbowToUse = routeLength;
+                                }
+                                for(int i = 0; i < numRainbowToUse; i++) {
+                                    colors.add(RAINBOW);
+                                }
+
+                                routeLength = routeLength - numRainbowToUse;
                             }
+                        }
+                        if(blackBtn.isChecked()) {
+                            col = ResourceColor.BLACK;
+                        }
+                        else if(blueBtn.isChecked()) {
+                            col = ResourceColor.BLUE;
+                        }
+                        else if(greenBtn.isChecked()) {
+                            col = ResourceColor.GREEN;
+                        }
+                        else if(orangeBtn.isChecked()){
+                            col = ResourceColor.ORANGE;
+                        }
+                        else if(purpleBtn.isChecked()) {
+                            col = ResourceColor.PURPLE;
+                        }
+                        else if(redBtn.isChecked()) {
+                            col = ResourceColor.RED;
+                        }
+                        else if(whiteBtn.isChecked()) {
+                            col = ResourceColor.WHITE;
+                        }
+                        else if(yellowBtn.isChecked()) {
+                            col = ResourceColor.YELLOW;
+                        }
+                        else if(locoBtn.isChecked()) {
+                            col = ResourceColor.RAINBOW;
+                        }
+                        for(int j = 0; j < routeLength; j++) {
+                            //grab the radio button that is selected, and select that color
+                            colors.add(col);
+                        }
+
+                        try {
+                            new CommandTask(getContext()).execute(
+                                    new ClaimRouteCommand(claimThisRoute[0].getCity1(),
+                                            claimThisRoute[0].getCity2(),
+                                            colors));
+                        } catch (ResourceNotFoundException e) {
+                            e.printStackTrace();
                         }
                     }
                 });

@@ -9,6 +9,7 @@ import java.util.Observer;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import teamseth.cs340.common.commands.server.ClaimRouteCommand;
 import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
 import teamseth.cs340.common.commands.server.DrawResourceCardCommand;
@@ -440,7 +441,7 @@ public class PlayerTurnTracker implements Observer {
         public List<DestinationCard> getDestinationCardsToDecideOn() {
             return new LinkedList<>();
         }
-        public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) {
+        public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) throws ResourceNotFoundException {
             boolean nonClaimedRouteExists = ClientModelRoot.board.getMatchingRoutes(route.getCity1(), route.getCity2(), route.getColor()).stream().anyMatch((Route currentRoute) -> !currentRoute.getClaimedPlayer().isPresent());
             boolean validColors = route.equals(route.getCity1(), route.getCity2(), colors);
             boolean playerHasEnoughCards = colors.stream().distinct().allMatch((ResourceColor uniqueColor) -> {
@@ -454,6 +455,7 @@ public class PlayerTurnTracker implements Observer {
                 destroyContext = context;
                 awaitingForRouteToBeClaimed = route;
                 registerObserver(ClientModelRoot.board);
+                (new CommandTask(context)).execute(new ClaimRouteCommand(route.getCity1(), route.getCity2(), colors));
                 return true;
             } else {
                 setState(new DecideActionState());

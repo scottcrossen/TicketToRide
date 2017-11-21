@@ -118,7 +118,7 @@ public class Route implements Serializable {
 
 
     public String toString() {
-        return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString() + getClaimedPlayer().map((UUID playerId) -> "and claimed by player " + playerId.toString()).orElseGet(() -> "");
+        return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString() + getClaimedPlayer().map((UUID playerId) -> " and claimed by player " + playerId.toString()).orElseGet(() -> "");
     }
 
     public boolean hasCity(CityName city) {

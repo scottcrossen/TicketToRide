@@ -1,6 +1,7 @@
 package teamseth.cs340.common.commands.server;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,18 +29,18 @@ public class ClaimRouteCommand implements IServerCommand {
     private UUID gameId;
     private CityName city1;
     private CityName city2;
-    private ArrayList<ResourceColor> colors;
+    private ArrayList<ResourceColor> colors = new ArrayList<>();
     private UUID routeId;
     private UUID historyId;
     private UUID resourceDeckId;
     private UUID cartId;
 
-    public ClaimRouteCommand(CityName city1, CityName city2, ArrayList<ResourceColor> colors) throws ResourceNotFoundException {
+    public ClaimRouteCommand(CityName city1, CityName city2, List<ResourceColor> colors) throws ResourceNotFoundException {
         this.players = ClientModelRoot.games.getActive().getPlayers();
         this.gameId = ClientModelRoot.games.getActive().getId();
         this.city1 = city1;
         this.city2 = city2;
-        this.colors = colors;
+        this.colors.addAll(colors);
         this.historyId = ClientModelRoot.games.getActive().getHistory();
         this.routeId = ClientModelRoot.games.getActive().getRoutes();
         this.resourceDeckId = ClientModelRoot.games.getActive().getResourceDeck();

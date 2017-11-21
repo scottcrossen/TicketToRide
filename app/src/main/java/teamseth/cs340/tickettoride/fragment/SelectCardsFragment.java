@@ -178,8 +178,6 @@ public class SelectCardsFragment extends DialogFragment {
                             //grab the radio button that is selected, and select that color
                             colors.add(col);
                         }
-                        //TODO Scott - doesn't always claim route with mixed resource cards, the list is correct though
-                        //TODO Scott - doesn't decrement player cards when claiming the route
                         if(PlayerTurnTracker.getInstance().claimRoute(getContext(),claimThisRoute[0],colors))
                         {
                             Toast.makeText(getContext(), "Claimed Route", Toast.LENGTH_SHORT).show();

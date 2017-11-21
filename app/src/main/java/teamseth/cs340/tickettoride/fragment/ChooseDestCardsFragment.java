@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +26,7 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
 
 public class ChooseDestCardsFragment extends Fragment implements View.OnClickListener {
 
+    private TextView loadingText;
     private CheckBox checkBox1;
     private CheckBox checkBox2;
     private CheckBox checkBox3;
@@ -40,7 +42,6 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
         } catch (Exception e) {
             parent = Optional.empty();
         }
-        //chooseDestCardsBtn.setEnabled(false);
     }
 
     public interface Caller {
@@ -67,6 +68,8 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_choose_dest_cards, container, false);
+        loadingText = v.findViewById(R.id.loadingText);
+        loadingText.setVisibility(View.INVISIBLE);
         checkBox1 = v.findViewById(R.id.checkbox1);
         checkBox1.setOnClickListener(this);
         checkBox2 = v.findViewById(R.id.checkbox2);
@@ -117,6 +120,14 @@ public class ChooseDestCardsFragment extends Fragment implements View.OnClickLis
 
         new CommandTask(getContext()).execute(new InitialReturnDestinationCardCommand(Optional.ofNullable(returnCard)));
         parent.map((Caller caller) -> { caller.onFragmentSuccess(); return caller; });
+    }
+
+    public void playerChoseDestCards() {
+        checkBox1.setEnabled(false);
+        checkBox2.setEnabled(false);
+        checkBox3.setEnabled(false);
+        chooseDestCardsBtn.setEnabled(false);
+        loadingText.setVisibility(View.VISIBLE);
     }
 
     public void enableButton() {

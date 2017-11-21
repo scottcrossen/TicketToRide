@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ import teamseth.cs340.tickettoride.R;
 
 public class OtherPlayersFragment extends Fragment implements IUpdatableFragment {
     public static final String ARG_TAB_NUMBER = "tab_number";
+
+    private ScrollView otherPlayersContainer;
 
     private TextView otherPlayer1;
     private TextView otherPlayer1Cards;
@@ -59,6 +62,8 @@ public class OtherPlayersFragment extends Fragment implements IUpdatableFragment
     private LinearLayout otherPlayer3View;
     private LinearLayout otherPlayer4View;
 
+    private TextView noOtherPlayers;
+
     private View rootView;
 
     public OtherPlayersFragment() {
@@ -74,6 +79,8 @@ public class OtherPlayersFragment extends Fragment implements IUpdatableFragment
         String title = getResources().getStringArray(R.array.tabs_array)[i];
 
         getActivity().setTitle(title);
+
+        otherPlayersContainer = rootView.findViewById(R.id.otherPlayersContainer);
 
         otherPlayer1 = rootView.findViewById(R.id.otherPlayer1);
         otherPlayer1Cards = rootView.findViewById(R.id.otherPlayer1Cards);
@@ -107,6 +114,9 @@ public class OtherPlayersFragment extends Fragment implements IUpdatableFragment
         otherPlayer4View = rootView.findViewById(R.id.other_player_4_view);
         otherPlayer4View.setVisibility(rootView.GONE);
 
+        noOtherPlayers = rootView.findViewById(R.id.noOtherPlayers);
+        noOtherPlayers.setVisibility(View.INVISIBLE);
+
         update();
 
         return rootView;
@@ -129,6 +139,9 @@ public class OtherPlayersFragment extends Fragment implements IUpdatableFragment
                 otherPlayer1DestCards.setText(Integer.toString(otherPlayerCards.getPlayerDestintationCard(nextPlayer)));
                 otherPlayer1Score.setText(Integer.toString(otherPlayerPoints.getTotalPlayerPoints(nextPlayer)));
                 otherPlayer1View.setVisibility(rootView.VISIBLE);
+            } else {
+                otherPlayersContainer.setVisibility(View.GONE);
+                noOtherPlayers.setVisibility(View.VISIBLE);
             }
             if (iterator.hasNext()) {
                 UUID nextPlayer = iterator.next();

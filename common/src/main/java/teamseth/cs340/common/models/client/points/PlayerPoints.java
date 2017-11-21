@@ -90,11 +90,23 @@ public class PlayerPoints extends Observable implements IModel {
     }
 
     private void addMetDestinationCard(UUID playerId, DestinationCard card) {
-        getPlayerMetDestinationCards(playerId).add(card);
+        try {
+            getPlayerMetDestinationCards(playerId).add(card);
+        } catch (Exception e) {
+            Set<DestinationCard> newPlayerCardSet = new HashSet<>();
+            newPlayerCardSet.add(card);
+            playerDestinationCardsMet.put(playerId, newPlayerCardSet);
+        }
     }
 
     private void addUnmetDestinationCard(UUID playerId, DestinationCard card) {
-        getPlayerUnmetDestinationCards(playerId).add(card);
+        try {
+            getPlayerUnmetDestinationCards(playerId).add(card);
+        } catch (Exception e) {
+            Set<DestinationCard> newPlayerCardSet = new HashSet<>();
+            newPlayerCardSet.add(card);
+            playerDestinationCardsUnmet.put(playerId, newPlayerCardSet);
+        }
     }
 
     public void incrementPlayerPoints(UUID playerId, int points) {

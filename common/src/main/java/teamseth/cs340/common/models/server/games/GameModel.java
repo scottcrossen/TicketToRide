@@ -18,6 +18,7 @@ import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
 import teamseth.cs340.common.commands.client.RemoveDestinationCardCommand;
 import teamseth.cs340.common.commands.client.SeedFaceUpCardsCommand;
+import teamseth.cs340.common.commands.client.SetGameStateCommand;
 import teamseth.cs340.common.commands.client.SetPlayerLongestPathCommand;
 import teamseth.cs340.common.commands.client.UpdatePlayerPointsByDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -35,9 +36,9 @@ import teamseth.cs340.common.models.server.carts.CartSet;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
 import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
+import teamseth.cs340.common.util.RouteCalculator;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
-import teamseth.cs340.common.util.RouteCalculator;
 
 /**
  * @author Scott Leland Crossen
@@ -173,8 +174,9 @@ public class GameModel extends AuthAction implements IModel<Game> {
         Game game = get(gameId);
         List<IHistoricalCommand> destinationCardCommands = ServerModelRoot.getInstance().history.getAllCommands(game.getHistory());
         Map<UUID, Set<DestinationCard>> playerDestinationCards = new HashMap<>();
-        destinationCardCommands.forEach((IHistoricalCommand command) -> {
-            UUID playerId = command.getId();
+        for (IHistoricalCommand command : destinationCardCommands) {
+            UUID playerId = command.playerOwnedby();
+
             if (command instanceof AddDestinationCardCommand) {
                 DestinationCard card = ((AddDestinationCardCommand) command).getDestinationCard();
                 try {
@@ -185,21 +187,21 @@ public class GameModel extends AuthAction implements IModel<Game> {
                     playerDestinationCards.put(playerId, cards);
                 }
             } else if (command instanceof InitialChooseDestinationCardCommand) {
-                DestinationCard card = ((InitialChooseDestinationCardCommand) command).getDestinationCard();
+                Optional<DestinationCard> cardOption = ((InitialChooseDestinationCardCommand) command).getDestinationCard();
                 try {
-                    playerDestinationCards.get(playerId).remove(card);
+                    cardOption.map((DestinationCard card) -> { playerDestinationCards.get(playerId).remove(card); return card; });
                 } catch (Exception e) {
-                    System.out.println("Error: Historical state incorrectly ordered.");
+                    System.out.println("Error: Code 1");
                 }
             } else if (command instanceof RemoveDestinationCardCommand) {
                 DestinationCard card = ((RemoveDestinationCardCommand) command).getDestinationCard();
                 try {
                     playerDestinationCards.get(playerId).remove(card);
                 } catch (Exception e) {
-                    System.out.println("Error: Historical state incorrectly ordered.");
+                    System.out.println("Error: Code 2");
                 }
             }
-        });
+        }
         UUID historyId = game.getHistory();
         Set<UUID> allPlayers = game.getPlayers();
         for (UUID playerId : playerDestinationCards.keySet()) {
@@ -219,6 +221,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         }
         ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new SetPlayerLongestPathCommand(game.getPlayers(), longestPathPlayer), token);
         game.setState(GameState.FINISHED);
+        ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new SetGameStateCommand(GameState.FINISHED, game.getPlayers(), token.getUser()), token);
     }
 
     private void attemptEndGame(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
@@ -228,7 +231,8 @@ public class GameModel extends AuthAction implements IModel<Game> {
         UUID cartId = game.getCarts();
         boolean nextPlayerHasNoCarts = nextPlayerIdOption.map((UUID nextPlayerId) -> {
             try {
-                return ServerModelRoot.getInstance().carts.getPlayerCartsById(cartId, nextPlayerId, token) == 0;
+                int carts_of_next = ServerModelRoot.getInstance().carts.getPlayerCartsById(cartId, nextPlayerId, token);
+                return carts_of_next <= 0;
             } catch (Exception e) {
                 return false;
             }
@@ -240,7 +244,17 @@ public class GameModel extends AuthAction implements IModel<Game> {
 
     public void nextPlayerTurn(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
         AuthAction.user(token);
-        attemptEndGame(gameId, token);
+        try {
+            attemptEndGame(gameId, token);
+        } catch (UnauthorizedException e) {
+            throw e;
+        } catch (ResourceNotFoundException e) {
+            throw e;
+        } catch (ModelActionException e) {
+            throw e;
+        } catch (Exception e) {
+            System.out.println("Error: Code 3");
+        }
         get(gameId).nextTurn();
     }
 }

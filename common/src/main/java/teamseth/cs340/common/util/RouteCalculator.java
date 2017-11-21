@@ -1,6 +1,7 @@
 package teamseth.cs340.common.util;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,25 +14,24 @@ import teamseth.cs340.common.models.server.cards.CityName;
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
 public class RouteCalculator {
-    public static final int calculateLongestPath(Set<Route> routeSet){
-        Stream<Route> visited = Stream.empty();
-        Stream<Route> routes = routeSet.stream();
-        Stream<Integer> solutions = routes.flatMap((Route route) -> recurseOnRoute(routes, route, visited)).map((Tuple<Integer, Stream<Route>> solution) -> solution.get1());
-        Integer max = solutions.max((Integer solution1, Integer solution2) -> Integer.compare(solution1, solution2)).orElseGet(() -> -1);
+    public static final int calculateLongestPath(Set<Route> routes){
+        Set<Route> visited = new HashSet<>();
+        Set<Integer> solutions = routes.stream().flatMap((Route route) -> recurseOnRoute(routes, route, visited).stream()).map((Tuple<Integer, Set<Route>> solution) -> solution.get1()).collect(Collectors.toSet());
+        Integer max = solutions.stream().max((Integer solution1, Integer solution2) -> Integer.compare(solution1, solution2)).orElseGet(() -> 0);
         return max;
     }
 
-    private static final Stream<Tuple<Integer, Stream<Route>>> recurseOnRoute(Stream<Route> routes, Route route, Stream<Route> visited) {
-        Stream<Route> neighborRoutes = routes.filter((Route currentRoute) -> (currentRoute.hasCity(route.getCity1()) || currentRoute.hasCity(route.getCity2())));
-        Stream<Route> currentVisited = Stream.concat(visited, Stream.of(route));
-        Stream<Tuple<Integer, Stream<Route>>> output = neighborRoutes.filter((Route currentRoute) -> {
-            boolean hasBeenVisited = currentVisited.noneMatch((visitedRoute) -> visitedRoute.compareCitiesAndColor(currentRoute));
+    private static final Set<Tuple<Integer, Set<Route>>> recurseOnRoute(Set<Route> routes, Route route, Set<Route> visited) {
+        Set<Route> neighborRoutes = routes.stream().filter((Route currentRoute) -> (currentRoute.hasCity(route.getCity1()) || currentRoute.hasCity(route.getCity2()))).collect(Collectors.toSet());
+        Set<Route> currentVisited = Stream.concat(visited.stream(), Stream.of(route)).collect(Collectors.toSet());
+        Stream<Tuple<Integer, Set<Route>>> output = neighborRoutes.stream().filter((Route currentRoute) -> {
+            boolean hasBeenVisited = currentVisited.stream().noneMatch((visitedRoute) -> visitedRoute.compareCitiesAndColor(currentRoute));
             return hasBeenVisited;
         }).flatMap((Route currentRoute) -> {
-            Stream<Tuple<Integer, Stream<Route>>> result = recurseOnRoute(routes, currentRoute, currentVisited);
-            return result.map((Tuple<Integer, Stream<Route>> singleResult) -> new Tuple<>(singleResult.get1() + route.getLength(), singleResult.get2()));
+            Stream<Tuple<Integer, Set<Route>>> result = recurseOnRoute(routes, currentRoute, currentVisited).stream();
+            return result.map((Tuple<Integer, Set<Route>> singleResult) -> new Tuple<>(singleResult.get1() + route.getLength(), singleResult.get2()));
         });
-        return Stream.concat(output, Stream.of(new Tuple<>(route.getLength(), visited)));
+        return Stream.concat(output, Stream.of(new Tuple<>(route.getLength(), visited))).collect(Collectors.toSet());
     }
 
     // You can probably get away without returning the set of visited routes but in case we need it:
@@ -46,43 +46,47 @@ public class RouteCalculator {
         public B get2() { return object2; }
     }
 
-    public static boolean citiesConnected(CityName city1, CityName city2, Set<Route> routeSet) {
-        Stream<Route> routes = routeSet.stream();
-        return getCityClusters(routes).anyMatch((Stream<CityName> cluster) -> {
-            boolean clusterContainsCity1 = cluster.anyMatch((CityName city) -> city.equals(city1));
-            boolean clusterContainsCity2 = cluster.anyMatch((CityName city) -> city.equals(city2));
+    public static boolean citiesConnected(CityName city1, CityName city2, Set<Route> routes) {
+        return getCityClusters(routes).stream().anyMatch((Set<CityName> cluster) -> {
+            boolean clusterContainsCity1 = cluster.stream().anyMatch((CityName city) -> city.equals(city1));
+            boolean clusterContainsCity2 = cluster.stream().anyMatch((CityName city) -> city.equals(city2));
             return (clusterContainsCity1 && clusterContainsCity2);
         });
     }
 
-    private static Stream<Stream<CityName>> getCityClusters(Stream<Route> routes) {
-        Stream<Stream<CityName>> collectionAddTo = Stream.empty();
-        Stream<Stream<CityName>> collectionToAdd = routes.map((Route route) -> Stream.concat(Stream.of(route.getCity1()), Stream.of(route.getCity2())));
+    private static Set<Set<CityName>> getCityClusters(Set<Route> routes) {
+        Set<Set<CityName>> collectionAddTo = new HashSet<>();
+        Set<Set<CityName>> collectionToAdd = routes.stream().map((Route route) -> {
+            Set<CityName> singleCluster = new HashSet<CityName>();
+            singleCluster.add(route.getCity1());
+            singleCluster.add(route.getCity2());
+            return singleCluster;
+        }).collect(Collectors.toSet());
         //Stream<Stream<CityName>> output = combineCollections(collectionToAdd, collectionAddTo);
         // Why is there no fold function? This is stupid.
-        for (Stream<CityName> cluster : collectionToAdd.collect(Collectors.toList())) {
+        for (Set<CityName> cluster : collectionToAdd) {
             collectionAddTo = addClusterToCollection(collectionAddTo, cluster);
         }
         return collectionAddTo;
     }
 
-    private static Stream<Stream<CityName>> addClusterToCollection(Stream<Stream<CityName>> clusters, Stream<CityName> clusterToAdd) {
-        Stream<Stream<CityName>> clustersMatchCities = Stream.concat(clusters.filter((Stream<CityName> cities) -> {
-            boolean cityInCluster = cities.anyMatch((CityName city) -> clusterToAdd.anyMatch((CityName routeCity) -> routeCity.equals(city)));
+    private static Set<Set<CityName>> addClusterToCollection(Set<Set<CityName>> clusters, Set<CityName> clusterToAdd) {
+        Set<Set<CityName>> clustersMatchCities = Stream.concat(clusters.stream().filter((Set<CityName> cities) -> {
+            boolean cityInCluster = cities.stream().anyMatch((CityName city) -> clusterToAdd.stream().anyMatch((CityName routeCity) -> routeCity.equals(city)));
             return cityInCluster;
-        }), Stream.of(clusterToAdd));
-        Stream<CityName> combinedCluster = clustersMatchCities.flatMap((Stream<CityName> cluster) -> cluster).distinct();
-        Stream<Stream<CityName>> clustersDontMatch = clusters.filter((Stream<CityName> cities) -> {
-            boolean cityNotInCluster = cities.anyMatch((CityName city) -> clusterToAdd.noneMatch((CityName routeCity) -> routeCity.equals(city)));
+        }), Stream.of(clusterToAdd)).collect(Collectors.toSet());
+        Set<CityName> combinedCluster = clustersMatchCities.stream().flatMap((Set<CityName> cluster) -> cluster.stream()).distinct().collect(Collectors.toSet());
+        Set<Set<CityName>> clustersDontMatch = clusters.stream().filter((Set<CityName> cities) -> {
+            boolean cityNotInCluster = cities.stream().anyMatch((CityName city) -> clusterToAdd.stream().noneMatch((CityName routeCity) -> routeCity.equals(city)));
             return cityNotInCluster;
-        });
-        return Stream.concat(Stream.of(combinedCluster), clustersDontMatch);
+        }).collect(Collectors.toSet());
+        return Stream.concat(Stream.of(combinedCluster), clustersDontMatch.stream()).collect(Collectors.toSet());
     }
 
-    private static Stream<Stream<CityName>> combineCollections(Stream<Stream<CityName>> collectionToAdd, Stream<Stream<CityName>> collectionAddTo) {
+    private static Set<Set<CityName>> combineCollections(Set<Set<CityName>> collectionToAdd, Set<Set<CityName>> collectionAddTo) {
         // This might not work because of it's weird recursive nature.
-        Stream<Stream<CityName>> output = collectionToAdd.reduce(collectionAddTo, (Stream<Stream<CityName>> clusters, Stream<CityName> cluster) -> addClusterToCollection(clusters, cluster),
-                (Stream<Stream<CityName>> clusters1, Stream<Stream<CityName>> clusters2) -> combineCollections(clusters1, clusters2));
+        Set<Set<CityName>> output = collectionToAdd.stream().reduce(collectionAddTo, (Set<Set<CityName>> clusters, Set<CityName> cluster) -> addClusterToCollection(clusters, cluster),
+                (Set<Set<CityName>> clusters1, Set<Set<CityName>> clusters2) -> combineCollections(clusters1, clusters2));
         return output;
     }
 }

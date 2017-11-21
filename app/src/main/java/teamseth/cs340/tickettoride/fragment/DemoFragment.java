@@ -10,14 +10,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import teamseth.cs340.common.commands.client.AddTrainCartsCommand;
-import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IncrementPlayerPointsCommand;
-import teamseth.cs340.common.commands.client.RemoveTrainCartsCommand;
 import teamseth.cs340.common.commands.server.ClaimRouteCommand;
+import teamseth.cs340.common.commands.server.DecrementPlayerCartsCommand;
 import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
 import teamseth.cs340.common.commands.server.DrawResourceCardCommand;
+import teamseth.cs340.common.commands.server.NextTurnCommand;
 import teamseth.cs340.common.commands.server.ReturnDestinationCardCommand;
 import teamseth.cs340.common.commands.server.ReturnResourceCardCommand;
 import teamseth.cs340.common.commands.server.UpdateAllClientsCommand;
@@ -119,10 +118,11 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
                 case R.id.add_train_carts:
-                    new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new AddTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    //new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new AddTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    System.out.println("Deprecated method access attempted.");
                     break;
                 case R.id.remove_train_carts:
-                    new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new RemoveTrainCartsCommand(1, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    new CommandTask(this.getContext()).execute(new DecrementPlayerCartsCommand(1));
                     break;
                 case R.id.claim_route:
                     if (ClientModelRoot.getInstance().cards.getDestinationCards().size() > 0) {
@@ -133,16 +133,14 @@ public class DemoFragment extends Fragment implements View.OnClickListener {
                     break;
                 case R.id.change_turn:
                     if (ClientModelRoot.getInstance().cards.getDestinationCards().size() > 0) {
-                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new ChangeTurnCommand(ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                        new CommandTask(this.getContext()).execute(new NextTurnCommand());
                         Toast.makeText(this.getContext(), ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().get().toString(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.reduce_carts_zero:
-                    int num_carts = ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId());
-                    System.out.println("Flag 1");
-                    System.out.println(num_carts);
-                    if (num_carts > 0) {
-                        new CommandTask(this.getContext()).execute(new UpdateAllClientsCommand(new RemoveTrainCartsCommand(num_carts, ClientModelRoot.getInstance().games.getActive().getPlayers(), Login.getUserId())));
+                    int numCarts = ClientModelRoot.getInstance().carts.getPlayerCarts(Login.getUserId());
+                    if (numCarts > 0) {
+                        new CommandTask(this.getContext()).execute(new DecrementPlayerCartsCommand(numCarts));
                     }
                     break;
             }

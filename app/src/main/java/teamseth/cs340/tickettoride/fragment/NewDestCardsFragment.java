@@ -1,15 +1,15 @@
 package teamseth.cs340.tickettoride.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.view.KeyEvent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,13 +18,14 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
-import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
-import teamseth.cs340.tickettoride.communicator.CommandTask;
+import teamseth.cs340.tickettoride.activity.MapActivity;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
+
+import static android.view.View.GONE;
 
 /**
  * Created by macrow7 on 11/20/17.
@@ -32,30 +33,29 @@ import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 public class NewDestCardsFragment extends Fragment implements View.OnClickListener, Observer {
 
-private CheckBox checkBox1;
-private CheckBox checkBox2;
-private CheckBox checkBox3;
-private Button chooseDestCardsBtn;
-private Optional<Caller> parent;
-private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
+    private CheckBox checkBox1;
+    private CheckBox checkBox2;
+    private CheckBox checkBox3;
+    private Button chooseDestCardsBtn;
+    private Optional<Caller> parent;
+    private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
-        setMenuVisibility(false);
+
         try {
-        parent = Optional.of((Caller) getActivity());
+            parent = Optional.of((Caller) getActivity());
         } catch (Exception e) {
-        parent = Optional.empty();
+            parent = Optional.empty();
         }
         //chooseDestCardsBtn.setEnabled(false);
-        }
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         //ClientModelRoot.getInstance().cards.getDestinationCards().stream().forEach((DestinationCard card) -> System.out.println(card.toString()));
-        if (PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size() > 0){
+        if (PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size() > 0) {
             setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
         } else {
             checkBox1.setText("Loading...");
@@ -65,20 +65,14 @@ private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        ClientModelRoot.cards.addObserver(this);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         ClientModelRoot.cards.deleteObserver(this);
     }
 
     public interface Caller {
-    void onFragmentSuccess();
-}
+        void onFragmentSuccess();
+    }
 
     public void setDestinationCards(List<DestinationCard> cards) {
         Iterator<DestinationCard> iterator = cards.iterator();
@@ -95,11 +89,31 @@ private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
             checkBox3.setText(next.toString());
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ClientModelRoot.cards.addObserver(this);
+        MapActivity map = (MapActivity) getActivity();
+        map.disableDrawer();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MapActivity map = (MapActivity) getActivity();
+        map.enableDrawer();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_choose_dest_cards, container, false);
+        ListView menu = (ListView) getActivity().findViewById(R.id.left_drawer);
+
+        TextView loading = v.findViewById(R.id.loadingText);
+        loading.setVisibility(GONE);
         checkBox1 = v.findViewById(R.id.checkbox1);
         checkBox1.setOnClickListener(this);
         checkBox2 = v.findViewById(R.id.checkbox2);
@@ -125,7 +139,6 @@ private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -149,18 +162,17 @@ private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
     }
 
 
-
     public void onButtonClicked() throws ResourceNotFoundException {
         List<DestinationCard> destinationCards = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
-                //ClientModelRoot.getInstance().cards.getDestinationCards();
+        //ClientModelRoot.getInstance().cards.getDestinationCards();
         List<DestinationCard> returnCards = new LinkedList<>();
-        if(!checkBox1.isChecked()){
+        if (!checkBox1.isChecked()) {
             returnCards.add(destinationCards.get(0));
         }
-        if(!checkBox2.isChecked()){
+        if (!checkBox2.isChecked()) {
             returnCards.add(destinationCards.get(1));
         }
-        if(!checkBox3.isChecked()){
+        if (!checkBox3.isChecked()) {
             returnCards.add(destinationCards.get(2));
         }
         PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
@@ -169,7 +181,10 @@ private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
         getActivity().onBackPressed();
 
 
-        parent.map((NewDestCardsFragment.Caller caller) -> { caller.onFragmentSuccess(); return caller; });
+        parent.map((NewDestCardsFragment.Caller caller) -> {
+            caller.onFragmentSuccess();
+            return caller;
+        });
     }
 
     public void enableButton() {
@@ -189,8 +204,7 @@ private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
 
         if (count < 1) {
             chooseDestCardsBtn.setEnabled(false);
-        }
-        else if (count >= 1) {
+        } else if (count >= 1) {
             chooseDestCardsBtn.setEnabled(true);
         }//hello
     }

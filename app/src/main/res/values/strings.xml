@@ -32,4 +32,5 @@
     <string name="wins">wins!</string>
     <string name="waiting">Waiting...</string>
     <string name="noOtherPlayers">No Other Players</string>
+    <string name="gameFinishedButton">Go To Game List</string>
 </resources>

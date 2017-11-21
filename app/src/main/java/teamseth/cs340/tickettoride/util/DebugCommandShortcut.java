@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import teamseth.cs340.common.commands.server.CreateGameCommand;
+import teamseth.cs340.common.commands.server.DrawResourceCardCommand;
 import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.commands.server.RegisterCommand;
 import teamseth.cs340.common.commands.server.StartGameCommand;
@@ -62,6 +63,14 @@ public class DebugCommandShortcut implements Runnable {
         try {
             System.out.println("Running destination card return command");
             new CommandTask(this.context).execute(new InitialReturnDestinationCardCommand(Optional.empty()));
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+        System.out.println("Giving tons of cards to player");
+            for (int i=0; i<=40; i++) {
+                new CommandTask(this.context).execute(new DrawResourceCardCommand());
+            }
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
         }

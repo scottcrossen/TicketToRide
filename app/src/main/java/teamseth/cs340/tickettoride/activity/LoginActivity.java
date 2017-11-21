@@ -9,8 +9,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import teamseth.cs340.common.util.client.Login;
-import teamseth.cs340.tickettoride.fragment.LoginFragment;
 import teamseth.cs340.tickettoride.R;
+import teamseth.cs340.tickettoride.fragment.LoginFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
 
 /**
@@ -23,6 +23,8 @@ public class LoginActivity extends FragmentActivity implements Observer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

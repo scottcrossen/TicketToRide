@@ -13,15 +13,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import teamseth.cs340.common.commands.server.ClaimRouteCommand;
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.tickettoride.R;
-import teamseth.cs340.tickettoride.communicator.CommandTask;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 import static teamseth.cs340.common.models.server.cards.ResourceColor.RAINBOW;
 
@@ -130,14 +129,6 @@ public class SelectCardsFragment extends DialogFragment {
                 .setPositiveButton("Claim", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO do the choosing of the dialog box here
-                        //route[0] = routes[selection[0]];
-                        //TODO check the selected cards here
-                        //maybe set the number of each card the player has on the screen
-                        //don't allow player to go above the length of route
-                        //Select which color of card to use, then ask for number of RAINBOW cards they want to use
-                        //TODO Claim the route here
-                        //this is the route-> claimThisRoute[0];
                         int routeLength = claimThisRoute[0].getLength();
                         ArrayList<ResourceColor> colors = new ArrayList<ResourceColor>();
                         ResourceColor col = ResourceColor.RAINBOW;
@@ -145,7 +136,7 @@ public class SelectCardsFragment extends DialogFragment {
                             String num = number.getText().toString();
                             if(!num.isEmpty()) {
                                 int numRainbowToUse = Integer.parseInt(num);
-                                if(numRainbowToUse > routeLength)
+                                if(numRainbowToUse >= routeLength)
                                 {
                                     numRainbowToUse = routeLength;
                                 }
@@ -187,14 +178,14 @@ public class SelectCardsFragment extends DialogFragment {
                             //grab the radio button that is selected, and select that color
                             colors.add(col);
                         }
-
-                        try {
-                            new CommandTask(getContext()).execute(
-                                    new ClaimRouteCommand(claimThisRoute[0].getCity1(),
-                                            claimThisRoute[0].getCity2(),
-                                            colors));
-                        } catch (ResourceNotFoundException e) {
-                            e.printStackTrace();
+                        //TODO Scott - doesn't always claim route with mixed resource cards, the list is correct though
+                        //TODO Scott - doesn't decrement player cards when claiming the route
+                        if(PlayerTurnTracker.getInstance().claimRoute(getContext(),claimThisRoute[0],colors))
+                        {
+                            Toast.makeText(getContext(), "Claimed Route", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Cannot Claim Route", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

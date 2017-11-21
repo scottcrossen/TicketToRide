@@ -21,6 +21,7 @@ public class Login extends Observable implements Serializable {
         return instance;
     }
 
+    public static final boolean debug = false;
     private static AuthToken token;
     private static String serverPort = "8081";
     private static String serverHost = "10.0.2.2";

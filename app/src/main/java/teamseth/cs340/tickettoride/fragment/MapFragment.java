@@ -188,11 +188,18 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
                     convertCityNametoImageView(rt.getCity2()));
             allRoutes.add(dr);
         }
+
+        /*for(Route rt : allClaimedRoutes) {
+            DrawView dr = new DrawView(this.getContext(), rt, convertCityNametoImageView(rt.getCity1()),
+                    convertCityNametoImageView(rt.getCity2()));
+
+            allRoutes.add(dr);
+        }*/
         drawTheRoutes();
     }
 
     private void drawTheRoutes() {
-
+        relativeLayout.removeView(mapView);
         for (DrawView imRoute : allRoutes) {
             imRoute.setBackgroundColor(Color.TRANSPARENT);
             mapView.addRouteToMap(imRoute);

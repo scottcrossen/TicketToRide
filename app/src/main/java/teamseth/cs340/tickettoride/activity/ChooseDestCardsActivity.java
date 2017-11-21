@@ -65,10 +65,11 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
 
         fragment = new ChooseDestCardsFragment();
         waitingFragment = SingleTextFragment.newV4Instance(Optional.empty(), "Waiting for other players...");
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.choose_dest_cards_fragment_container, fragment)
                 .add(R.id.choose_dest_cards_fragment_container, waitingFragment)
+                .add(R.id.choose_dest_cards_fragment_container, fragment)
                 .hide(waitingFragment)
                 .commit();
     }
@@ -94,7 +95,10 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
     public void update(Observable o, Object arg) {
         if (fragment instanceof ChooseDestCardsFragment) {
             if (ClientModelRoot.history.playerChoseInitialCards(Login.getUserId())) {
-                getSupportFragmentManager().beginTransaction().hide(fragment).show(waitingFragment).commit();
+                this.runOnUiThread(() -> {
+                    // Does not work. perhaps try new/old version of fragment.
+                    getSupportFragmentManager().beginTransaction().hide(fragment).show(waitingFragment).commit();
+                });
             } else {
                 ((ChooseDestCardsFragment) fragment).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
             }

@@ -218,20 +218,12 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 //TODO give player option of 3 destination cards, player must keep 1-3 of these
                 //TODO unused cards return to bottom of deck
-                NewDestCardsFragment prepDestCards = new NewDestCardsFragment();
-////                try {
-////                    prepDestCards.setDestinationCards(ClientModelRoot.cards.getDestinationCards());
-////                } catch (ResourceNotFoundException e) {
-////                    e.printStackTrace();
-////                }
-                Fragment getDestCards = prepDestCards;
-//                Fragment getDestCards = new Fragment();
-//                getDestCards.show()
-//                ((NewDestCardsFragment) getDestCards).setDestinationCards(ClientModelRoot.cards.getDestinationCards());
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, getDestCards).commit();
-//                Intent intent = new Intent(getActivity(), ChooseDestCardsActivity.class);
-//                getActivity().startActivity(intent);
+                if (PlayerTurnTracker.getInstance().drawDestinationCard(getContext())){
+                    NewDestCardsFragment prepDestCards = new NewDestCardsFragment();
+                    Fragment getDestCards = prepDestCards;
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, getDestCards).commit();
+                }
             }
         });
 

@@ -215,7 +215,7 @@ public class PlayerTurnTracker implements Observer {
         }
     }
 
-    public void clearObserber() {
+    public void clearObserver() {
         if (currentObserver != null) {
             currentObserver.deleteObserver(this);
         }

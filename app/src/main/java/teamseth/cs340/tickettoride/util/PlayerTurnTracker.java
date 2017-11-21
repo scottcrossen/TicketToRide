@@ -366,7 +366,7 @@ public class PlayerTurnTracker implements Observer {
     private class DrawDestinationState implements TurnState {
         private Context destroyContext = null;
         private List<DestinationCard> awaitingForCardsToBeRemoved = new LinkedList<>();
-        List<DestinationCard> initialCards = ClientModelRoot.cards.getDestinationCards();
+        List<DestinationCard> initialCards = null;
         public boolean drawFaceDownResourceCard(Context context) {
             return false;
         }
@@ -374,37 +374,49 @@ public class PlayerTurnTracker implements Observer {
             return false;
         }
         public boolean drawDestinationCard(Context context) throws ResourceNotFoundException {
-            int cardsLeft = 30 - ClientModelRoot.cards.getDestinationCards().size();
-            for (int i = 0; i <= (cardsLeft > 3 ? 3 : cardsLeft); i++){
-                (new CommandTask(context)).execute(new DrawDestinationCardCommand());
-            }
-            return true;
-        }
-        public boolean returnDestinationCards(Context context, List<DestinationCard> cards) throws ResourceNotFoundException {
-            int amountOfCardsDrawn = ClientModelRoot.cards.getDestinationCards().size() - initialCards.size();
-            boolean cardsAreValid = cards.stream().allMatch((DestinationCard card) -> {
-                boolean playerOwnsCard = ClientModelRoot.cards.getDestinationCards().stream().anyMatch((DestinationCard ownedCard) -> ownedCard.compareCitiesAndValue(card));
-                boolean cardIsNew = initialCards.stream().noneMatch((DestinationCard ownedCard) -> ownedCard.compareCitiesAndValue(card));
-                return (cardIsNew && playerOwnsCard);
-            });
-            if (awaitingForCardsToBeRemoved.size() == 0 && amountOfCardsDrawn > 0 && cardsAreValid && amountOfCardsDrawn - cards.size() >= 1) {
-                for (DestinationCard card : cards) {
-                    (new CommandTask(context)).execute(new ReturnDestinationCardCommand(card));
-                }
-                if (cards.size() == 0) {
-                    nextTurn(context);
-                } else {
-                    destroyContext = context;
-                    awaitingForCardsToBeRemoved = cards;
-                    registerObserver(ClientModelRoot.cards);
+            if (destroyContext == null && initialCards == null) {
+                LinkedList<DestinationCard> newInitialCards = new LinkedList<>();
+                newInitialCards.addAll(ClientModelRoot.cards.getDestinationCards());
+                initialCards = newInitialCards;
+                int cardsLeft = 30 - ClientModelRoot.cards.getDestinationCards().size();
+                for (int i = 1; i <= (cardsLeft > 3 ? 3 : cardsLeft); i++) {
+                    (new CommandTask(context)).execute(new DrawDestinationCardCommand());
                 }
                 return true;
             } else {
                 return false;
             }
         }
+        public boolean returnDestinationCards(Context context, List<DestinationCard> cards) throws ResourceNotFoundException {
+            if (destroyContext == null && initialCards != null) {
+                int amountOfCardsDrawn = ClientModelRoot.cards.getDestinationCards().size() - initialCards.size();
+                boolean cardsAreValid = cards.stream().allMatch((DestinationCard card) -> {
+                    boolean playerOwnsCard = ClientModelRoot.cards.getDestinationCards().stream().anyMatch((DestinationCard ownedCard) -> ownedCard.compareCitiesAndValue(card));
+                    boolean cardIsNew = initialCards.stream().noneMatch((DestinationCard ownedCard) -> ownedCard.compareCitiesAndValue(card));
+                    return (cardIsNew && playerOwnsCard);
+                });
+                if (awaitingForCardsToBeRemoved.size() == 0 && amountOfCardsDrawn > 0 && cardsAreValid && amountOfCardsDrawn - cards.size() >= 1) {
+                    for (DestinationCard card : cards) {
+                        (new CommandTask(context)).execute(new ReturnDestinationCardCommand(card));
+                    }
+                    if (cards.size() == 0) {
+                        nextTurn(context);
+                    } else {
+                        destroyContext = context;
+                        awaitingForCardsToBeRemoved = cards;
+                        registerObserver(ClientModelRoot.cards);
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
         public List<DestinationCard> getDestinationCardsToDecideOn() {
-            return ClientModelRoot.cards.getDestinationCards().stream().filter((DestinationCard card) -> {
+            if (initialCards == null) return new LinkedList<>();
+            return ClientModelRoot.getInstance().cards.getDestinationCards().stream().filter((DestinationCard card) -> {
                 boolean cardInInitialSet = initialCards.stream().anyMatch((DestinationCard initialCard) -> card.compareCitiesAndValue(initialCard));
                 return !cardInInitialSet;
             }).collect(Collectors.toList());

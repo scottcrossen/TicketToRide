@@ -18,7 +18,6 @@ import java.util.Optional;
 import teamseth.cs340.common.commands.server.InitialReturnDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
-import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
@@ -51,7 +50,7 @@ public void onCreate(Bundle savedInstanceState) {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size());
+        //ClientModelRoot.getInstance().cards.getDestinationCards().stream().forEach((DestinationCard card) -> System.out.println(card.toString()));
         if (PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size() > 0){
             setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
         } else {

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -127,11 +126,6 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         saultStMarie = (ImageView) rootView.findViewById(R.id.saultStMarieCity);
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
-        try {
-            Map<UUID, PlayerColor> coooooo = ClientModelRoot.getInstance().games.getActive().getPlayerColors();
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        }
         PlayerColor colo = PlayerColor.GREEN;
         try {
             colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(Login.getUserId());

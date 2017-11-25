@@ -12,7 +12,7 @@
 
         <RelativeLayout
             android:id="@+id/relativeMap"
-            android:layout_width="wrap_content"
+            android:layout_width="1000dp"
             android:layout_height="match_parent">
             <View
                 android:id="@+id/ticketToRideMapImage"

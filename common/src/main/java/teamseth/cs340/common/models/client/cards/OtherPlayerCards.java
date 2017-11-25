@@ -23,6 +23,7 @@ public class OtherPlayerCards extends Observable implements IModel {
     }
 
     public void resetModel() {
+        deleteObservers();
         playerResourceCards = new HashMap<>();
         playerDestinationCards = new HashMap<>();
         setChanged();

@@ -27,6 +27,7 @@ public class GameModel extends Observable implements IModel<Game> {
     }
 
     public void resetModel() {
+        deleteObservers();
         state = new InactiveGameState();
         setChanged();
         notifyObservers();

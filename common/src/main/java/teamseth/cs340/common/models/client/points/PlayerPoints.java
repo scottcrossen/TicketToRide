@@ -29,6 +29,7 @@ public class PlayerPoints extends Observable implements IModel {
     }
 
     public void resetModel() {
+        deleteObservers();
         playerPoints = new HashMap<>();
         setChanged();
         notifyObservers();

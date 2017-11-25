@@ -30,6 +30,7 @@ public class Board extends Observable implements IModel {
     private Routes routes = new Routes();
 
     public void resetModel() {
+        deleteObservers();
         routes = new Routes();
         setChanged();
         notifyObservers();

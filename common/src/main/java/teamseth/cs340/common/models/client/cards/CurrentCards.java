@@ -22,6 +22,7 @@ public class CurrentCards extends Observable {
     }
 
     public void resetModel() {
+        deleteObservers();
         destinationCards = new LinkedList<>();
         resourceCards = new LinkedList<>();
         others.resetModel();

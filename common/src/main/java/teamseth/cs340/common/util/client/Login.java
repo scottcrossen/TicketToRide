@@ -94,5 +94,7 @@ public class Login extends Observable implements Serializable {
     public void logout() {
         this.token = null;
         ClientModelRoot.getInstance().resetAll();
+        setChanged();
+        notifyObservers();
     }
 }

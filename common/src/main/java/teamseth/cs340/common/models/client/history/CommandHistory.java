@@ -33,6 +33,7 @@ public class CommandHistory extends Observable {
     private static Semaphore writers = new Semaphore(1);
 
     public void resetModel() {
+        deleteObservers();
         try {
             writers.acquire();
             history = new LinkedList<>();

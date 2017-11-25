@@ -20,6 +20,7 @@ public class CurrentChat extends Observable {
     }
 
     public void resetModel() {
+        deleteObservers();
         messages = new ArrayList<>();
         setChanged();
         notifyObservers();

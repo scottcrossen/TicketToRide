@@ -25,6 +25,7 @@ public class FaceUpCards extends Observable implements IModel {
     }
 
     public void resetModel() {
+        deleteObservers();
         resourceCards = new LinkedList<>();
         setChanged();
         notifyObservers();

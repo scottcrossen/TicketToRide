@@ -3,6 +3,7 @@ package teamseth.cs340.common.models.server.boards;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -124,8 +125,8 @@ public class Routes implements Serializable, IModel<Route> {
       routes.add(new Route(CityName.Seattle, CityName.Vancouver, ResourceColor.RAINBOW, 1,-20,-20,0,0));
     }
 
-    public void claimRoute(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors) throws ModelActionException {
-        List<Route> matchedRoutes = getMatchingRoutes(city1, city2, colors);
+    public void claimRoute(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColor) throws ModelActionException {
+        List<Route> matchedRoutes = getMatchingRoutes(city1, city2, colors, routeColor);
         if (matchedRoutes.size() != 1 && (matchedRoutes.size() != 2 || !matchedRoutes.get(0).compareCitiesAndColor(matchedRoutes.get(1)))) {
             throw new ModelActionException(); // not correctly specified
         } else {
@@ -149,8 +150,16 @@ public class Routes implements Serializable, IModel<Route> {
         return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, colors)).collect(Collectors.toList());
     }
 
+    public List<Route> getMatchingRoutes(CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColorOpt) {
+        return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, colors) && routeColorOpt.map((ResourceColor routeColor) -> currentRoute.equals(city1, city2, routeColor)).orElseGet(() -> true)).collect(Collectors.toList());
+    }
+
     public List<Route> getMatchingRoutes(CityName city1, CityName city2, ResourceColor color) {
         return routes.stream().filter((Route currentRoute) -> currentRoute.equals(city1, city2, color)).collect(Collectors.toList());
+    }
+
+    public List<Route> getMatchingRoutes(CityName city1, CityName city2, Optional<ResourceColor> routeColor) {
+        return routeColor.map((ResourceColor color) -> getMatchingRoutes(city1, city2, color)).orElseGet(() -> getMatchingRoutes(city1, city2));
     }
 
     public List<Route> getMatchingRoutes(CityName city1, CityName city2) {

@@ -120,8 +120,8 @@ public final class ServerFacade implements IServer {
     }
 
     // Board methods
-    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
-        return model.board.claimRoute(routeSetId, city1, city2, colors, token);
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColor, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
+        return model.board.claimRoute(routeSetId, city1, city2, colors, routeColor, token);
     }
 
     // Cart methods

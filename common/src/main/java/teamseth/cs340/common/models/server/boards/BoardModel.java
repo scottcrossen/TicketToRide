@@ -47,14 +47,13 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
         return routes.stream().filter((Routes routeModel) -> routeModel.getId().equals(id)).findFirst().orElseThrow(() -> new ResourceNotFoundException());
     }
 
-    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColor, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);
         UUID playerId = token.getUser();
         Routes routeSet = getRoutes(routeSetId);
         Optional<Game> gameOption = ServerModelRoot.getInstance().games.getAll().stream().filter((Game game) -> game.getRoutes().equals(routeSetId)).findFirst();
-        List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, colors);
+        List<Route> matchedRoutes = routeSet.getMatchingRoutes(city1, city2, colors, routeColor);
         List<Route> neighborRoutes = routeSet.getMatchingRoutes(city1, city2);
-
         // Begin precondition check.
         boolean lessThanFourPlayers = gameOption.map((Game game) -> game.getPlayers().size() < 4).orElseGet(() -> true);
         boolean nonClaimedRouteExists = matchedRoutes.stream().noneMatch((Route currentRoute) -> currentRoute.getClaimedPlayer().isPresent());
@@ -75,7 +74,7 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
 
         if (nonClaimedRouteExists && doubleRouteRestrictionObserved && playerHasEnoughCarts && playerDoesntHaveBothRoutes && onlyOnePossibleSelection) {
             Route matchingRoute = matchedRoutes.get(0);
-            routeSet.claimRoute(playerId, city1, city2, colors);
+            routeSet.claimRoute(playerId, city1, city2, colors, routeColor);
             return matchingRoute.getLength();
         } else {
             throw new ModelActionException();

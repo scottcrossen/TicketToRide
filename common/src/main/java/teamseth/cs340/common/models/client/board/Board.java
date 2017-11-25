@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.client.board;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,8 +35,8 @@ public class Board extends Observable implements IModel {
         notifyObservers();
     }
 
-    public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors) throws ModelActionException {
-        routes.claimRoute(userId, city1, city2, colors);
+    public void claimRouteByPlayer(UUID userId, CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColor) throws ModelActionException {
+        routes.claimRoute(userId, city1, city2, colors, routeColor);
         setChanged();
         notifyObservers();
     }

@@ -65,7 +65,7 @@ public interface IServer {
     public boolean playerHasChoseInitialCards(UUID historyId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;
 
     // Board methods
-    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException;
+    public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColor, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException;
 
     // Cart methods
     public void decrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;

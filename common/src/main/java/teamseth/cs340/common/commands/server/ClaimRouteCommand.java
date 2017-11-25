@@ -2,6 +2,7 @@ package teamseth.cs340.common.commands.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,8 +35,13 @@ public class ClaimRouteCommand implements IServerCommand {
     private UUID historyId;
     private UUID resourceDeckId;
     private UUID cartId;
+    private ResourceColor routeColor;
 
     public ClaimRouteCommand(CityName city1, CityName city2, List<ResourceColor> colors) throws ResourceNotFoundException {
+        this(city1, city2, colors, null);
+    }
+
+    public ClaimRouteCommand(CityName city1, CityName city2, List<ResourceColor> colors, ResourceColor routeColor) throws ResourceNotFoundException {
         this.players = ClientModelRoot.games.getActive().getPlayers();
         this.gameId = ClientModelRoot.games.getActive().getId();
         this.city1 = city1;
@@ -45,13 +51,14 @@ public class ClaimRouteCommand implements IServerCommand {
         this.routeId = ClientModelRoot.games.getActive().getRoutes();
         this.resourceDeckId = ClientModelRoot.games.getActive().getResourceDeck();
         this.cartId = ClientModelRoot.games.getActive().getCarts();
+        this.routeColor = routeColor;
     }
 
     public Result<ReturnManyResourceCardsCommand> call() {
         return new Result<>(() -> {
-            int cost = ServerFacade.getInstance().claimRoute(this.routeId, this.city1, this.city2, this.colors, token);
+            int cost = ServerFacade.getInstance().claimRoute(this.routeId, this.city1, this.city2, this.colors, Optional.ofNullable(routeColor), token);
             ServerFacade.getInstance().decrementPlayerCarts(cartId, cost, token);
-            ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new ClaimRouteByPlayerCommand(city1, city2, colors, players, token.getUser()), token);
+            ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new ClaimRouteByPlayerCommand(city1, city2, colors, Optional.ofNullable(routeColor), players, token.getUser()), token);
             ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new RemoveTrainCartsCommand(cost, players, token.getUser()), token);
             ServerFacade.getInstance().addCommandToHistory(gameId, historyId, new IncrementPlayerPointsCommand(getPointsFromLength(cost), players, token.getUser()), token);
             return new ReturnManyResourceCardsCommand(this.colors, gameId, resourceDeckId, historyId, token);

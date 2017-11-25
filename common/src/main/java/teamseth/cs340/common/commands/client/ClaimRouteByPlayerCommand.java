@@ -2,6 +2,7 @@ package teamseth.cs340.common.commands.client;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,19 +24,21 @@ public class ClaimRouteByPlayerCommand implements IHistoricalCommand {
     private CityName city1;
     private CityName city2;
     private ArrayList<ResourceColor> colors;
+    private ResourceColor routeColor;
 
 
-    public ClaimRouteByPlayerCommand(CityName city1, CityName city2, ArrayList<ResourceColor> colors, Set<UUID> allPlayers, UUID owner) {
+    public ClaimRouteByPlayerCommand(CityName city1, CityName city2, ArrayList<ResourceColor> colors, Optional<ResourceColor> routeColor, Set<UUID> allPlayers, UUID owner) {
         this.players = allPlayers;
         this.owner = owner;
         this.city1 = city1;
         this.city2 = city2;
         this.colors = colors;
+        this.routeColor = routeColor.orElseGet(() -> null);
     }
 
     public Result call() {
         return new Result(() -> {
-            ClientFacade.getInstance().claimRouteByPlayer(owner, city1, city2, colors); return null;});
+            ClientFacade.getInstance().claimRouteByPlayer(owner, city1, city2, colors,Optional.ofNullable(routeColor)); return null;});
     }
 
     public UUID getId() {

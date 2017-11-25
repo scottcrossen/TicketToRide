@@ -576,7 +576,7 @@ public class PlayerTurnTracker implements Observer {
                 destroyContext = context;
                 awaitingForRouteToBeClaimed = route;
                 registerObserver(ClientModelRoot.board);
-                (new CommandTask(context)).execute(new ClaimRouteCommand(route.getCity1(), route.getCity2(), colors));
+                (new CommandTask(context)).execute(new ClaimRouteCommand(route.getCity1(), route.getCity2(), colors, route.getColor()));
                 return true;
             } else {
                 setState(new DecideActionState());

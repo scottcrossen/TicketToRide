@@ -134,7 +134,6 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         }
         PlayerColor colo = PlayerColor.GREEN;
         try {
-            Map<UUID, PlayerColor> co = ClientModelRoot.getInstance().games.getActive().getPlayerColors();
             colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(Login.getUserId());
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();

@@ -55,7 +55,7 @@ public class LoginActivity extends FragmentActivity implements Observer {
 
     @Override
     public void onDestroy() {
-        PlayerTurnTracker.getInstance().safeLeave(null);
+        PlayerTurnTracker.getInstance().safeExit(null);
         Login.getInstance().logout();
         super.onDestroy();
     }

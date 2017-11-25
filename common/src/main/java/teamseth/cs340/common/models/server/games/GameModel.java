@@ -265,14 +265,21 @@ public class GameModel extends AuthAction implements IModel<Game> {
     }
 
     public void playerLoginHelper(AuthToken token) throws UnauthorizedException {
+        System.out.println("Flag 1");
         AuthAction.user(token);
         UUID playerId = token.getUser();
+        System.out.println("Flag 2");
         games.stream().filter(game -> game.hasPlayer(playerId)).forEach((Game game) -> {
+            System.out.println("Flag 3");
             if (game.getWhosTurnItIs().map((UUID playerTurn) -> playerTurn.equals(playerId)).orElseGet(() -> false) && !ServerModelRoot.history.logoutStateOkay(game.getHistory(), playerId)) {
+                System.out.println("Flag 4");
                 try {
                     nextPlayerTurn(game.getId(), token);
+                    System.out.println("Flag 1");
                     ServerModelRoot.history.forceAddCommandToHistory(game.getHistory(), new ChangeTurnCommand(game.getPlayers(), playerId, game.getWhosTurnItIs().get()), token);
+                    System.out.println("Flag 1");
                 } catch (Exception e) {
+                    System.out.println("Flag 1");
                     // Game must be in incorrect state. Skip.
                 }
             }

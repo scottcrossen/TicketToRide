@@ -59,6 +59,10 @@ public class InitialChooseDestinationCardCommand implements IHistoricalCommand, 
     public Optional<DestinationCard> getDestinationCard() { return Optional.ofNullable(card); }
 
     public IHistoricalCommand getAlternate() {
-        return new AlternativeHistoryCommand(this);
+        if (card != null) {
+            return new DecrementPlayerDestinationCardsCommands(this);
+        } else {
+            return new AlternativeHistoryCommand(this);
+        }
     }
 }

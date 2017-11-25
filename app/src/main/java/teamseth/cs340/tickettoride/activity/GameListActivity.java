@@ -56,7 +56,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
     }
 
     private void backPressed() {
-        PlayerTurnTracker.getInstance().safeLeave(getApplicationContext());
+        PlayerTurnTracker.getInstance().safeExit(getApplicationContext());
         Login.getInstance().logout();
         this.finish();
     }

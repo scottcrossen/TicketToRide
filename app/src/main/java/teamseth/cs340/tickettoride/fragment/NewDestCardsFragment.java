@@ -38,7 +38,7 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
     private CheckBox checkBox3;
     private Button chooseDestCardsBtn;
     private Optional<Caller> parent;
-    private LinkedList<DestinationCard> test = new LinkedList<DestinationCard>();
+    private List<DestinationCard> cardsToDecideOn = new LinkedList<DestinationCard>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,8 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void update(Observable o, Object arg) {
-        if (PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn().size() > 0) {
+        cardsToDecideOn = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
+        if (cardsToDecideOn.size() > 0) {
             setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
         } else {
             checkBox1.setText("Loading...");
@@ -164,19 +165,21 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
         List<DestinationCard> destinationCards = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
         //ClientModelRoot.getInstance().cards.getDestinationCards();
         List<DestinationCard> returnCards = new LinkedList<>();
-        if (!checkBox1.isChecked()) {
+        if (cardsToDecideOn.size() > 0 && !checkBox1.isChecked()) {
             returnCards.add(destinationCards.get(0));
         }
-        if (!checkBox2.isChecked()) {
+        if (cardsToDecideOn.size() > 1 && !checkBox2.isChecked()) {
             returnCards.add(destinationCards.get(1));
         }
-        if (!checkBox3.isChecked()) {
+        if (cardsToDecideOn.size() > 2 && !checkBox3.isChecked()) {
             returnCards.add(destinationCards.get(2));
         }
-        PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
+        if (cardsToDecideOn.size() > 0) {
+            PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
 //        android.app.FragmentManager fm = getFragmentManager();
 //        fm.beginTransaction().replace(R.id.content_frame, new PlayerFragment());
-        getActivity().onBackPressed();
+            getActivity().onBackPressed();
+        }
 
 
         parent.map((NewDestCardsFragment.Caller caller) -> {

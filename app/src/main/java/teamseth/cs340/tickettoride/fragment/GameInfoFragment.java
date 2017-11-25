@@ -48,12 +48,13 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 
 
     public void update() {
-
+        int trainCardsLeftNum = 110 - ClientModelRoot.cards.others.getResourceAmountUsed() - 5 - ClientModelRoot.cards.getResourceCards().size();
         trainCardsLeft.setText(Integer.toString(
-                110 - ClientModelRoot.cards.others.getResourceAmountUsed() - 5 - ClientModelRoot.cards.getResourceCards().size()
+                trainCardsLeftNum < 0 ? 0 : trainCardsLeftNum
         ));
+        int destCardsLeftNum = 30 - ClientModelRoot.cards.others.getDestinationAmountUsed() - ClientModelRoot.cards.getDestinationCards().size();
         destCardsLeft.setText(Integer.toString(
-                30 - ClientModelRoot.cards.others.getDestinationAmountUsed() - ClientModelRoot.cards.getDestinationCards().size()
+                destCardsLeftNum < 0 ? 0 : destCardsLeftNum
         ));
         try {
             UUID currentPlayerTurn = ClientModelRoot.games.getActive().getWhosTurnItIs().get();

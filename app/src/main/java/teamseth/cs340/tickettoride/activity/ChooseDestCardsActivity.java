@@ -44,7 +44,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
     }
 
     private void backPressed() {
-        PlayerTurnTracker.getInstance().safeLeave(getApplicationContext());
+        PlayerTurnTracker.getInstance().safeExit(getApplicationContext());
         Login.getInstance().logout();
         this.finish();
     }

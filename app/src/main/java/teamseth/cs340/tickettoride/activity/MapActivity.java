@@ -165,7 +165,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
     @Override
     public void onBackPressed()
     {
-        PlayerTurnTracker.getInstance().safeLeave(getApplicationContext());
+        PlayerTurnTracker.getInstance().safeExit(getApplicationContext());
         Login.getInstance().logout();
         this.finish();
     }

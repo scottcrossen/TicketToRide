@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -70,6 +71,7 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
     private ImageView montreal;
     private RelativeLayout relativeLayout;
     private MapView mapView;
+    private TextView playerName;
 
     private DrawView vancouverSeattle;
     private Set<DrawView> allRoutes = new HashSet<>();
@@ -133,6 +135,14 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
             e.printStackTrace();
         }
 
+        playerName = (TextView) rootView.findViewById(R.id.player_name_activity);
+
+        try {
+            UUID currentPlayerTurn = ClientModelRoot.games.getActive().getWhosTurnItIs().get();
+            playerName.setText(ClientModelRoot.games.getActive().getPlayerNames().get(currentPlayerTurn));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         rootView.setBackgroundColor(convertPlayerColorFromEnum(colo));
 
         getActivity().setTitle(title);
@@ -197,6 +207,12 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
     }
 
     public void update() {
+        try {
+            UUID currentPlayerTurn = ClientModelRoot.games.getActive().getWhosTurnItIs().get();
+            playerName.setText(ClientModelRoot.games.getActive().getPlayerNames().get(currentPlayerTurn));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Set<Route> newRoutes = ClientModelRoot.board.getAllClaimedRoutes().stream().filter((Route route) -> {
             boolean alreadyExists = allClaimedRoutes.stream().filter((Route drawn) -> {
                 return route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer());

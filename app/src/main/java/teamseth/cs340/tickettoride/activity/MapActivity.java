@@ -84,7 +84,6 @@ public class MapActivity extends AppCompatActivity implements Observer {
         } catch (Exception e) {
         }
 
-
         setContentView(R.layout.activity_map);
 
         mTitle = mDrawerTitle = getTitle();

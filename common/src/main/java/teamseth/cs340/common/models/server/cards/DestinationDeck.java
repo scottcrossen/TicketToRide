@@ -1,5 +1,7 @@
 package teamseth.cs340.common.models.server.cards;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
@@ -12,6 +14,7 @@ import teamseth.cs340.common.util.RandomList;
 public class DestinationDeck implements Deck<DestinationCard> {
 
     private RandomList<DestinationCard> deck = new RandomList<>();
+    private List<DestinationCard> discards = new ArrayList<>();
     private UUID id = UUID.randomUUID();
 
     public DestinationDeck(){
@@ -48,11 +51,14 @@ public class DestinationDeck implements Deck<DestinationCard> {
     }
 
     public DestinationCard draw() throws ModelActionException {
-        if (deck.size() == 0) throw new ModelActionException();
+        if (deck.size() == 0 && discards.size() > 0) {
+            deck.addAll(discards);
+            discards.clear();
+        } else if (deck.size() == 0 && discards.size() <= 0) throw new ModelActionException();
         return deck.popRandom();
     }
     public void returnCard(DestinationCard card) {
-        deck.add(card);
+        discards.add(card);
     }
     public UUID getId() {
         return this.id;

@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.cards;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class ResourceDeck implements Deck<ResourceColor> {
 
     private RandomList<ResourceColor> deck = new RandomList<>();
     private List<ResourceColor> faceUp = new LinkedList<>();
+    private List<ResourceColor> discards = new ArrayList<>();
     private UUID id = UUID.randomUUID();
 
     public ResourceDeck() {
@@ -45,12 +47,15 @@ public class ResourceDeck implements Deck<ResourceColor> {
     public List<ResourceColor> getFaceUp() {return faceUp;}
 
     public ResourceColor draw() throws ModelActionException {
-        if (deck.size() == 0) throw new ModelActionException();
+        if (deck.size() == 0 && discards.size() > 0) {
+            deck.addAll(discards);
+            discards.clear();
+        } else if (deck.size() == 0 && discards.size() <= 0) throw new ModelActionException();
         return deck.popRandom();
     }
 
     public void returnCard(ResourceColor card) {
-        deck.add(card);
+        discards.add(card);
     }
 
     public Optional<ResourceColor> drawFaceUpCard(ResourceColor oldCard) throws ModelActionException, ResourceNotFoundException {
@@ -72,13 +77,18 @@ public class ResourceDeck implements Deck<ResourceColor> {
     }
 
     public List<ResourceColor> checkAndResuffleFaceUpCards() {
-        if (faceUp.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count() >= 3 && deck.size() + faceUp.size() > 5) {
-            int amntRainbows = (int) deck.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count();
-            if (deck.size() + faceUp.size() - amntRainbows >= 3) {
+        if (faceUp.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count() >= 3 && deck.size() + discards.size() + faceUp.size() > 5) {
+            int amntRainbows = (int) deck.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count()
+                    + (int) discards.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count()
+                    + (int) faceUp.stream().filter((ResourceColor color) -> color.equals(ResourceColor.RAINBOW)).count();
+            if (deck.size() + faceUp.size() + discards.size() - amntRainbows >= 3) {
                 faceUp.stream().forEach((ResourceColor color) -> returnCard(color));
                 faceUp = new LinkedList<>();
                 for (int i = 0; i < 5; i++) {
-                    faceUp.add(deck.popRandom());
+                    try {
+                        faceUp.add(draw());
+                    } catch (ModelActionException e) {
+                    }
                 }
                 checkAndResuffleFaceUpCards();
             }

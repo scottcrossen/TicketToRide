@@ -62,6 +62,7 @@ public interface IServer {
     public LinkedList<IHistoricalCommand> getCommandsAfter(UUID historyId, Optional<UUID> afterId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException;
     public void addCommandToHistory(UUID gameId, UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException, NotYourTurnException;
     public void forceAddCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException;
+    public boolean playerHasChoseInitialCards(UUID historyId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException;
 
     // Board methods
     public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException;

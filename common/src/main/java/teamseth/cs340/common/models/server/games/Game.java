@@ -159,4 +159,14 @@ public class Game implements Serializable, Comparable<Game> {
             return Optional.empty();
         }
     }
+
+    public synchronized void startGameHasLock() throws ModelActionException {
+        if (!getState().equals(GameState.PREGAME)) throw new ModelActionException();
+        setState(GameState.START);
+    }
+
+    public synchronized void playGameHasLock() throws ModelActionException {
+        if (!getState().equals(GameState.START)) throw new ModelActionException();
+        setState(GameState.PLAYING);
+    }
 }

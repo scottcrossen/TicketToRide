@@ -115,6 +115,9 @@ public final class ServerFacade implements IServer {
     public void forceAddCommandToHistory(UUID historyId, IHistoricalCommand command, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
         model.history.forceAddCommandToHistory(historyId, command, token);
     }
+    public boolean playerHasChoseInitialCards(UUID historyId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+        return model.history.playerHasChosenInitialCards(historyId, token);
+    }
 
     // Board methods
     public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {

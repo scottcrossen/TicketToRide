@@ -83,7 +83,7 @@ public class GameModel extends AuthAction implements IModel<Game> {
         AuthAction.user(token);
         Game game = this.get(gameId);
         if (!game.hasPlayer(token.getUser())) throw new ModelActionException();
-        if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
+        game.startGameHasLock();
         ChatRoom newRoom = new ChatRoom();
         DestinationDeck newDestDeck = new DestinationDeck();
         ResourceDeck newResDeck = new ResourceDeck();
@@ -104,7 +104,6 @@ public class GameModel extends AuthAction implements IModel<Game> {
         game.setCarts(cartSet.getId());
         ServerModelRoot.history.forceAddCommandToHistory(history.getId(), new SeedFaceUpCardsCommand(newResDeck.getFaceUp(), game.getPlayers(), token.getUser()), token);
         seedGame(game, token);
-        game.setState(GameState.START);
     }
 
     private void seedGame(Game game, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
@@ -140,16 +139,22 @@ public class GameModel extends AuthAction implements IModel<Game> {
         Game game = get(gameId);
         UUID historyId = game.getHistory();
         Set<UUID> destinationCardsDecided = new TreeSet<>();
-        ServerModelRoot.getInstance().history.getAllCommands(historyId).forEach((IHistoricalCommand command) -> {
+        ServerModelRoot.getInstance().history.getAllCommands(historyId).stream().forEach((IHistoricalCommand command) -> {
             if (command instanceof InitialChooseDestinationCardCommand) {
                 destinationCardsDecided.add(command.playerOwnedby());
             }
         });
         boolean success = game.getPlayers().stream().allMatch((UUID player) -> destinationCardsDecided.contains(player));
         if (success) {
-            game.setState(GameState.PLAYING);
+            try {
+                game.playGameHasLock();
+                return true;
+            } catch (ModelActionException e) {
+                return false;
+            }
+        } else {
+            return false;
         }
-        return success;
     }
 
     public HashSet<Game> getAll() {

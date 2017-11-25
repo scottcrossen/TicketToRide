@@ -9,6 +9,7 @@ import java.util.UUID;
 import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.ILogoutOkayCommand;
+import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -101,5 +102,13 @@ public class HistoryModel extends AuthAction implements IModel<CommandHistory> {
         } catch (ResourceNotFoundException e) {
             return true;
         }
+    }
+
+    public boolean playerHasChosenInitialCards(UUID historyId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
+        AuthAction.user(token);
+        UUID playerId = token.getUser();
+        return getAllCommands(historyId).stream().anyMatch((IHistoricalCommand command) ->
+                command instanceof InitialChooseDestinationCardCommand && command.playerOwnedby().equals(playerId)
+        );
     }
 }

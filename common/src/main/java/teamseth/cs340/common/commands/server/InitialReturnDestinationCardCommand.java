@@ -41,8 +41,12 @@ public class InitialReturnDestinationCardCommand extends QueueCommand implements
     }
 
     public IHistoricalCommand clientCommand() throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
-        ServerFacade.getInstance().returnDestinationCard(deckId, card, token);
-        return new InitialChooseDestinationCardCommand(Optional.ofNullable(card), token.getUser());
+        if (!ServerFacade.getInstance().playerHasChoseInitialCards(historyId, token)) {
+            ServerFacade.getInstance().returnDestinationCard(deckId, card, token);
+            return new InitialChooseDestinationCardCommand(Optional.ofNullable(card), token.getUser());
+        } else {
+            return null;
+        }
     }
 
     @Override

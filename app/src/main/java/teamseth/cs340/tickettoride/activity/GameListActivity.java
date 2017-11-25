@@ -87,18 +87,20 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
     protected void onResume() {
         super.onResume();
         ClientModelRoot.games.addObserver(this);
+        Login.getInstance().addObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         ClientModelRoot.games.deleteObserver(this);
+        Login.getInstance().deleteObserver(this);
     }
 
     @Override
     public void update(Observable observable, Object o) {
         this.runOnUiThread(() -> {
-            if (ClientModelRoot.games.hasActive()) {
+            if (ClientModelRoot.games.hasActive() || Login.getInstance().getToken() == null) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 try {
                     startActivity(new Intent(this, ActivityDecider.next()));

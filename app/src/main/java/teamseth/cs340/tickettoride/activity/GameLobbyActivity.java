@@ -15,6 +15,7 @@ import teamseth.cs340.common.commands.server.LeaveGameCommand;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.models.server.games.GameState;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.communicator.Poller;
@@ -91,12 +92,14 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     protected void onResume() {
         super.onResume();
         ClientModelRoot.games.addObserver(this);
+        Login.getInstance().addObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         ClientModelRoot.games.deleteObserver(this);
+        Login.getInstance().deleteObserver(this);
     }
 
     public void updateGame() {
@@ -113,13 +116,13 @@ public class GameLobbyActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         try{
-            if (!ClientModelRoot.games.hasActive()) {
-                Poller.getInstance(this.getApplicationContext()).reset();
-                startActivity(new Intent(this, GameListActivity.class));
-                this.finish();
-            } else if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PREGAME)) {
+            if ((ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PREGAME)) || Login.getInstance().getToken() == null) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 startActivity(new Intent(this, ActivityDecider.next()));
+                this.finish();
+            } else if (!ClientModelRoot.games.hasActive()) {
+                Poller.getInstance(this.getApplicationContext()).reset();
+                startActivity(new Intent(this, GameListActivity.class));
                 this.finish();
             } else {
                 this.runOnUiThread(() -> updateGame());

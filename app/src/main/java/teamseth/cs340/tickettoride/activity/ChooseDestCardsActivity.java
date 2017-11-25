@@ -74,6 +74,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
         super.onResume();
         ClientModelRoot.cards.addObserver(this);
         ClientModelRoot.games.addObserver(this);
+        Login.getInstance().addObserver(this);
     }
 
     @Override
@@ -81,6 +82,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
         super.onPause();
         ClientModelRoot.cards.deleteObserver(this);
         ClientModelRoot.games.deleteObserver(this);
+        Login.getInstance().deleteObserver(this);
     }
 
     public void onFragmentSuccess() {
@@ -98,7 +100,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
             }
         }
         try {
-            if (!ClientModelRoot.games.getActive().getState().equals(GameState.START) ) {
+            if (!ClientModelRoot.games.getActive().getState().equals(GameState.START) || Login.getInstance().getToken() == null) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 startActivity(new Intent(this, ActivityDecider.next()));
                 this.finish();

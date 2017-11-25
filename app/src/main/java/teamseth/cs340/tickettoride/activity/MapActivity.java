@@ -269,6 +269,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
         ClientModelRoot.cards.faceUp.addObserver(this);
         ClientModelRoot.cards.others.addObserver(this);
         ClientModelRoot.games.addObserver(this);
+        Login.getInstance().addObserver(this);
     }
 
     @Override
@@ -283,12 +284,13 @@ public class MapActivity extends AppCompatActivity implements Observer {
         ClientModelRoot.cards.faceUp.deleteObserver(this);
         ClientModelRoot.cards.others.deleteObserver(this);
         ClientModelRoot.games.deleteObserver(this);
+        Login.getInstance().deleteObserver(this);
     }
 
     @Override
     public void update(Observable observable, Object arg) {
         try {
-            if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PLAYING)) {
+            if (ClientModelRoot.games.hasActive() && !ClientModelRoot.games.getActive().getState().equals(GameState.PLAYING) || Login.getInstance().getToken() == null) {
                 Poller.getInstance(this.getApplicationContext()).reset();
                 startActivity(new Intent(this, ActivityDecider.next()));
                 this.finish();
@@ -297,6 +299,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
                 this.runOnUiThread(() -> {
                     if (updateFragment instanceof MapFragment) {
                         if (observable instanceof Board) updateFragment.update();
+                        if (observable instanceof GameModel) updateFragment.update();
                     } else if (updateFragment instanceof ChatFragment) {
                         if (observable instanceof CurrentChat) updateFragment.update();
                     } else if (updateFragment instanceof GameInfoFragment) {

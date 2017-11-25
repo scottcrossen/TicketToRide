@@ -8,8 +8,11 @@ import java.util.Arrays;
 import teamseth.cs340.common.commands.ICommand;
 import teamseth.cs340.common.commands.client.IClientCommand;
 import teamseth.cs340.common.commands.server.IServerCommand;
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.Result;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
@@ -42,8 +45,25 @@ public class CommandTask extends AsyncTask<ICommand, Void, String> {
                         Logger.error("You screwed something up");
                     }
                     currentObject = result.get();
+                } catch (ResourceNotFoundException e) {
+                    Logger.error("An error occurred while executing command " + currentCommand.toString());
+                    if (Login.getInstance().getToken() == null) {
+                        currentObject = new Exception("Error: Login information not found.");
+                    } else {
+                        e.printStackTrace();
+                        currentObject = e;
+                    }
+                } catch (UnauthorizedException e) {
+                    Logger.error("An error occurred while executing command " + currentCommand.toString());
+                    if (Login.getInstance().getToken() != null) {
+                        Login.getInstance().logout();
+                        currentObject = new Exception("Error: Token expired.");
+                    } else {
+                        e.printStackTrace();
+                        currentObject = e;
+                    }
                 } catch (Exception e) {
-                    Logger.error("An error occured while executing command " + currentCommand.toString());
+                    Logger.error("An error occurred while executing command " + currentCommand.toString());
                     e.printStackTrace();
                     currentObject = e;
                 }

@@ -3,14 +3,15 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ticket_to_ride_starter"
         android:label="Ticket To Ride"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
             android:name=".activity.LoginActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,7 +21,8 @@
             android:name=".activity.GameListActivity"
             android:label="Game List"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>
@@ -28,7 +30,8 @@
             android:name=".activity.GameLobbyActivity"
             android:label="Game Lobby"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.GameListActivity">
+            android:parentActivityName=".activity.GameListActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.GameListActivity" />
         </activity>
@@ -36,7 +39,8 @@
             android:name=".activity.ChooseDestCardsActivity"
             android:label="Choose Destination Cards"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>
@@ -44,7 +48,8 @@
             android:name=".activity.MapActivity"
             android:label="Ticket To Ride Map"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>
@@ -52,7 +57,8 @@
             android:name=".activity.GameFinishActivity"
             android:label="Game Summary"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>

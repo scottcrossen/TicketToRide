@@ -38,7 +38,6 @@ public class Routes implements Serializable, IModel<Route> {
       routes.add(new Route(CityName.Calgary, CityName.Helena, ResourceColor.RAINBOW, 4,0,0,0,0));
       routes.add(new Route(CityName.Calgary, CityName.Seattle, ResourceColor.RAINBOW, 4,0,0,0,0));
       routes.add(new Route(CityName.Charleston, CityName.Raleigh, ResourceColor.RAINBOW, 2,0,0,0,0));
-      routes.add(new Route(CityName.Charleston, CityName.Atlanta, ResourceColor.RAINBOW, 2,0,0,0,0));
       routes.add(new Route(CityName.Charleston, CityName.Miami, ResourceColor.PURPLE, 4,0,0,0,0));
       routes.add(new Route(CityName.Chicago, CityName.Pittsburgh, ResourceColor.ORANGE, 3,0,0,10,10));
       routes.add(new Route(CityName.Chicago, CityName.Pittsburgh, ResourceColor.BLACK, 3,0,0,-5,-5));

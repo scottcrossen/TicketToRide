@@ -14,10 +14,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.games.PlayerColor;
+import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.util.DrawView;
 import teamseth.cs340.tickettoride.util.MapView;
@@ -124,6 +126,15 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         saultStMarie = (ImageView) rootView.findViewById(R.id.saultStMarieCity);
         montreal = (ImageView) rootView.findViewById(R.id.montrealCity);
 
+        PlayerColor colo = PlayerColor.GREEN;
+        try {
+            colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(Login.getUserId());
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        rootView.setBackgroundColor(convertPlayerColorFromEnum(colo));
+
         getActivity().setTitle(title);
 
         allClaimedRoutes = new HashSet<Route>();
@@ -167,6 +178,22 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             v.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
+    }
+
+    private int convertPlayerColorFromEnum(PlayerColor color) {
+        switch (color) {
+            case GREEN:
+                return Color.GREEN;
+            case RED:
+                return Color.RED;
+            case BLACK:
+                return Color.BLACK;
+            case BLUE:
+                return Color.BLUE;
+            case YELLOW:
+                return Color.YELLOW;
+        }
+        return Color.BLUE;
     }
 
     public void update() {

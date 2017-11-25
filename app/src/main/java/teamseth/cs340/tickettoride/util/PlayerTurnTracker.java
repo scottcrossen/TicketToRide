@@ -215,6 +215,20 @@ public class PlayerTurnTracker implements Observer {
         }
     }
 
+    public enum TurnStateEnum {
+        NotTurn, Deciding, ChooseResource, ChooseDestination, ClaimRoute, Waiting
+    }
+
+    public TurnStateEnum getState() {
+        if (state instanceof NotTurnState) return TurnStateEnum.NotTurn;
+        if (state instanceof DecideActionState) return TurnStateEnum.Deciding;
+        if (state instanceof DrawResourceState) return TurnStateEnum.ChooseResource;
+        if (state instanceof DrawDestinationState) return TurnStateEnum.ChooseDestination;
+        if (state instanceof ClaimRouteState) return TurnStateEnum.ClaimRoute;
+        if (state instanceof WaitingForNextTurnState) return TurnStateEnum.Waiting;
+        return TurnStateEnum.NotTurn;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         try {
@@ -370,12 +384,8 @@ public class PlayerTurnTracker implements Observer {
             return new LinkedList<>();
         }
         public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) throws Exception {
-            if (ClientModelRoot.board.getMatchingRoutes(route.getCity1(), route.getCity2(), route.getColor()).stream().anyMatch((Route matchingRoute) -> !matchingRoute.getClaimedPlayer().isPresent())) {
-                setState(new ClaimRouteState());
-                return state.claimRoute(context, route, colors);
-            } else {
-                return false;
-            }
+            setState(new ClaimRouteState());
+            return state.claimRoute(context, route, colors);
         }
         public void update() {}
     }

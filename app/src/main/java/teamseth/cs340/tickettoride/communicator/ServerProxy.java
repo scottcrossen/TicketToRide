@@ -2,21 +2,13 @@ package teamseth.cs340.tickettoride.communicator;
 
 import android.content.Context;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import teamseth.cs340.common.commands.client.AddTrainCartsCommand;
-import teamseth.cs340.common.commands.server.ClaimRouteCommand;
-import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
-import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
-import teamseth.cs340.common.commands.server.ReturnDestinationCardCommand;
 import teamseth.cs340.common.commands.server.SendMessageCommand;
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
-import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.chat.Message;
@@ -38,92 +30,111 @@ public class ServerProxy {
         return instance;
     }
 
-
     // Claim a route
-
-    public static void claimRoute(Context context, CityName city1, CityName city2, ArrayList<ResourceColor> colors) {
+    public static void claimRoute(Context context, Route route, List<ResourceColor> colors) {
         try {
-            new CommandTask(context).execute(new ClaimRouteCommand(city1, city2, colors));
-        } catch (ResourceNotFoundException e) {
+            PlayerTurnTracker.getInstance().claimRoute(context, route, colors);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public static boolean canDoClaimRoute(Context context, CityName city1, CityName city2, ResourceColor color) {
-        boolean routeNotClaimed = ClientModelRoot.getInstance().board.getMatchingRoutes(city1, city2, color).stream().anyMatch((Route route) -> !route.getClaimedPlayer().isPresent());
-        return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && routeNotClaimed);
+    public static boolean canDoClaimRoute(Context context, Route route, List<ResourceColor> colors) {
+        try {
+            boolean clientInCorrectState = PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.Deciding);
+            List<Route> matchingRoutes = ClientModelRoot.board.getMatchingRoutes(route.getCity1(), route.getCity2(), route.getColor());
+            List<Route> neighborRoutes = ClientModelRoot.getInstance().board.getMatchingRoutes(route.getCity1(), route.getCity2());
+            boolean nonClaimedRouteExists = matchingRoutes.stream().anyMatch((Route currentRoute) -> !currentRoute.getClaimedPlayer().isPresent());
+            boolean validColors = route.equals(route.getCity1(), route.getCity2(), colors);
+            boolean playerHasEnoughCards = colors.stream().distinct().allMatch((ResourceColor uniqueColor) -> {
+                long amntColorToBeUsed = colors.stream().filter((ResourceColor currentColor) -> currentColor.equals(uniqueColor)).count();
+                long amntColorOwned = ClientModelRoot.cards.getResourceCards().stream().filter((ResourceColor currentColor) -> currentColor.equals(uniqueColor)).count();
+                boolean playerHasEnoughColor = amntColorOwned >= amntColorToBeUsed;
+                return playerHasEnoughColor;
+            });
+            boolean doubleRouteRestrictionObserved = ClientModelRoot.getInstance().games.getActive().getPlayers().size() >= 4 ||
+                    neighborRoutes.size() == 1 ||
+                    neighborRoutes.stream().noneMatch((Route boardRoute) -> boardRoute.getClaimedPlayer().isPresent());
+            boolean playerHasEnoughCarts = ClientModelRoot.carts.getPlayerCarts(Login.getInstance().getUserId()) >= route.getLength();
+            boolean playerDoesntHaveBothRoutes = neighborRoutes.stream().noneMatch((Route boardRoute) -> boardRoute.getClaimedPlayer().map((UUID claimedPlayer) -> claimedPlayer.equals(Login.getUserId())).orElseGet(() -> false));
+            return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && clientInCorrectState && nonClaimedRouteExists && validColors && playerHasEnoughCards && playerHasEnoughCarts && doubleRouteRestrictionObserved && playerDoesntHaveBothRoutes);
+        } catch (Exception e) {
+            return false;
+        }
     }
-
 
     // Request destination cards
-
     public static void requestDestCard(Context context) {
         try {
-            new CommandTask(context).execute(new DrawDestinationCardCommand());
-        } catch (ResourceNotFoundException e) {
+            PlayerTurnTracker.getInstance().drawDestinationCard(context);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public static boolean canDoRequestDestCard(Context context) {
-        boolean availableDestCards = ClientModelRoot.getInstance().cards.others.getDestinationAmountUsed() <= 30;
-        return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && availableDestCards);
+        try {
+            boolean clientInCorrectState = PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.Deciding);
+            boolean enoughCards = 30 - ClientModelRoot.cards.others.getDestinationAmountUsed() - ClientModelRoot.cards.getDestinationCards().size() > 0;
+            return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && clientInCorrectState && enoughCards);
+        } catch (Exception e) {
+            return false;
+        }
     }
-
 
     // Return destination card
-
-    public static void returnDestCard(Context context, DestinationCard card) {
+    public static void returnDestCard(Context context, LinkedList<DestinationCard> cards) {
         try {
-            new CommandTask(context).execute(new ReturnDestinationCardCommand(card));
-        } catch (ResourceNotFoundException e) {
+            PlayerTurnTracker.getInstance().returnDrawnDestinationCards(context, cards);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public static boolean canDoReturnDestCard(Context context, List<DestinationCard> cards) {
-        boolean test = PlayerTurnTracker.getInstance().returnDrawnDestinationCards(context, cards);
-        return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && test);
+        try {
+            boolean clientInCorrectState = PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.ChooseDestination);
+            boolean cardsAreValid = cards.stream().allMatch((DestinationCard card) -> {
+                boolean playerOwnsCard = ClientModelRoot.cards.getDestinationCards().stream().anyMatch((DestinationCard ownedCard) -> ownedCard.compareCitiesAndValue(card));
+                return playerOwnsCard;
+            });
+            return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && clientInCorrectState && cardsAreValid);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-
-    // Choose face-up train card
-
-    /*public boolean drawFaceUpResourceCard(Context context, ResourceColor color) throws Exception {
-            if (actionAllowed() && (!color.equals(ResourceColor.RAINBOW) || cardsDrawn == 0)) {
-                if (++cardsDrawn == 2 || color.equals(ResourceColor.RAINBOW)) {
-                    destroyContext = context;
-                    awaitingDestruction = true;
-                    registerObserver(ClientModelRoot.cards);
-                }
-                (new CommandTask(context)).execute(new DrawFaceUpCardCommand(color));
-                return true;
-            } else {
-                return false;
-            }
-        }*/
-
+    // Choose faceup train card
     public static void chooseFaceUpTrainCard(Context context, ResourceColor color) {
         try {
-            new CommandTask(context).execute(new DrawFaceUpCardCommand(color));
-        } catch (ResourceNotFoundException e) {
+            PlayerTurnTracker.getInstance().drawFaceUpResourceCard(context, color);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public static boolean canDoChooseFaceUpTrainCard(Context context) {
-        //PlayerTurnTracker.getInstance().dr
+    public static boolean canDoChooseFaceUpTrainCard(Context context, ResourceColor color) {
+        try {
+            boolean clientInCorrectState = PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.Deciding) || PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.ChooseResource);
+            boolean enoughCards = 110 - ClientModelRoot.cards.others.getResourceAmountUsed() - ClientModelRoot.cards.getResourceCards().size() > 5;
+            boolean cardExists = ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color));
+            return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && clientInCorrectState && enoughCards && cardExists);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // Choose train card from deck
-
-    public static void chooseTrainCardFromDeck(Context context, int points, Set<UUID> allPlayers, UUID owner) {
-        new CommandTask(context).execute(new AddTrainCartsCommand(points, allPlayers, owner));
+    public static void chooseFaceUpDownCard(Context context) {
+        PlayerTurnTracker.getInstance().drawFaceDownResourceCard(context);
+    }
+    public static boolean canDoChooseFaceDownTrainCard(Context context) {
+        try {
+            boolean clientInCorrectState = PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.Deciding) || PlayerTurnTracker.getInstance().getState().equals(PlayerTurnTracker.TurnStateEnum.ChooseResource);
+            boolean enoughCards = 110 - ClientModelRoot.cards.others.getResourceAmountUsed() - ClientModelRoot.cards.getResourceCards().size() > 0;
+            return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && clientInCorrectState && enoughCards);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-
     // Chat
-
     public static void chat(Context context, String makeChat) {
         Message newMessage = new Message(Login.getUserId(), makeChat);
         try {
@@ -132,7 +143,6 @@ public class ServerProxy {
             e.printStackTrace();
         }
     }
-
     public static boolean canDoChat(Context context, String makeChat) {
         boolean chatNotEmpty = !makeChat.isEmpty();
         return (context != null && Login.getInstance().getToken() != null && Login.getInstance().getUserId() != null && chatNotEmpty);

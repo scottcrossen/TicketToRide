@@ -12,7 +12,7 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
-public class UpdatePlayerPointsByDestinationCardCommand implements IHistoricalCommand {
+public class UpdatePlayerPointsByDestinationCardCommand implements IHistoricalCommand, ILogoutOkayCommand {
 private static final long serialVersionUID = 7356017783205051991L;
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();

@@ -9,6 +9,8 @@ import java.util.Observer;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import teamseth.cs340.common.commands.client.ChangeTurnCommand;
+import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.server.ClaimRouteCommand;
 import teamseth.cs340.common.commands.server.DrawDestinationCardCommand;
 import teamseth.cs340.common.commands.server.DrawFaceUpCardCommand;
@@ -29,7 +31,7 @@ import teamseth.cs340.tickettoride.communicator.CommandTask;
  */
 public class PlayerTurnTracker implements Observer {
     private static PlayerTurnTracker instance;
-    public static PlayerTurnTracker getInstance() {
+    public static synchronized PlayerTurnTracker getInstance() {
         if(instance == null) {
             instance = new PlayerTurnTracker();
         }
@@ -45,9 +47,9 @@ public class PlayerTurnTracker implements Observer {
      *                  Possible reasons for 'false' include player trying to do another type of
      *                  action or there isn't enough cards to draw.
      */
-    public boolean drawFaceDownResourceCard(Context context) {
+    public synchronized boolean drawFaceDownResourceCard(Context context) {
         try {
-            if (isPlayerTurn() && ClientModelRoot.cards.getResourceCards().size() > 0) {
+            if (isPlayerTurn()) {
                 return state.drawFaceDownResourceCard(context);
             } else {
                 return false;
@@ -67,13 +69,9 @@ public class PlayerTurnTracker implements Observer {
      *                  Possible reasons for 'false' include player trying to do another type of
      *                  action or there isn't enough cards to draw.
      */
-    public boolean drawFaceUpResourceCard(Context context, ResourceColor color) {
+    public synchronized boolean drawFaceUpResourceCard(Context context, ResourceColor color) {
         try {
-            if (isPlayerTurn() &&
-                    ClientModelRoot.cards.faceUp.getFaceUpCards().size() > 0 &&
-                    ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color)) &&
-                    cardsDrawn < 2
-            ) {
+            if (isPlayerTurn()) {
                 return state.drawFaceUpResourceCard(context, color);
             } else {
                 return false;
@@ -92,9 +90,9 @@ public class PlayerTurnTracker implements Observer {
      *                  Possible reasons for 'false' include player trying to do another type of
      *                  action or there isn't enough cards to draw.
      */
-    public boolean drawDestinationCard(Context context) {
+    public synchronized boolean drawDestinationCard(Context context) {
         try {
-            if (isPlayerTurn() && ClientModelRoot.cards.others.getDestinationAmountUsed() != 30) {
+            if(isPlayerTurn()) {
                 return state.drawDestinationCard(context);
             } else {
                 return false;
@@ -113,7 +111,7 @@ public class PlayerTurnTracker implements Observer {
      *
      * @return List     A list of destination cards that represent the cards the player just drew.
      */
-    public List<DestinationCard> getDestinationCardsToDecideOn() {
+    public synchronized List<DestinationCard> getDestinationCardsToDecideOn() {
         try {
             if (isPlayerTurn()) {
                 return state.getDestinationCardsToDecideOn();
@@ -136,7 +134,7 @@ public class PlayerTurnTracker implements Observer {
      *                  Possible reasons for 'false' include player trying to do another type of
      *                  action or the client-side state hasn't "caught up" yet.
      */
-    public boolean returnDrawnDestinationCards(Context context, List<DestinationCard> cards) {
+    public synchronized boolean returnDrawnDestinationCards(Context context, List<DestinationCard> cards) {
         try {
             if (isPlayerTurn()) {
                 return state.returnDestinationCards(context, cards);
@@ -159,7 +157,7 @@ public class PlayerTurnTracker implements Observer {
      *                  Possible reasons for 'false' include player trying to do another type of
      *                  action or the client-side state hasn't "caught up" yet.
      */
-    public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) {
+    public synchronized boolean claimRoute(Context context, Route route, List<ResourceColor> colors) {
         try {
             if (isPlayerTurn()) {
                 return state.claimRoute(context, route, colors);
@@ -178,7 +176,7 @@ public class PlayerTurnTracker implements Observer {
      *
      * @return boolean  Almost always true.
      */
-    public boolean passTurn(Context context) {
+    public synchronized boolean passTurn(Context context) {
         try {
             if (isPlayerTurn()) {
                 nextTurn(context);
@@ -187,6 +185,31 @@ public class PlayerTurnTracker implements Observer {
                 return false;
             }
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * The player leaves the game.
+     *
+     * @param context   The activity context. Just pass in "getContext()" from an activity.
+     *
+     * @return boolean  Almost always true.
+     */
+    public synchronized boolean safeLeave(Context context) {
+        if (ClientModelRoot.games.hasActive()) {
+            try {
+                if (state instanceof WaitingForNextTurnState || state instanceof DecideActionState || state instanceof NotTurnState) {
+                    return true;
+                } else {
+                    (new CommandTask(context)).execute(new NextTurnCommand());
+                    this.setState(new NotTurnState());
+                    return true;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        } else {
             return false;
         }
     }
@@ -229,7 +252,7 @@ public class PlayerTurnTracker implements Observer {
 
     private void nextTurn(Context context) throws ResourceNotFoundException {
         (new CommandTask(context)).execute(new NextTurnCommand());
-        setState(new NotTurnState());
+        setState(new WaitingForNextTurnState());
     }
 
     public boolean isPlayerTurn() {
@@ -240,9 +263,9 @@ public class PlayerTurnTracker implements Observer {
             output = false;
         }
         if (!(state instanceof NotTurnState) && !output) {
-            this.setState(new NotTurnState());
+            setState(new NotTurnState());
         } else if ((state instanceof NotTurnState) && output) {
-            this.setState(new DecideActionState());
+            setState(new DecideActionState());
         }
         return output;
     }
@@ -279,21 +302,65 @@ public class PlayerTurnTracker implements Observer {
         public void update() {}
     }
 
-    private class DecideActionState implements TurnState {
-        public DecideActionState() {
-            cardsDrawn = 0;
+    private class WaitingForNextTurnState implements TurnState {
+        public WaitingForNextTurnState() {
+            registerObserver(ClientModelRoot.history);
         }
+        public boolean drawFaceDownResourceCard(Context context) {
+            return false;
+        }
+        public boolean drawFaceUpResourceCard(Context context, ResourceColor color) {
+            return false;
+        }
+        public boolean drawDestinationCard(Context context) {
+            return false;
+        }
+        public boolean returnDestinationCards(Context context, List<DestinationCard> cards) {
+            return false;
+        }
+        public List<DestinationCard> getDestinationCardsToDecideOn() {
+            return new LinkedList<>();
+        }
+        public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) {
+            return false;
+        }
+        public void update() {
+            if (ClientModelRoot.history.tailOption().map((IHistoricalCommand command) -> {
+                if (command instanceof ChangeTurnCommand) {
+                    return ((ChangeTurnCommand) command).getPlayerTurn().equals(Login.getUserId());
+                } else {
+                    return false;
+                }
+            }).orElseGet(() -> false) || !isPlayerTurn()) {
+                setState(new NotTurnState());
+            }
+        }
+    }
+
+    private class DecideActionState implements TurnState {
         public boolean drawFaceDownResourceCard(Context context) throws Exception {
-            setState(new DrawResourceState());
-            return state.drawFaceDownResourceCard(context);
+            if (110 - 5 - ClientModelRoot.cards.others.getResourceAmountUsed() - ClientModelRoot.cards.getResourceCards().size() > 5) {
+                setState(new DrawResourceState());
+                return state.drawFaceDownResourceCard(context);
+            } else {
+                return false;
+            }
         }
         public boolean drawFaceUpResourceCard(Context context, ResourceColor color) throws Exception {
-            setState(new DrawResourceState());
-            return state.drawFaceUpResourceCard(context, color);
+            if (110 - 5 - ClientModelRoot.cards.others.getResourceAmountUsed() - ClientModelRoot.cards.getResourceCards().size() > 0) {
+                setState(new DrawResourceState());
+                return state.drawFaceUpResourceCard(context, color);
+            } else {
+                return false;
+            }
         }
         public boolean drawDestinationCard(Context context) throws Exception {
-            setState(new DrawDestinationState());
-            return state.drawDestinationCard(context);
+            if (30 - ClientModelRoot.cards.others.getDestinationAmountUsed() - ClientModelRoot.cards.getDestinationCards().size() > 0) {
+                setState(new DrawDestinationState());
+                return state.drawDestinationCard(context);
+            } else {
+                return false;
+            }
         }
         public boolean returnDestinationCards(Context context, List<DestinationCard> cards) {
             return false;
@@ -302,14 +369,21 @@ public class PlayerTurnTracker implements Observer {
             return new LinkedList<>();
         }
         public boolean claimRoute(Context context, Route route, List<ResourceColor> colors) throws Exception {
-            setState(new ClaimRouteState());
-            return state.claimRoute(context, route, colors);
+            if (ClientModelRoot.board.getMatchingRoutes(route.getCity1(), route.getCity2(), route.getColor()).stream().anyMatch((Route matchingRoute) -> !matchingRoute.getClaimedPlayer().isPresent())) {
+                setState(new ClaimRouteState());
+                return state.claimRoute(context, route, colors);
+            } else {
+                return false;
+            }
         }
         public void update() {}
     }
 
-    private int cardsDrawn = 0;
     private class DrawResourceState implements TurnState {
+        private int cardsDrawn = 0;
+        public DrawResourceState() {
+            cardsDrawn = 0;
+        }
         private Context destroyContext = null;
         private boolean awaitingDestruction = false;
         private int initialAmountOfCards = ClientModelRoot.cards.getResourceCards().size();
@@ -317,29 +391,46 @@ public class PlayerTurnTracker implements Observer {
             return (!awaitingDestruction && (cardsDrawn == 0 ||  initialAmountOfCards != ClientModelRoot.cards.getResourceCards().size()));
         }
         public boolean drawFaceDownResourceCard(Context context) throws ResourceNotFoundException {
-            if (actionAllowed()) {
-                cardsDrawn++;
-                if (cardsDrawn == 2) {
+            if (actionAllowed() && cardsDrawn <= 1) {
+                if (110 - 5 - ClientModelRoot.cards.others.getResourceAmountUsed() - ClientModelRoot.cards.getResourceCards().size() <= 5) {
                     destroyContext = context;
                     awaitingDestruction = true;
                     registerObserver(ClientModelRoot.cards);
+                    return false;
+                } else {
+                    cardsDrawn++;
+                    if (cardsDrawn == 2) {
+                        destroyContext = context;
+                        awaitingDestruction = true;
+                        registerObserver(ClientModelRoot.cards);
+                    }
+                    (new CommandTask(context)).execute(new DrawResourceCardCommand());
+                    return true;
                 }
-                (new CommandTask(context)).execute(new DrawResourceCardCommand());
-                return true;
             } else {
                 return false;
             }
         }
         public boolean drawFaceUpResourceCard(Context context, ResourceColor color) throws Exception {
-            if (actionAllowed() && (!color.equals(ResourceColor.RAINBOW) || cardsDrawn == 0)) {
-                cardsDrawn++;
-                if (cardsDrawn == 2 || color.equals(ResourceColor.RAINBOW)) {
+            if (actionAllowed() && cardsDrawn <= 1 &&
+                    (!color.equals(ResourceColor.RAINBOW) || cardsDrawn == 0) &&
+                    ClientModelRoot.cards.faceUp.getFaceUpCards().stream().anyMatch((ResourceColor faceUp) -> faceUp.equals(color))
+            ) {
+                if (110 - ClientModelRoot.cards.others.getResourceAmountUsed() - 5 - ClientModelRoot.cards.getResourceCards().size() <= 0) {
                     destroyContext = context;
                     awaitingDestruction = true;
                     registerObserver(ClientModelRoot.cards);
+                    return false;
+                } else {
+                    cardsDrawn++;
+                    if (cardsDrawn == 2 || color.equals(ResourceColor.RAINBOW)) {
+                        destroyContext = context;
+                        awaitingDestruction = true;
+                        registerObserver(ClientModelRoot.cards);
+                    }
+                    (new CommandTask(context)).execute(new DrawFaceUpCardCommand(color));
+                    return true;
                 }
-                (new CommandTask(context)).execute(new DrawFaceUpCardCommand(color));
-                return true;
             } else {
                 return false;
             }

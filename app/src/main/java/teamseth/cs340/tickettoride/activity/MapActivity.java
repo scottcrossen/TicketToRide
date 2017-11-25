@@ -46,6 +46,7 @@ import teamseth.cs340.tickettoride.fragment.MapFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 /**
  * Created by Seth on 10/13/2017.
@@ -164,6 +165,7 @@ public class MapActivity extends AppCompatActivity implements Observer {
     @Override
     public void onBackPressed()
     {
+        PlayerTurnTracker.getInstance().safeLeave(getApplicationContext());
         Login.getInstance().logout();
         this.finish();
     }

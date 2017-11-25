@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
 import teamseth.cs340.common.commands.client.AddResourceCardCommand;
+import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
 import teamseth.cs340.common.commands.client.RemoveDestinationCardCommand;
@@ -257,5 +258,25 @@ public class GameModel extends AuthAction implements IModel<Game> {
             Logger.error("Problem checking end-game conditions");
         }
         get(gameId).nextTurn();
+    }
+
+    public Optional<UUID> getWhosTurnItIs(UUID gameId) throws ResourceNotFoundException {
+        return get(gameId).getWhosTurnItIs();
+    }
+
+    public void playerLoginHelper(AuthToken token) throws UnauthorizedException {
+        AuthAction.user(token);
+        UUID playerId = token.getUser();
+        games.stream().filter(game -> game.hasPlayer(playerId)).forEach((Game game) -> {
+            if (game.getWhosTurnItIs().map((UUID playerTurn) -> playerTurn.equals(playerId)).orElseGet(() -> false) && !ServerModelRoot.history.logoutStateOkay(game.getHistory(), playerId)) {
+                try {
+                    nextPlayerTurn(game.getId(), token);
+                    ServerModelRoot.history.forceAddCommandToHistory(game.getHistory(), new ChangeTurnCommand(game.getPlayers(), playerId, game.getWhosTurnItIs().get()), token);
+                } catch (Exception e) {
+                    // Game must be in incorrect state. Skip.
+                }
+            }
+        });
+
     }
 }

@@ -78,4 +78,12 @@ public class CommandHistory extends Observable {
             (command instanceof InitialChooseDestinationCardCommand && command.playerOwnedby().equals(playerId))
         );
     }
+
+    public Optional<IHistoricalCommand> tailOption() {
+        if (history.size() > 0) {
+            return Optional.of(history.get(history.size() - 1));
+        } else {
+            return Optional.empty();
+        }
+    }
 }

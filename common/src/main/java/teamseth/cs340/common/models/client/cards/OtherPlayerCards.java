@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.util.client.Login;
 
 /**
  * @author Scott Leland Crossen
@@ -40,7 +41,7 @@ public class OtherPlayerCards extends Observable implements IModel {
     }
 
     public void addPlayerDestinationCard(UUID playerId) {
-        if(playerDestinationCards.containsKey(playerId)) {
+        if(playerDestinationCards.containsKey(playerId) && !playerId.equals(Login.getUserId())) {
             playerDestinationCards.put(playerId, playerDestinationCards.get(playerId) + 1);
         } else {
             playerDestinationCards.put(playerId, 1);
@@ -50,7 +51,7 @@ public class OtherPlayerCards extends Observable implements IModel {
     }
 
     public void removePlayerDestinationCard(UUID playerId) {
-        if(playerDestinationCards.containsKey(playerId)) {
+        if(playerDestinationCards.containsKey(playerId) && !playerId.equals(Login.getUserId())) {
             playerDestinationCards.put(playerId, playerDestinationCards.get(playerId) - 1);
         }
         setChanged();
@@ -66,7 +67,7 @@ public class OtherPlayerCards extends Observable implements IModel {
     }
 
     public void addPlayerResourceCard(UUID playerId) {
-        if(playerResourceCards.containsKey(playerId)) {
+        if(playerResourceCards.containsKey(playerId) && !playerId.equals(Login.getUserId())) {
             playerResourceCards.put(playerId, playerResourceCards.get(playerId) + 1);
         } else {
             playerResourceCards.put(playerId, 1);
@@ -76,7 +77,7 @@ public class OtherPlayerCards extends Observable implements IModel {
     }
 
     public void removePlayerResourceCard(UUID playerId) {
-        if(playerResourceCards.containsKey(playerId)) {
+        if(playerResourceCards.containsKey(playerId) && !playerId.equals(Login.getUserId())) {
             playerResourceCards.put(playerId, playerResourceCards.get(playerId) - 1);
         }
         setChanged();

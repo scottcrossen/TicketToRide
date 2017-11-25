@@ -22,6 +22,7 @@ public class LoginCommand implements IServerCommand {
     public Result<UpdateTokenCommand> call() {
         return new Result<UpdateTokenCommand>(() -> {
             AuthToken token = ServerFacade.getInstance().login(this.creds);
+            ServerFacade.getInstance().playerLoginHelper(token);
             return new UpdateTokenCommand(token);
         });
     }

@@ -27,6 +27,7 @@ public class NextTurnCommand extends QueueCommand implements IServerCommand {
 
     public IHistoricalCommand clientCommand() throws Exception {
         ServerFacade.getInstance().nextPlayerTurn(gameId, token);
-        return new ChangeTurnCommand(allPlayers, token.getUser());
+        UUID playerTurn = ServerFacade.getInstance().getWhosTurnItIs(gameId).get();
+        return new ChangeTurnCommand(allPlayers, token.getUser(), playerTurn);
     }
 }

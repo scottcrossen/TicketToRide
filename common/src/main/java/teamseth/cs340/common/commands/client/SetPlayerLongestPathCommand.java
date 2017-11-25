@@ -11,7 +11,7 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class SetPlayerLongestPathCommand implements IHistoricalCommand {
+public class SetPlayerLongestPathCommand implements IHistoricalCommand, ILogoutOkayCommand {
     private static final long serialVersionUID = -5036063188550227095L;
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();

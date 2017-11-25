@@ -112,7 +112,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(0).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(0))){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
-                } else {
+                } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 0;
@@ -130,7 +130,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(1))){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
-                } else {
+                } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 1;
@@ -148,7 +148,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(2))){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
-                } else {
+                } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 2;
@@ -166,7 +166,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(3))){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
-                } else {
+                } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 3;
@@ -184,7 +184,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 String cardColor = ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(4).toString().toLowerCase();
                 if (PlayerTurnTracker.getInstance().drawFaceUpResourceCard(getContext(), ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(4))){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a " + cardColor + " card.");
-                } else {
+                } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
 //                int cardIndex = 4;
@@ -217,7 +217,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 //                String cardColor = ClientModelRoot.getInstance()
                 if (PlayerTurnTracker.getInstance().drawFaceDownResourceCard(getContext())){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a random card.");
-                } else {
+                } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
             }

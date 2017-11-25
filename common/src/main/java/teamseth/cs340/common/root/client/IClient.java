@@ -40,6 +40,7 @@ public interface IClient {
     public void addPlayerTrainCarts(UUID playerId, int amount);
     public void removePlayerTrainCarts(UUID playerId, int amount);
     public void nextTurn();
+    public void setTurn(UUID playerId);
     public void updatePlayerPointsByDestinationCard(UUID playerId, DestinationCard card) throws ResourceNotFoundException;
     public void setPlayerLongestPath(UUID playerId);
 }

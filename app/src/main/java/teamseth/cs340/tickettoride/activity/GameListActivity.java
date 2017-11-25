@@ -22,6 +22,7 @@ import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.FragmentChangeListener;
 import teamseth.cs340.tickettoride.fragment.GameListFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 /**
  * @author Scott Leland Crossen
@@ -55,6 +56,7 @@ public class GameListActivity extends AppCompatActivity implements FragmentChang
     }
 
     private void backPressed() {
+        PlayerTurnTracker.getInstance().safeLeave(getApplicationContext());
         Login.getInstance().logout();
         this.finish();
     }

@@ -2,10 +2,13 @@ package teamseth.cs340.common.models.server.history;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
+import teamseth.cs340.common.commands.client.ILogoutOkayCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -74,4 +77,29 @@ public class HistoryModel extends AuthAction implements IModel<CommandHistory> {
         }
     }
 
+    public boolean logoutStateOkay(UUID historyId, UUID playerId) {
+        try {
+            List<IHistoricalCommand> history = get(historyId).getAll();
+            int lastPlayerTurnChangePos;
+            for (lastPlayerTurnChangePos = history.size() - 1; lastPlayerTurnChangePos >= 0; lastPlayerTurnChangePos--) {
+                IHistoricalCommand currentCommand = history.get(lastPlayerTurnChangePos);
+                if (currentCommand instanceof ChangeTurnCommand) {
+                    if (((ChangeTurnCommand) currentCommand).getPlayerTurn().equals(playerId)) {
+                        break;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            lastPlayerTurnChangePos = lastPlayerTurnChangePos < 0 ? 0 : lastPlayerTurnChangePos;
+            for (int i = lastPlayerTurnChangePos; i < history.size(); i++) {
+                if (!(history.get(i) instanceof ILogoutOkayCommand)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (ResourceNotFoundException e) {
+            return true;
+        }
+    }
 }

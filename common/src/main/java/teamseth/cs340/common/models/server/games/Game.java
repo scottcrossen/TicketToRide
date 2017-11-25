@@ -86,6 +86,9 @@ public class Game implements Serializable, Comparable<Game> {
         this.carts = id;
         updateTime();
     }
+    public void setTurn(UUID playerId) {
+        this.turn = playerTurns.indexOf(playerId);
+    }
 
     public GameState getState() {
         return state;

@@ -59,6 +59,12 @@ public final class ServerFacade implements IServer {
     public void nextPlayerTurn(UUID gameId, AuthToken token) throws UnauthorizedException, ResourceNotFoundException, ModelActionException {
         model.games.nextPlayerTurn(gameId, token);
     }
+    public Optional<UUID> getWhosTurnItIs(UUID gameId) throws ResourceNotFoundException {
+        return model.games.getWhosTurnItIs(gameId);
+    }
+    public void playerLoginHelper(AuthToken token) throws UnauthorizedException {
+        model.games.playerLoginHelper(token);
+    }
 
     // User model methods
     public AuthToken login(UserCreds creds) throws ResourceNotFoundException, UnauthorizedException {

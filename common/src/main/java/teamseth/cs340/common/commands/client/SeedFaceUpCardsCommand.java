@@ -13,7 +13,7 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class SeedFaceUpCardsCommand implements IHistoricalCommand {
+public class SeedFaceUpCardsCommand implements IHistoricalCommand, ILogoutOkayCommand {
     private static final long serialVersionUID = -2226174445616083465L;
 
     private List<ResourceColor> cards;

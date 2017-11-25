@@ -13,7 +13,7 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class AddMessagesCommand implements IClientCommand, IHistoricalCommand {
+public class AddMessagesCommand implements IClientCommand, IHistoricalCommand, ILogoutOkayCommand {
     private static final long serialVersionUID = -11802527544567339L;
 
     private ArrayList<Message> messages;

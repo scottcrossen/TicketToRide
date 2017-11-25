@@ -30,13 +30,21 @@ public class ClientModelRoot {
     public static final PlayerPoints points = PlayerPoints.getInstance();
     public static final PlayerCarts carts = PlayerCarts.getInstance();
     public void resetAll() {
+        ClientModelRoot.cards.deleteObservers();
+        ClientModelRoot.chat.deleteObservers();
+        ClientModelRoot.history.deleteObservers();
+        ClientModelRoot.board.deleteObservers();
+        ClientModelRoot.points.deleteObservers();
+        ClientModelRoot.carts.deleteObservers();
+        ClientModelRoot.cards.faceUp.deleteObservers();
+        ClientModelRoot.cards.others.deleteObservers();
+        ClientModelRoot.games.deleteObservers();
         games.resetModel();
         cards.resetModel();
         chat.resetModel();
         history.resetModel();
         board.resetModel();
         points.resetModel();
-        cards.resetModel();
         carts.resetModel();
     }
 }

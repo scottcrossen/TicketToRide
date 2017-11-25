@@ -16,6 +16,7 @@ import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.communicator.Poller;
 import teamseth.cs340.tickettoride.fragment.ChooseDestCardsFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 
 /**
  * Created by ajols on 10/14/2017.
@@ -43,6 +44,7 @@ public class ChooseDestCardsActivity extends AppCompatActivity implements Observ
     }
 
     private void backPressed() {
+        PlayerTurnTracker.getInstance().safeLeave(getApplicationContext());
         Login.getInstance().logout();
         this.finish();
     }

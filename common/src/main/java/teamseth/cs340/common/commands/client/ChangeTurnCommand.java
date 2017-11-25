@@ -11,21 +11,27 @@ import teamseth.cs340.common.util.Result;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class ChangeTurnCommand implements IHistoricalCommand {
+public class ChangeTurnCommand implements IHistoricalCommand, ILogoutOkayCommand {
     private static final long serialVersionUID = 2595495252972858369L;
 
     private UUID id = UUID.randomUUID();
     private Set<UUID> players = new HashSet<UUID>();
     private UUID owner;
+    private UUID playerTurn;
 
-    public ChangeTurnCommand(Set<UUID> allPlayers, UUID owner) {
+    public ChangeTurnCommand(Set<UUID> allPlayers, UUID owner, UUID playerTurn) {
         this.players = allPlayers;
         this.owner = owner;
+        this.playerTurn = playerTurn;
     }
 
     public Result call() {
         return new Result(() -> {
-            ClientFacade.getInstance().nextTurn(); return null;});
+            ClientFacade.getInstance().setTurn(playerTurn); return null;});
+    }
+
+    public UUID getPlayerTurn() {
+        return playerTurn;
     }
 
     public UUID getId() {

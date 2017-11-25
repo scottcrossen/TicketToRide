@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Set;
+import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.IModel;
@@ -93,6 +94,12 @@ public class GameModel extends Observable implements IModel<Game> {
         notifyObservers();
     }
 
+    public void setTurn(UUID playerId) {
+        state.setTurn(playerId);
+        setChanged();
+        notifyObservers();
+    }
+
     public boolean hasActive() {
         return this.state.hasActive();
     }
@@ -105,6 +112,7 @@ public class GameModel extends Observable implements IModel<Game> {
         void nextTurn();
         void addGames(Set<Game> newGames);
         HashSet<Game> getAll();
+        void setTurn(UUID playerId);
     }
 
     private class ActiveGameState implements IGameModelState {
@@ -132,6 +140,9 @@ public class GameModel extends Observable implements IModel<Game> {
             HashSet<Game> output = new HashSet<>();
             output.add(active);
             return output;
+        }
+        public void setTurn(UUID playerId) {
+            active.setTurn(playerId);
         }
     }
 
@@ -173,5 +184,6 @@ public class GameModel extends Observable implements IModel<Game> {
         public HashSet<Game> getAll(){
             return games;
         }
+        public void setTurn(UUID playerId) {}
     }
 }

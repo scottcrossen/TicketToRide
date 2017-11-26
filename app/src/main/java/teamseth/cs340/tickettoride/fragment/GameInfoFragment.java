@@ -159,7 +159,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                     getDestCards.setHasOptionsMenu(false);
                     getDestCards.setMenuVisibility(false);
 
-                    fragmentManager.beginTransaction().addToBackStack("Game Info").replace(R.id.content_frame, getDestCards).commit();
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, getDestCards).commit();
                 }
             }
         });

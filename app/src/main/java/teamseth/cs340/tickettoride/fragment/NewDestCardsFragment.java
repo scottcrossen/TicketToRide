@@ -166,8 +166,6 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
             PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
             getActivity().onBackPressed();
         }
-
-
     }
 
     public void enableButton() {

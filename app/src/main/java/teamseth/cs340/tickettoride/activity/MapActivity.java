@@ -171,6 +171,7 @@ public class MapActivity extends AppCompatActivity implements Observer, NewDestC
     public void onBackPressed() {
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
+            // Warning: If you were in the middle of a turn action be sure to finalize the turn before this executes.
             fm.popBackStack();
         } else {
             PlayerTurnTracker.getInstance().safeExit(getApplicationContext());

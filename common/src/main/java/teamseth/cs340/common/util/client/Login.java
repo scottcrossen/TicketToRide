@@ -28,7 +28,7 @@ public class Login extends Observable implements Serializable {
             Logger.getInstance().setVerbosity(3);
         }
     }
-    public static final boolean debug = false;
+    public static final boolean debug = true;
     private static AuthToken token;
     private static String serverPort = "8081";
     private static String serverHost = "10.0.2.2";

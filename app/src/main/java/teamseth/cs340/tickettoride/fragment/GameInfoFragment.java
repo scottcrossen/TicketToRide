@@ -37,7 +37,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     ImageView card3;
     ImageView card4;
     ImageView card5;
-    private boolean isTurn = false;
     TextView trainCardsLeft;
     TextView destCardsLeft;
     TextView playerName;
@@ -99,12 +98,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
-//                int cardIndex = 0;
-//                try {
-//                    drawCard(cardIndex);
-//                } catch (ResourceNotFoundException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -117,12 +110,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
-//                int cardIndex = 1;
-//                try {
-//                    drawCard(cardIndex);
-//                } catch (ResourceNotFoundException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -135,12 +122,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
-//                int cardIndex = 2;
-//                try {
-//                    drawCard(cardIndex);
-//                } catch (ResourceNotFoundException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -153,12 +134,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
-//                int cardIndex = 3;
-//                try {
-//                    drawCard(cardIndex);
-//                } catch (ResourceNotFoundException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -171,12 +146,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
                     Toaster.shortT(getContext(), "It's not your turn.");
                 }
-//                int cardIndex = 4;
-//                try {
-//                    drawCard(cardIndex);
-//                } catch (ResourceNotFoundException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -198,7 +167,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         trainCardDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String cardColor = ClientModelRoot.getInstance()
                 if (PlayerTurnTracker.getInstance().drawFaceDownResourceCard(getContext())){
                     if (Login.debug) Toaster.shortT(getContext(), "You drew a random card.");
                 } else if (!PlayerTurnTracker.getInstance().isPlayerTurn()) {
@@ -209,36 +177,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 
         return rootView;
     }
-
-//    private void drawCard(int cardIndex) throws ResourceNotFoundException {
-//        if(ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().equals(Login.getUserId())){
-//            try {
-//                if (ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex).toString() == ResourceColor.RAINBOW.toString()) {
-//                    if (Login.getInstance().getCardsDrawn() == 0){
-//                        isTurn = false;
-//                        new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
-//                        new CommandTask(this.getContext()).execute(new NextTurnCommand());
-//                    } else {
-//                    }
-//
-//                } else {
-//                    Login.getInstance().setCardsDrawn(Login.getInstance().getCardsDrawn() + 1);
-//                    new CommandTask(getContext()).execute(new DrawFaceUpCardCommand(ClientModelRoot.getInstance().cards.faceUp.getFaceUpCards().get(cardIndex)));
-//                }
-////                this.getView().invalidate();
-//            } catch (ResourceNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            checkChangeTurn();
-//            setImage(1);
-//            setImage(2);
-//            setImage(3);
-//            setImage(4);
-//            setImage(5);
-//        } else
-//        {
-//        }
-//    }
 
     private void setImage(int cardNum) {
         ImageView card = null;
@@ -288,8 +226,5 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                 return blueCard;
         }
         return orangeCard;
-    }
-
-    private void refreshView(){
     }
 }

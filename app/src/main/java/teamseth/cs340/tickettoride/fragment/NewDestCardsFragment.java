@@ -152,7 +152,6 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
 
     public void onButtonClicked() throws ResourceNotFoundException {
         List<DestinationCard> destinationCards = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
-        //ClientModelRoot.getInstance().cards.getDestinationCards();
         List<DestinationCard> returnCards = new LinkedList<>();
         if (cardsToDecideOn.size() > 0 && !checkBox1.isChecked()) {
             returnCards.add(destinationCards.get(0));

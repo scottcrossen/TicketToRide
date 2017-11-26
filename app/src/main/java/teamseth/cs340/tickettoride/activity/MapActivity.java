@@ -43,6 +43,7 @@ import teamseth.cs340.tickettoride.fragment.GameInfoFragment;
 import teamseth.cs340.tickettoride.fragment.HistoryFragment;
 import teamseth.cs340.tickettoride.fragment.IUpdatableFragment;
 import teamseth.cs340.tickettoride.fragment.MapFragment;
+import teamseth.cs340.tickettoride.fragment.NewDestCardsFragment;
 import teamseth.cs340.tickettoride.fragment.OtherPlayersFragment;
 import teamseth.cs340.tickettoride.fragment.PlayerFragment;
 import teamseth.cs340.tickettoride.util.ActivityDecider;
@@ -52,7 +53,7 @@ import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
  * Created by Seth on 10/13/2017.
  */
 
-public class MapActivity extends AppCompatActivity implements Observer {
+public class MapActivity extends AppCompatActivity implements Observer, NewDestCardsFragment.Caller {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -62,6 +63,11 @@ public class MapActivity extends AppCompatActivity implements Observer {
     private CharSequence mTitle;
     private String[] mTabTitles;
     private Fragment fragment;
+
+    @Override
+    public void onNewDestCardsChosen() {
+        selectItem(3);
+    }
 
     public void disableDrawer() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -162,11 +168,15 @@ public class MapActivity extends AppCompatActivity implements Observer {
     }
 
     @Override
-    public void onBackPressed()
-    {
-        PlayerTurnTracker.getInstance().safeExit(getApplicationContext());
-        Login.getInstance().logout();
-        this.finish();
+    public void onBackPressed() {
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        } else {
+            PlayerTurnTracker.getInstance().safeExit(getApplicationContext());
+            Login.getInstance().logout();
+            this.finish();
+        }
     }
 
     /* The click listener for ListView in the navigation drawer */

@@ -71,7 +71,7 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
     }
 
     public interface Caller {
-        void onFragmentSuccess();
+        void onNewDestCardsChosen();
     }
 
     public void setDestinationCards(List<DestinationCard> cards) {
@@ -123,17 +123,6 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
         chooseDestCardsBtn = v.findViewById(R.id.chooseDestCardsButton);
         chooseDestCardsBtn.setOnClickListener(this);
         chooseDestCardsBtn.setEnabled(false);
-
-//        test = ClientModelRoot.getInstance().cards.getDestinationCards();
-//
-////        setDestinationCards(ClientModelRoot.getInstance().cards.getDestinationCards());
-//
-//        test.add(new DestinationCard(CityName.Vancouver, CityName.SaltLakeCity, 90));
-//        test.add(new DestinationCard(CityName.Calgary, CityName.Raleigh, 90));
-//        test.add(new DestinationCard(CityName.Toronto, CityName.SantaFe, 90));
-//        test.add(new DestinationCard(CityName.Boston, CityName.ElPaso, 90));
-//        setDestinationCards(test);
-
         return v;
     }
 
@@ -176,16 +165,10 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
         }
         if (cardsToDecideOn.size() > 0) {
             PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
-//        android.app.FragmentManager fm = getFragmentManager();
-//        fm.beginTransaction().replace(R.id.content_frame, new PlayerFragment());
             getActivity().onBackPressed();
         }
 
 
-        parent.map((NewDestCardsFragment.Caller caller) -> {
-            caller.onFragmentSuccess();
-            return caller;
-        });
     }
 
     public void enableButton() {
@@ -207,7 +190,6 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
             chooseDestCardsBtn.setEnabled(false);
         } else if (count >= 1) {
             chooseDestCardsBtn.setEnabled(true);
-        }//hello
+        }
     }
 }
-//love andrew

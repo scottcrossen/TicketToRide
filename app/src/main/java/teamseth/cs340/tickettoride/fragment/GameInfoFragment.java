@@ -11,12 +11,9 @@ import android.widget.TextView;
 
 import java.util.UUID;
 
-import teamseth.cs340.common.commands.server.NextTurnCommand;
-import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.common.util.client.Login;
 import teamseth.cs340.tickettoride.R;
-import teamseth.cs340.tickettoride.communicator.CommandTask;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 import teamseth.cs340.tickettoride.util.Toaster;
 
@@ -41,7 +38,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
     ImageView card4;
     ImageView card5;
     private boolean isTurn = false;
-    private int cardsDrawn = Login.getInstance().getCardsDrawn();
     TextView trainCardsLeft;
     TextView destCardsLeft;
     TextView playerName;
@@ -80,19 +76,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
         int i = getArguments().getInt(ARG_TAB_NUMBER);
         String title = getResources().getStringArray(R.array.tabs_array)[i];
         getActivity().setTitle(title);
-
-        try {
-            if (ClientModelRoot.getInstance().games.getActive().getWhosTurnItIs().get().equals(Login.getUserId())){
-                isTurn = true;
-                Login.getInstance().setCardsDrawn(0);
-            } else
-            {
-                isTurn = false;
-            }
-
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        }
 
         card1 = (ImageView) rootView.findViewById(R.id.card1);
         card2 = (ImageView) rootView.findViewById(R.id.card2);
@@ -207,7 +190,7 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
                     getDestCards.setHasOptionsMenu(false);
                     getDestCards.setMenuVisibility(false);
 
-                    fragmentManager.beginTransaction().replace(R.id.content_frame, getDestCards).commit();
+                    fragmentManager.beginTransaction().addToBackStack("Game Info").replace(R.id.content_frame, getDestCards).commit();
                 }
             }
         });
@@ -256,16 +239,6 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
 //        {
 //        }
 //    }
-
-    private void checkChangeTurn() {
-        if (Login.getInstance().getCardsDrawn() > 1 || !isTurn){
-            try {
-                new CommandTask(this.getContext()).execute(new NextTurnCommand());
-            } catch (ResourceNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     private void setImage(int cardNum) {
         ImageView card = null;

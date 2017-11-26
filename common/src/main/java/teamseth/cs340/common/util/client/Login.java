@@ -28,22 +28,13 @@ public class Login extends Observable implements Serializable {
             Logger.getInstance().setVerbosity(3);
         }
     }
-    public static final boolean debug = false;
+    public static final boolean debug = true;
     private static AuthToken token;
     private static String serverPort = "8081";
     private static String serverHost = "10.0.2.2";
     private static String username;
     private static String password;
-    private int cardsDrawn = 0;
     private static UUID player;
-
-    public int getCardsDrawn() {
-        return cardsDrawn;
-    }
-
-    public void setCardsDrawn(int cardsDrawn) {
-        this.cardsDrawn = cardsDrawn;
-    }
 
     public static UUID getUserId() { return player;}
 

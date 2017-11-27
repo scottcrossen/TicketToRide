@@ -1,8 +1,7 @@
 package teamseth.cs340.tickettoride.fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import java.util.UUID;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
 import teamseth.cs340.tickettoride.R;
-import teamseth.cs340.tickettoride.util.ActivityDecider;
 
 /**
  * Created by ajols on 11/11/2017.
@@ -133,6 +131,7 @@ public class GameFinishFragment extends Fragment implements View.OnClickListener
             Iterator<UUID> playerIterator = ClientModelRoot.getInstance().games.getActive().getPlayers().iterator();
             int count = 0;
             int highestScore = 0;
+            boolean firstValueFound = false; // Helps with negative values.
             String winningPlayer = "";
 
             if (totalPlayers != 5) {
@@ -157,9 +156,10 @@ public class GameFinishFragment extends Fragment implements View.OnClickListener
                 String playerName = playerNames.get(player);
                 int score = ClientModelRoot.getInstance().points.getTotalPlayerPoints(player);
 
-                if (score > highestScore) {
+                if (!firstValueFound || score > highestScore) {
                     highestScore = score;
                     winningPlayer = playerName;
+                    firstValueFound = true;
                 }
 
                 int carts = ClientModelRoot.getInstance().carts.getPlayerCarts(player);

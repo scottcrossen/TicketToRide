@@ -1,5 +1,7 @@
 package teamseth.cs340.tickettoride.fragment;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,10 +22,12 @@ import java.util.Optional;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.models.client.ClientModelRoot;
+import teamseth.cs340.common.models.client.cards.CurrentCards;
 import teamseth.cs340.common.models.server.cards.DestinationCard;
 import teamseth.cs340.tickettoride.R;
 import teamseth.cs340.tickettoride.activity.MapActivity;
 import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
+import teamseth.cs340.tickettoride.util.Toaster;
 
 import static android.view.View.GONE;
 
@@ -31,7 +35,7 @@ import static android.view.View.GONE;
  * Created by macrow7 on 11/20/17.
  */
 
-public class NewDestCardsFragment extends Fragment implements View.OnClickListener, Observer {
+public class NewDestCardsFragment extends DialogFragment implements View.OnClickListener, Observer {
 
     private CheckBox checkBox1;
     private CheckBox checkBox2;
@@ -39,6 +43,15 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
     private Button chooseDestCardsBtn;
     private Optional<Caller> parent;
     private List<DestinationCard> cardsToDecideOn = new LinkedList<DestinationCard>();
+    private int timesUpdated = 0;
+    private boolean lessThanThree = false;
+    private boolean isTwo = false;
+    private boolean isOne = false;
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,9 +68,26 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
     @Override
     public void update(Observable o, Object arg) {
         cardsToDecideOn = PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn();
-        if (cardsToDecideOn.size() > 0) {
+//        int destCardsLeftNum = 30 - ClientModelRoot.cards.others.getDestinationAmountUsed() - ClientModelRoot.cards.getDestinationCards().size();
+//        String size = String.valueOf(destCardsLeftNum);
+//        System.out.println(size);
+//        System.out.println(cardsToDecideOn.size());
+        timesUpdated++;
+        System.out.println(timesUpdated);
+        if (cardsToDecideOn.size() == 3) {
             setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
-        } else {
+        } else if (isTwo && timesUpdated > 1){
+            setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
+        } else if (isOne && timesUpdated > 0){
+            setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
+        }
+//        else if (timesUpdated < 3){
+//            update(o, arg);
+//        }
+//        else if(destCardsLeftNum < 3 && cardsToDecideOn.size() > 0){
+//            setDestinationCards(PlayerTurnTracker.getInstance().getDestinationCardsToDecideOn());
+//        }
+        else {
             checkBox1.setText("Loading...");
             checkBox2.setText("Loading...");
             checkBox3.setText("Loading...");
@@ -74,6 +104,18 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
         void onNewDestCardsChosen();
     }
 
+    public void setLessThanThree(boolean lessThanThree) {
+        this.lessThanThree = lessThanThree;
+    }
+
+    public void setTwo(boolean two) {
+        isTwo = two;
+    }
+
+    public void setOne(boolean one) {
+        isOne = one;
+    }
+
     public void setDestinationCards(List<DestinationCard> cards) {
         Iterator<DestinationCard> iterator = cards.iterator();
         if (iterator.hasNext()) {
@@ -88,6 +130,13 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
             DestinationCard next = iterator.next();
             checkBox3.setText(next.toString());
         }
+//        if (isTwo){
+//            checkBox3.setVisibility(GONE);
+//        }
+//        if (isOne){
+//            checkBox2.setVisibility(GONE);
+//            checkBox3.setVisibility(GONE);
+//        }
     }
     @Override
     public void onResume() {
@@ -164,7 +213,7 @@ public class NewDestCardsFragment extends Fragment implements View.OnClickListen
         }
         if (cardsToDecideOn.size() > 0) {
             PlayerTurnTracker.getInstance().returnDrawnDestinationCards(getContext(), returnCards);
-            getActivity().onBackPressed();
+            dismiss();
         }
     }
 

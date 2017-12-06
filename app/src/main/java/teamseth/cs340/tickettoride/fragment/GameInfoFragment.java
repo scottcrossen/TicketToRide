@@ -1,5 +1,6 @@
 package teamseth.cs340.tickettoride.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -154,12 +155,13 @@ public class GameInfoFragment extends Fragment implements IUpdatableFragment {
             public void onClick(View v) {
                 if (PlayerTurnTracker.getInstance().drawDestinationCard(getContext())){
                     NewDestCardsFragment prepDestCards = new NewDestCardsFragment();
-                    Fragment getDestCards = prepDestCards;
-                    FragmentManager fragmentManager = getFragmentManager();
-                    getDestCards.setHasOptionsMenu(false);
-                    getDestCards.setMenuVisibility(false);
-
-                    fragmentManager.beginTransaction().replace(R.id.content_frame, getDestCards).commit();
+                    if (Integer.valueOf(String.valueOf(destCardsLeft.getText())) == 2) {
+                        prepDestCards.setTwo(true);
+                    }
+                    if (Integer.valueOf(String.valueOf(destCardsLeft.getText())) == 1) {
+                        prepDestCards.setOne(true);
+                    }
+                    prepDestCards.show(((Activity) getContext()).getFragmentManager(), "Select Destination Cards");
                 }
             }
         });

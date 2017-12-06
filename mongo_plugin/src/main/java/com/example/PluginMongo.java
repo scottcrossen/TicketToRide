@@ -1,8 +1,16 @@
 package com.example;
 
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+
+import java.net.UnknownHostException;
+
 public class PluginMongo implements IPersistanceProvider{
     MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-    DB db = mongo.getDB("TicketToRide");
+    DB db = mongoClient.getDB("TicketToRide");
+
+    public PluginMongo() throws UnknownHostException {
+    }
 
     @Override
     public void initialize() {

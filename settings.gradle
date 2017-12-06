@@ -1,1 +1,1 @@
-include ':app', ':server', ':common'
+include ':app', ':server', ':common', ':sql_plugin', ':mongo_plugin'

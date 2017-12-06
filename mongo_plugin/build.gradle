@@ -3,6 +3,7 @@ apply plugin: 'java'
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/mongo-java-driver-2.12.3.jar')
+    compile project(path: ':common')
 }
 
 sourceCompatibility = "1.8"

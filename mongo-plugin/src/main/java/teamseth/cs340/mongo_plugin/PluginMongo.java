@@ -1,4 +1,4 @@
-package com.example;
+package teamseth.cs340.mongo_plugin;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;

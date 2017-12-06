@@ -1,4 +1,4 @@
-package com.example;
+package teamseth.cs340.sql_plugin;
 
 public class PluginSQL implements IPersistanceProvider {
     @Override

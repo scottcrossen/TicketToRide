@@ -1,4 +1,4 @@
-package teamseth.cs340.common.plugin;
+package teamseth.cs340.common.persistence.plugin;
 
 import java.io.Serializable;
 import java.util.List;

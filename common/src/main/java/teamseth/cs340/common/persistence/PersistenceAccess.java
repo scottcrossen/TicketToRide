@@ -1,7 +1,9 @@
-package teamseth.cs340.common.plugin;
+package teamseth.cs340.common.persistence;
 
 import java.util.List;
 
+import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
+import teamseth.cs340.common.persistence.plugin.PluginLoader;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.server.Config;
 
@@ -22,7 +24,7 @@ public class PersistenceAccess {
 
     public void initialize(String[] args) {
         Logger.info("Loading plugins from providers");
-        providers = PersistenceLoader.loadPlugins(args, Config.getInstance().getPersistanceType());
+        providers = PluginLoader.loadPlugins(args, Config.getInstance().getPersistanceType());
         if (providers.size() <= 0) {
             Logger.warn("Supported providers not found in plugins");
         } else {

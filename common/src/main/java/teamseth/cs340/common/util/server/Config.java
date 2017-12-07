@@ -6,7 +6,7 @@ import java.util.Optional;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import teamseth.cs340.common.plugin.IPersistenceProvider;
+import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
 
 /**
  * @author Scott Leland Crossen

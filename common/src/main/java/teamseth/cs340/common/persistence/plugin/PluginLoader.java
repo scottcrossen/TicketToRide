@@ -1,4 +1,4 @@
-package teamseth.cs340.common.plugin;
+package teamseth.cs340.common.persistence.plugin;
 
 import java.io.File;
 import java.net.URL;
@@ -10,13 +10,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import teamseth.cs340.common.persistence.PersistenceAccess;
 import teamseth.cs340.common.util.Logger;
 
 /**
  * @author Scott Leland Crossen
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
-public class PersistenceLoader {
+public class PluginLoader {
 
     private static PersistenceAccess instance;
 

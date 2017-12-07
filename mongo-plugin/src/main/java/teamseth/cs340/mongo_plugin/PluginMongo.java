@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.server.ObjectType;
-import teamseth.cs340.common.plugin.IPersistenceProvider;
+import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.MaybeTuple;
 

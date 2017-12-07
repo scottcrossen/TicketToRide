@@ -3,6 +3,7 @@ package teamseth.cs340.tickettoride.communicator;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.net.ConnectException;
 import java.util.Arrays;
 
 import teamseth.cs340.common.commands.ICommand;
@@ -62,6 +63,10 @@ public class CommandTask extends AsyncTask<ICommand, Void, String> {
                         e.printStackTrace();
                         currentObject = e;
                     }
+                } catch (ConnectException e) {
+                    Logger.error("An error occurred while executing command " + currentCommand.toString());
+                    Login.getInstance().logout();
+                    currentObject = new Exception("Error: Cannot access server");
                 } catch (Exception e) {
                     Logger.error("An error occurred while executing command " + currentCommand.toString());
                     e.printStackTrace();

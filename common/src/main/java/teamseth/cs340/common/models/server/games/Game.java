@@ -12,12 +12,13 @@ import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.models.server.users.User;
+import teamseth.cs340.common.persistence.IStorable;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class Game implements Serializable, Comparable<Game> {
+public class Game implements Serializable, Comparable<Game>, IStorable {
     private static final long serialVersionUID = 2374397675854997368L;
     private UUID id = UUID.randomUUID();
     private HashSet<UUID> users= new HashSet<UUID>();

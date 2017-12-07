@@ -9,12 +9,13 @@ import java.util.UUID;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.persistence.IStorable;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class CommandHistory implements Serializable {
+public class CommandHistory implements Serializable, IStorable {
     private UUID id = UUID.randomUUID();
 
     private LinkedList<IHistoricalCommand> commandQueue = new LinkedList<IHistoricalCommand>();

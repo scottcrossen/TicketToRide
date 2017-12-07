@@ -3,8 +3,9 @@ package teamseth.cs340.common.persistence.plugin;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-import teamseth.cs340.common.models.server.ObjectType;
+import teamseth.cs340.common.models.server.ModelObjectType;
 import teamseth.cs340.common.util.MaybeTuple;
 
 /**
@@ -42,15 +43,17 @@ public interface IPersistenceProvider {
      * @param ObjectId              The ID of the object
      * @param type                  The type of object
      * @param deltasBeforeUpdate    The suggested amount of deltas before issuing a state update in database. -1 means update always.
+     * @return                      Whether or not the function succeeded. Wrapped in a future for convenience.
+     *
      */
-    void upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ObjectType type, int deltasBeforeUpdate); // Clear associated deltas as well.
+    CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate); // Clear associated deltas as well.
 
     /**
      * Loads all objects of type and their associated deltas.
      * @param type  The type of the object to load
-     * @return      A list of objects and their paired deltas.
+     * @return      A list of objects and their paired deltas. Wrapped in a future for convenience.
      */
-    List<MaybeTuple<Serializable, List<Serializable>>> getAllOfType(ObjectType type); // No need to include object Id.
+    CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type); // No need to include object Id.
 
     // User-tables methods are redundant. Users passed in just like any other object.
 }

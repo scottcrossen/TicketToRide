@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import teamseth.cs340.common.persistence.IStorable;
+
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class ChatRoom implements Serializable {
+public class ChatRoom implements Serializable, IStorable {
     private UUID id = UUID.randomUUID();
     public UUID getId() {
         return id;

@@ -2,11 +2,12 @@ package teamseth.cs340.common.models.server.carts;
 
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.IServerModel;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -14,7 +15,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
-public class CartModel extends AuthAction implements IModel {
+public class CartModel extends AuthAction implements IServerModel {
     private static CartModel instance;
 
     public static CartModel getInstance() {
@@ -25,6 +26,10 @@ public class CartModel extends AuthAction implements IModel {
     }
 
     private HashSet<CartSet> cartSets = new HashSet<>();
+
+    public CompletableFuture<Boolean> loadAllFromPersistence() {
+        return CompletableFuture.completedFuture(false);
+    }
 
     private CartSet getCartSet(UUID id) throws ResourceNotFoundException {
         for (CartSet cartSet : cartSets) {

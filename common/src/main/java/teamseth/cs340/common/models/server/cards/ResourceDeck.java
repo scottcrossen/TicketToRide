@@ -9,13 +9,14 @@ import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
+import teamseth.cs340.common.persistence.IStorable;
 import teamseth.cs340.common.util.RandomList;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class ResourceDeck implements Deck<ResourceColor> {
+public class ResourceDeck implements Deck<ResourceColor>, IStorable {
 
     private RandomList<ResourceColor> deck = new RandomList<>();
     private List<ResourceColor> faceUp = new LinkedList<>();

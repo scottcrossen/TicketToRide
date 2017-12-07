@@ -3,13 +3,14 @@ package teamseth.cs340.common.models.server.users;
 import java.io.Serializable;
 import java.util.UUID;
 
+import teamseth.cs340.common.persistence.IStorable;
 import teamseth.cs340.common.util.auth.AuthType;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class User implements Serializable, Comparable<User> {
+public class User implements Serializable, Comparable<User>, IStorable {
     private static final long serialVersionUID = 3867417489812381413L;
     private UserCreds credentials;
     private AuthType privilege = AuthType.user;

@@ -12,12 +12,13 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.models.IModel;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.persistence.IStorable;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class Routes implements Serializable, IModel<Route> {
+public class Routes implements Serializable, IModel<Route>, IStorable {
     private UUID id = UUID.randomUUID();
     public UUID getId() {return this.id;}
     private HashSet<Route> routes = new HashSet<>();

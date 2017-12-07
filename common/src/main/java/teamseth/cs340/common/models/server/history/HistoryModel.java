@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
@@ -14,7 +15,7 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.IServerModel;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -22,7 +23,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class HistoryModel extends AuthAction implements IModel<CommandHistory> {
+public class HistoryModel extends AuthAction implements IServerModel<CommandHistory> {
     private static HistoryModel instance;
 
     public static HistoryModel getInstance() {
@@ -33,6 +34,10 @@ public class HistoryModel extends AuthAction implements IModel<CommandHistory> {
     }
 
     private HashSet<CommandHistory> histories = new HashSet<>();
+
+    public CompletableFuture<Boolean> loadAllFromPersistence() {
+        return CompletableFuture.completedFuture(false);
+    }
 
     private CommandHistory get(UUID historyId) throws ResourceNotFoundException {
         CommandHistory output = histories.stream().filter(history -> history.getId().equals(historyId)).findFirst().orElseThrow(() -> new ResourceNotFoundException());

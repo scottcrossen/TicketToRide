@@ -45,6 +45,9 @@ public class ServerCommunicator {
         ServerModelRoot serverFacade = ServerModelRoot.getInstance();
         PersistenceAccess.getInstance().initialize(args);
 
+        Logger.info("Loading persistent state");
+        ServerModelRoot.loadDataFromPersistence();
+
         Logger.info("Creating contexts");
 
         server.createContext("/command", new CommandHandler());

@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.IServerModel;
 import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
@@ -21,7 +22,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class BoardModel extends AuthAction implements IModel<Routes> {
+public class BoardModel extends AuthAction implements IServerModel<Routes> {
     private static BoardModel instance;
 
     public static BoardModel getInstance() {
@@ -32,6 +33,10 @@ public class BoardModel extends AuthAction implements IModel<Routes> {
     }
 
     private HashSet<Routes> routes = new HashSet<Routes>();
+
+    public CompletableFuture<Boolean> loadAllFromPersistence() {
+        return CompletableFuture.completedFuture(false);
+    }
 
     public void upsert(Routes newRouteSet, AuthToken token) throws UnauthorizedException, ModelActionException {
         AuthAction.user(token);

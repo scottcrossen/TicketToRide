@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import teamseth.cs340.common.commands.client.AddDestinationCardCommand;
@@ -25,7 +26,7 @@ import teamseth.cs340.common.commands.client.UpdatePlayerPointsByDestinationCard
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.IServerModel;
 import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.boards.Routes;
@@ -46,7 +47,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class GameModel extends AuthAction implements IModel<Game> {
+public class GameModel extends AuthAction implements IServerModel<Game> {
     private static GameModel instance;
 
     public static GameModel getInstance() {
@@ -57,6 +58,10 @@ public class GameModel extends AuthAction implements IModel<Game> {
     }
 
     private HashSet<Game> games = new HashSet<Game>();
+
+    public CompletableFuture<Boolean> loadAllFromPersistence() {
+        return CompletableFuture.completedFuture(false);
+    }
 
     public Game create(AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);

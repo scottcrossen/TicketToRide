@@ -1,18 +1,24 @@
 package teamseth.cs340.common.models.server.users;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
-import teamseth.cs340.common.models.IModel;
+import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.IDeltaCommand;
+import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.auth.AuthToken;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class UserModel implements IModel<User> {
+public class UserModel implements IServerModel<User> {
     private static UserModel instance;
 
     public static UserModel getInstance() {
@@ -23,6 +29,14 @@ public class UserModel implements IModel<User> {
     }
 
     private HashSet<User> users = new HashSet<User>();
+
+    public CompletableFuture<Boolean> loadAllFromPersistence() {
+        CompletableFuture<List<User>> persistentData = PersistenceAccess.getObjects(ModelObjectType.USER);
+        return persistentData.thenApply((List<User> users) -> {
+            users.addAll(users);
+            return true;
+        });
+    }
 
     public AuthToken login(UserCreds credentials) throws ResourceNotFoundException, UnauthorizedException {
         // Check if user exists
@@ -43,6 +57,12 @@ public class UserModel implements IModel<User> {
         } catch (ResourceNotFoundException e){
             User user = new User(credentials);
             users.add(user);
+            PersistenceTask.save(user, new IDeltaCommand<User>() {
+                @Override
+                public User call(User oldState) {
+                    return user;
+                }
+            });
             AuthToken token = new AuthToken(user);
             return token;
         }

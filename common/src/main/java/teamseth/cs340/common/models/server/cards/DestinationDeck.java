@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import teamseth.cs340.common.exceptions.ModelActionException;
+import teamseth.cs340.common.persistence.IStorable;
 import teamseth.cs340.common.util.RandomList;
 
 /**
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class DestinationDeck implements Deck<DestinationCard> {
+public class DestinationDeck implements Deck<DestinationCard>, IStorable {
 
     private RandomList<DestinationCard> deck = new RandomList<>();
     private List<DestinationCard> discards = new ArrayList<>();

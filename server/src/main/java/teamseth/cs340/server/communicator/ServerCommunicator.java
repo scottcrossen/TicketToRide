@@ -23,10 +23,10 @@ public class ServerCommunicator {
 
     public static void main(String[] args) {
         String portNumber = args[0];
-        new ServerCommunicator().run(portNumber);
+        new ServerCommunicator().run(portNumber, args);
     }
 
-    private void run(String portNumber) {
+    private void run(String portNumber, String[] args) {
 
         Logger.info("Initializing HTTP Server on port " + portNumber.toString());
 
@@ -43,7 +43,7 @@ public class ServerCommunicator {
 
         Config config = Config.getInstance();
         ServerModelRoot serverFacade = ServerModelRoot.getInstance();
-        PersistanceAccess.getInstance().initialize();
+        PersistanceAccess.getInstance().initialize(args);
 
         Logger.info("Creating contexts");
 

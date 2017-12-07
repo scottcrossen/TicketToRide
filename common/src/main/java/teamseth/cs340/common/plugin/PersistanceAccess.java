@@ -3,6 +3,7 @@ package teamseth.cs340.common.plugin;
 import java.util.List;
 
 import teamseth.cs340.common.util.Logger;
+import teamseth.cs340.common.util.server.Config;
 
 /**
  * @author Scott Leland Crossen
@@ -19,13 +20,15 @@ public class PersistanceAccess {
         return instance;
     }
 
-    public void initialize() {
+    public void initialize(String[] args) {
         Logger.info("Loading plugins from providers");
-        providers = PersistanceLoader.loadPlugins();
-        if (providers.size() > 0) {
-            Logger.info("Plugins loaded successfully");
-        } else {
+        providers = PersistanceLoader.loadPlugins(args, Config.getInstance().getPersistanceType());
+        if (providers.size() <= 0) {
             Logger.warn("Supported providers not found in plugins");
+        } else {
+            Logger.info("Plugins loaded successfully");
+            providers.forEach((IPersistanceProvider provider) -> provider.initialize());
+            Logger.info("Persistance providers initialized");
         }
     }
 

@@ -5,7 +5,10 @@ import com.mongodb.MongoClient;
 
 import java.net.UnknownHostException;
 
-public class PluginMongo implements IPersistanceProvider{
+import teamseth.cs340.common.plugin.IPersistanceProvider;
+import teamseth.cs340.common.util.Logger;
+
+public class PluginMongo implements IPersistanceProvider {
     MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
     DB db = mongoClient.getDB("TicketToRide");
 
@@ -14,6 +17,11 @@ public class PluginMongo implements IPersistanceProvider{
 
     @Override
     public void initialize() {
-        System.out.println("Mongo Plugin initialized");
+        Logger.info("Mongo Plugin initialized");
+    }
+
+    @Override
+    public ProviderType getProviderType() {
+        return ProviderType.MONGO;
     }
 }

@@ -9,11 +9,11 @@ import java.util.List;
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
 public class DefaultPluginPaths {
-    private static List<String> paths = Arrays.asList(
-            String.join(File.separator, Arrays.asList("sql-plugin", "build", "libs", "sql-plugin.jar")),
-            String.join(File.separator, Arrays.asList("mongo-plugin", "build", "libs", "mongo-plugin.jar")),
-            "sql-plugin.jar",
-            "mongo-plugin.jar"
+    private static List<File> paths = Arrays.asList(
+            new File(String.join(File.separator, Arrays.asList("sql-plugin", "build", "libs", "sql-plugin.jar"))),
+            new File(String.join(File.separator, Arrays.asList("mongo-plugin", "build", "libs", "mongo-plugin.jar"))),
+            new File("sql-plugin.jar"),
+            new File("mongo-plugin.jar")
     );
-    public static List<String> getPaths() { return paths; }
+    public static List<File> getPaths() { return paths; }
 }

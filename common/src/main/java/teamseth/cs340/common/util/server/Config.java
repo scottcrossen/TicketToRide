@@ -6,7 +6,7 @@ import java.util.Optional;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import teamseth.cs340.common.plugin.IPersistanceProvider;
+import teamseth.cs340.common.plugin.IPersistenceProvider;
 
 /**
  * @author Scott Leland Crossen
@@ -31,9 +31,9 @@ public class Config {
         //Logger.setVerbosity(6);
     }
 
-    private Optional<IPersistanceProvider.ProviderType> persistanceType = Optional.empty();
+    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.empty();
 
-    public Optional<IPersistanceProvider.ProviderType> getPersistanceType() { return persistanceType; }
+    public Optional<IPersistenceProvider.ProviderType> getPersistanceType() { return persistanceType; }
 
     private SecretKey secretKey;
 

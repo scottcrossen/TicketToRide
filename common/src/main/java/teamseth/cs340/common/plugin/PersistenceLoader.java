@@ -16,19 +16,19 @@ import teamseth.cs340.common.util.Logger;
  * @author Scott Leland Crossen
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
-public class PersistanceLoader {
+public class PersistenceLoader {
 
-    private static PersistanceAccess instance;
+    private static PersistenceAccess instance;
 
-    public static PersistanceAccess getInstance() {
+    public static PersistenceAccess getInstance() {
         if(instance == null) {
-            instance = new PersistanceAccess();
+            instance = new PersistenceAccess();
         }
         return instance;
     }
 
-    public static List<IPersistanceProvider> loadPlugins(String[] args, Optional<IPersistanceProvider.ProviderType> providerType) {
-        Optional<IPersistanceProvider.ProviderType> localProviderType = providerType;
+    public static List<IPersistenceProvider> loadPlugins(String[] args, Optional<IPersistenceProvider.ProviderType> providerType) {
+        Optional<IPersistenceProvider.ProviderType> localProviderType = providerType;
         List<File> customPluginPaths = new LinkedList<>();
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--plugin-path") && i < args.length - 1) {
@@ -36,13 +36,13 @@ public class PersistanceLoader {
             } else if (args[i].equals("--plugin-type") && i < args.length - 1) {
                 switch (args[i+1]) {
                     case "mongo":
-                        localProviderType = Optional.of(IPersistanceProvider.ProviderType.MONGO);
+                        localProviderType = Optional.of(IPersistenceProvider.ProviderType.MONGO);
                         break;
                     case "sql":
-                        localProviderType = Optional.of(IPersistanceProvider.ProviderType.SQL);
+                        localProviderType = Optional.of(IPersistenceProvider.ProviderType.SQL);
                         break;
                     case "other":
-                        localProviderType = Optional.of(IPersistanceProvider.ProviderType.OTHER);
+                        localProviderType = Optional.of(IPersistenceProvider.ProviderType.OTHER);
                         break;
                     default:
                         Logger.warn("Command line argument for plugin-type malformed");
@@ -50,7 +50,7 @@ public class PersistanceLoader {
                 }
             }
         }
-        final Optional<IPersistanceProvider.ProviderType> useOnlyType = localProviderType;
+        final Optional<IPersistenceProvider.ProviderType> useOnlyType = localProviderType;
         return Stream.concat(
             customPluginPaths.stream().flatMap((File defaultPath) -> {
                 return loadPluginFromDir(defaultPath, false, false).stream();
@@ -58,12 +58,12 @@ public class PersistanceLoader {
             DefaultPluginPaths.getPaths().stream().flatMap((File defaultPath) -> {
                 return loadPluginFromDir(defaultPath, true, true).stream();
             })
-        ).filter((IPersistanceProvider provider) -> {
-            return useOnlyType.map((IPersistanceProvider.ProviderType type) -> type.equals(provider.getProviderType())).orElseGet(() -> true);
+        ).filter((IPersistenceProvider provider) -> {
+            return useOnlyType.map((IPersistenceProvider.ProviderType type) -> type.equals(provider.getProviderType())).orElseGet(() -> true);
         }).collect(Collectors.toList());
     }
 
-    private static List<IPersistanceProvider>  loadPluginFromDir(File dir, boolean quiet, boolean shallow) {
+    private static List<IPersistenceProvider>  loadPluginFromDir(File dir, boolean quiet, boolean shallow) {
         if (dir.isFile()) {
             return loadPluginFromFile(dir);
         } else if (dir.isDirectory() ) {
@@ -85,7 +85,7 @@ public class PersistanceLoader {
             return new LinkedList<>();
         }
     }
-    private static List<IPersistanceProvider> loadPluginFromFile(File jarFile) {
+    private static List<IPersistenceProvider> loadPluginFromFile(File jarFile) {
         List providers = new LinkedList();
         try {
             URL pathUrl = jarFile.toURI().toURL();
@@ -95,8 +95,8 @@ public class PersistanceLoader {
                     @Override
                     public boolean visit(String clazz) {
                         try {
-                            if (!classLoader.loadClass(clazz).isInterface() && classLoader.loadClass(clazz).newInstance() instanceof IPersistanceProvider) {
-                                providers.add((IPersistanceProvider) classLoader.loadClass(clazz).newInstance());
+                            if (!classLoader.loadClass(clazz).isInterface() && classLoader.loadClass(clazz).newInstance() instanceof IPersistenceProvider) {
+                                providers.add((IPersistenceProvider) classLoader.loadClass(clazz).newInstance());
                             }
                         } catch (Exception e) {
                             Logger.warn("Could not read all classes in jar");

@@ -4,26 +4,27 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
 import java.io.Serializable;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.server.ObjectType;
-import teamseth.cs340.common.models.server.users.User;
-import teamseth.cs340.common.plugin.IPersistanceProvider;
+import teamseth.cs340.common.plugin.IPersistenceProvider;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.MaybeTuple;
 
-public class PluginMongo implements IPersistanceProvider {
-    MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-    DB db = mongoClient.getDB("TicketToRide");
-
-    public PluginMongo() throws UnknownHostException {
-    }
+public class PluginMongo implements IPersistenceProvider {
+    MongoClient mongoClient;
+    DB db;
 
     @Override
     public void initialize() {
-        Logger.info("Mongo provider initialized");
+        try {
+            mongoClient = new MongoClient( "localhost" , 27017 );
+            db = mongoClient.getDB("TicketToRide");
+            Logger.info("Mongo provider initialized");
+        } catch (Exception e) {
+            Logger.error("Mongo provider could not be initialized: " + e.getMessage());
+        }
     }
 
     @Override
@@ -37,27 +38,12 @@ public class PluginMongo implements IPersistanceProvider {
     }
 
     @Override
-    public void upsertObjectState(Serializable Object, ObjectType type, UUID ObjectId) {
-
-    }
-
-    @Override
-    public void insertObjectDelta(Serializable Object, UUID ObjectId) {
+    public void upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ObjectType type, int deltasBeforeUpdate) {
 
     }
 
     @Override
     public List<MaybeTuple<Serializable, List<Serializable>>> getAllOfType(ObjectType type) {
-        return null;
-    }
-
-    @Override
-    public void upsertUser(User user) {
-
-    }
-
-    @Override
-    public List<User> getAllUsers() {
         return null;
     }
 }

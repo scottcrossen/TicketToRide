@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import teamseth.cs340.common.models.server.ServerModelRoot;
-import teamseth.cs340.common.plugin.PersistanceAccess;
+import teamseth.cs340.common.plugin.PersistenceAccess;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.server.Config;
 import teamseth.cs340.server.communicator.controllers.CommandHandler;
@@ -43,7 +43,7 @@ public class ServerCommunicator {
 
         Config config = Config.getInstance();
         ServerModelRoot serverFacade = ServerModelRoot.getInstance();
-        PersistanceAccess.getInstance().initialize(args);
+        PersistenceAccess.getInstance().initialize(args);
 
         Logger.info("Creating contexts");
 

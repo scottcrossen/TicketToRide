@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import teamseth.cs340.common.util.Logger;
+import teamseth.cs340.common.util.server.Config;
 
 /**
  * @author Scott Leland Crossen
@@ -25,7 +25,7 @@ public class PersistenceTask {
         }
         return mutex;
     }
-    private static ExecutorService executors = Executors.newCachedThreadPool();
+    private static ExecutorService executors = Config.getInstance().getExecutionContext(Config.ContextType.PERSISTENCE);
     public static final Future<Void> save(IStorable storable, IDeltaCommand command) {
         return CompletableFuture.supplyAsync(() -> getMutex(storable.getId()), executors).thenCompose((OrderedSemaphore mutex) -> {
             try {

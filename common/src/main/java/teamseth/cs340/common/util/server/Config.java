@@ -2,6 +2,8 @@ package teamseth.cs340.common.util.server;
 
 import java.time.Duration;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -42,5 +44,18 @@ public class Config {
     private Duration maxTokenAge = Duration.ofMinutes(120);
 
     public Duration getMaxTokenAge() { return maxTokenAge; }
+
+    public ExecutorService getExecutionContext(ContextType type) {
+        switch(type) {
+            case GLOBAL:
+                return null;
+            case PERSISTENCE:
+                return Executors.newCachedThreadPool();
+            default:
+                return null;
+        }
+    }
+
+    public enum ContextType {GLOBAL, PERSISTENCE}
 
 }

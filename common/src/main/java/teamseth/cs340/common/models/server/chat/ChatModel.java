@@ -11,7 +11,9 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
 import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.IDeltaCommand;
 import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -46,6 +48,12 @@ public class ChatModel extends AuthAction implements IServerModel<ChatRoom> {
             throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             rooms.add(newRoom);
+            PersistenceTask.save(newRoom, new IDeltaCommand<ChatRoom>() {
+                @Override
+                public ChatRoom call(ChatRoom oldState) {
+                    return newRoom;
+                }
+            });
         }
     }
 
@@ -58,9 +66,17 @@ public class ChatModel extends AuthAction implements IServerModel<ChatRoom> {
         throw new ResourceNotFoundException();
     }
 
-    public void addMessage(UUID room, Message message, AuthToken token) throws UnauthorizedException, ResourceNotFoundException {
+    public void addMessage(UUID roomId, Message message, AuthToken token) throws UnauthorizedException, ResourceNotFoundException {
         AuthAction.user(token);
-        getRoom(room).append(message);
+        ChatRoom room = getRoom(roomId);
+        room.append(message);
+        PersistenceTask.save(room, new IDeltaCommand<ChatRoom>() {
+            @Override
+            public ChatRoom call(ChatRoom oldState) {
+                oldState.append(message);
+                return oldState;
+            }
+        });
     }
 
     public ArrayList<Message> getMessages(UUID room) throws ResourceNotFoundException {

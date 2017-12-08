@@ -2,6 +2,7 @@ package teamseth.cs340.common.models.server.chat;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -9,6 +10,8 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.PersistenceAccess;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -29,7 +32,11 @@ public class ChatModel extends AuthAction implements IServerModel<ChatRoom> {
     private HashSet<ChatRoom> rooms = new HashSet<ChatRoom>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<ChatRoom>> persistentData = PersistenceAccess.getObjects(ModelObjectType.CHAT);
+        return persistentData.thenApply((List<ChatRoom> newData) -> {
+            rooms.addAll(newData);
+            return true;
+        });
     }
 
     public void upsert(ChatRoom newRoom, AuthToken token) throws UnauthorizedException, ModelActionException {

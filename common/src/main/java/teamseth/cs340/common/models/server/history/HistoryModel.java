@@ -16,6 +16,8 @@ import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.PersistenceAccess;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -36,7 +38,11 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
     private HashSet<CommandHistory> histories = new HashSet<>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<CommandHistory>> persistentData = PersistenceAccess.getObjects(ModelObjectType.HISTORY);
+        return persistentData.thenApply((List<CommandHistory> newData) -> {
+            histories.addAll(newData);
+            return true;
+        });
     }
 
     private CommandHistory get(UUID historyId) throws ResourceNotFoundException {

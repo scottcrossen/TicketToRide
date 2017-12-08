@@ -10,6 +10,8 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.PersistenceAccess;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -31,7 +33,18 @@ public class CardModel extends AuthAction implements IServerModel<Deck> {
     private HashSet<ResourceDeck> resourceDecks = new HashSet<>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<DestinationDeck>> persistentDestinationData = PersistenceAccess.getObjects(ModelObjectType.DESTINATIONDECK);
+        return persistentDestinationData.thenApply((List<DestinationDeck> newData) -> {
+            destinationDecks.addAll(newData);
+            return true;
+        }).thenCompose((Boolean result1) -> {
+            CompletableFuture<List<ResourceDeck>> persistentResourceData = PersistenceAccess.getObjects(ModelObjectType.RESOURCEDECK);
+            return persistentResourceData.thenApply((List<ResourceDeck> newData) -> {
+                resourceDecks.addAll(newData);
+                Boolean result2 = true;
+                return result1 && result2;
+            });
+        });
     }
 
     public ResourceColor drawResourceCard(UUID deckId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {

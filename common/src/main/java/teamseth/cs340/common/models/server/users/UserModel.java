@@ -32,8 +32,8 @@ public class UserModel implements IServerModel<User> {
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
         CompletableFuture<List<User>> persistentData = PersistenceAccess.getObjects(ModelObjectType.USER);
-        return persistentData.thenApply((List<User> users) -> {
-            users.addAll(users);
+        return persistentData.thenApply((List<User> newData) -> {
+            users.addAll(newData);
             return true;
         });
     }

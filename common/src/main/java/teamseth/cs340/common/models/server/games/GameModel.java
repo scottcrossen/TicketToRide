@@ -27,6 +27,7 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
 import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.models.server.boards.Route;
 import teamseth.cs340.common.models.server.boards.Routes;
@@ -38,6 +39,7 @@ import teamseth.cs340.common.models.server.carts.CartSet;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
 import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
+import teamseth.cs340.common.persistence.PersistenceAccess;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.RouteCalculator;
 import teamseth.cs340.common.util.auth.AuthAction;
@@ -60,7 +62,11 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
     private HashSet<Game> games = new HashSet<Game>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<Game>> persistentData = PersistenceAccess.getObjects(ModelObjectType.GAME);
+        return persistentData.thenApply((List<Game> newData) -> {
+            games.addAll(newData);
+            return true;
+        });
     }
 
     public Game create(AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {

@@ -82,7 +82,7 @@ public class SQLDAO {
      * @param delta Adds a serializable to database
      * @return
      */
-    public boolean addEvent(Serializable delta) throws DatabaseException {
+    public boolean addDelta(Serializable delta) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
             try {
@@ -114,11 +114,11 @@ public class SQLDAO {
     }
 
     /**
-     * gets a single person from the database based on string personID
+     * gets a single delta from the database based on a string personID and password
      * @return
      * @throws DatabaseException
      */
-    /*public Delta getSingleDelta(String username, String password) throws DatabaseException {
+    /*public Delta getSingleDelta(String personID, String password) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
             ResultSet rs = null;

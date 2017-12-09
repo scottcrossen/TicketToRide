@@ -10,10 +10,20 @@ import teamseth.cs340.common.models.server.ModelObjectType;
 import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.MaybeTuple;
+import teamseth.cs340.sql_plugin.DataAccess.Connection;
+import teamseth.cs340.sql_plugin.DataAccess.DatabaseException;
+import teamseth.cs340.sql_plugin.DataAccess.SQLDAO;
 
 public class PluginSQL implements IPersistenceProvider {
     @Override
     public void initialize() {
+        SQLDAO sqlDAO = new SQLDAO();
+        try {
+            Connection.SINGLETON.openConnection();
+            sqlDAO.SINGLETON.createTables();
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
         Logger.info("SQL provider initialized");
     }
 

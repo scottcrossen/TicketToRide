@@ -11,10 +11,14 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
 import teamseth.cs340.common.models.server.ServerModelRoot;
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.games.Game;
+import teamseth.cs340.common.persistence.IDeltaCommand;
+import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -35,7 +39,11 @@ public class BoardModel extends AuthAction implements IServerModel<Routes> {
     private HashSet<Routes> routes = new HashSet<Routes>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<Routes>> persistentData = PersistenceAccess.getObjects(ModelObjectType.ROUTES);
+        return persistentData.thenApply((List<Routes> newData) -> {
+            routes.addAll(newData);
+            return true;
+        });
     }
 
     public void upsert(Routes newRouteSet, AuthToken token) throws UnauthorizedException, ModelActionException {
@@ -45,6 +53,12 @@ public class BoardModel extends AuthAction implements IServerModel<Routes> {
             throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             routes.add(newRouteSet);
+            PersistenceTask.save(newRouteSet, new IDeltaCommand<Routes>() {
+                @Override
+                public Routes call(Routes oldState) {
+                    return newRouteSet;
+                }
+            });
         }
     }
 
@@ -80,6 +94,16 @@ public class BoardModel extends AuthAction implements IServerModel<Routes> {
         if (nonClaimedRouteExists && doubleRouteRestrictionObserved && playerHasEnoughCarts && playerDoesntHaveBothRoutes && onlyOnePossibleSelection) {
             Route matchingRoute = matchedRoutes.get(0);
             routeSet.claimRoute(playerId, city1, city2, colors, routeColor);
+            PersistenceTask.save(routeSet, new IDeltaCommand<Routes>() {
+                @Override
+                public Routes call(Routes oldState) {
+                    try {
+                        oldState.claimRoute(playerId, city1, city2, colors, routeColor);
+                    } catch (ModelActionException e) {
+                    }
+                    return oldState;
+                }
+            });
             return matchingRoute.getLength();
         } else {
             throw new ModelActionException();

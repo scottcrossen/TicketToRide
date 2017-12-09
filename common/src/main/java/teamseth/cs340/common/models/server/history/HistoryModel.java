@@ -16,6 +16,10 @@ import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.IDeltaCommand;
+import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -36,7 +40,11 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
     private HashSet<CommandHistory> histories = new HashSet<>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<CommandHistory>> persistentData = PersistenceAccess.getObjects(ModelObjectType.HISTORY);
+        return persistentData.thenApply((List<CommandHistory> newData) -> {
+            histories.addAll(newData);
+            return true;
+        });
     }
 
     private CommandHistory get(UUID historyId) throws ResourceNotFoundException {
@@ -71,6 +79,16 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
         AuthAction.user(token);
         CommandHistory history = get(historyId);
         history.insert(command);
+        PersistenceTask.save(history, new IDeltaCommand<CommandHistory>() {
+            @Override
+            public CommandHistory call(CommandHistory oldState) {
+                try {
+                    oldState.insert(command);
+                } catch (Exception e) {
+                }
+                return oldState;
+            }
+        });
     }
 
     public void upsert(CommandHistory newHistory, AuthToken token) throws UnauthorizedException, ModelActionException {
@@ -80,6 +98,12 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
             throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             histories.add(newHistory);
+            PersistenceTask.save(newHistory, new IDeltaCommand<CommandHistory>() {
+                @Override
+                public CommandHistory call(CommandHistory oldState) {
+                    return newHistory;
+                }
+            });
         }
     }
 

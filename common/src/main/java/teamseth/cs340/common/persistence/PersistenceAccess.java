@@ -63,6 +63,10 @@ public class PersistenceAccess {
         }
     }
 
+    public static int getAmountOfProviders() {
+        return providers.size();
+    }
+
     public static CompletableFuture<Boolean> save(IStorable storable, IDeltaCommand command) {
         ModelObjectType objectType = getTypeFromStorable(storable);
         int deltasBeforeUpdate = getDeltasBeforeUpdate(objectType);

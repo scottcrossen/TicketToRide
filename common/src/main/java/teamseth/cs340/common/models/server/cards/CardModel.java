@@ -10,6 +10,10 @@ import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
+import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.IDeltaCommand;
+import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -31,27 +35,72 @@ public class CardModel extends AuthAction implements IServerModel<Deck> {
     private HashSet<ResourceDeck> resourceDecks = new HashSet<>();
 
     public CompletableFuture<Boolean> loadAllFromPersistence() {
-        return CompletableFuture.completedFuture(false);
+        CompletableFuture<List<DestinationDeck>> persistentDestinationData = PersistenceAccess.getObjects(ModelObjectType.DESTINATIONDECK);
+        return persistentDestinationData.thenApply((List<DestinationDeck> newData) -> {
+            destinationDecks.addAll(newData);
+            return true;
+        }).thenCompose((Boolean result1) -> {
+            CompletableFuture<List<ResourceDeck>> persistentResourceData = PersistenceAccess.getObjects(ModelObjectType.RESOURCEDECK);
+            return persistentResourceData.thenApply((List<ResourceDeck> newData) -> {
+                resourceDecks.addAll(newData);
+                Boolean result2 = true;
+                return result1 && result2;
+            });
+        });
     }
 
     public ResourceColor drawResourceCard(UUID deckId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         AuthAction.user(token);
-        return getResourceDeck(deckId).draw();
+        ResourceDeck deck = getResourceDeck(deckId);
+        ResourceColor output = deck.draw();
+        PersistenceTask.save(deck, new IDeltaCommand<ResourceDeck>() {
+            @Override
+            public ResourceDeck call(ResourceDeck oldState) {
+                oldState.removeCard(output);
+                return oldState;
+            }
+        });
+        return output;
     }
 
     public DestinationCard drawDestinationCard(UUID deckId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         AuthAction.user(token);
-        return getDestinationDeck(deckId).draw();
+        DestinationDeck deck = getDestinationDeck(deckId);
+        DestinationCard output = deck.draw();
+        PersistenceTask.save(deck, new IDeltaCommand<DestinationDeck>() {
+            @Override
+            public DestinationDeck call(DestinationDeck oldState) {
+                oldState.removeCard(output);
+                return oldState;
+            }
+        });
+        return output;
     }
 
     public void returnResourceCard(UUID deckId, ResourceColor card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         AuthAction.user(token);
-        getResourceDeck(deckId).returnCard(card);
+        ResourceDeck deck = getResourceDeck(deckId);
+        deck.returnCard(card);
+        PersistenceTask.save(deck, new IDeltaCommand<ResourceDeck>() {
+            @Override
+            public ResourceDeck call(ResourceDeck oldState) {
+                oldState.returnCard(card);
+                return oldState;
+            }
+        });
     }
 
     public void returnDestinationCard(UUID deckId, DestinationCard card, AuthToken token) throws ResourceNotFoundException, UnauthorizedException, ModelActionException {
         AuthAction.user(token);
-        getDestinationDeck(deckId).returnCard(card);
+        DestinationDeck deck = getDestinationDeck(deckId);
+        deck.returnCard(card);
+        PersistenceTask.save(deck, new IDeltaCommand<DestinationDeck>() {
+            @Override
+            public DestinationDeck call(DestinationDeck oldState) {
+                oldState.returnCard(card);
+                return oldState;
+            }
+        });
     }
 
     public void upsert(DestinationDeck newDeck, AuthToken token) throws UnauthorizedException, ModelActionException {
@@ -61,6 +110,12 @@ public class CardModel extends AuthAction implements IServerModel<Deck> {
             throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             destinationDecks.add(newDeck);
+            PersistenceTask.save(newDeck, new IDeltaCommand<DestinationDeck>() {
+                @Override
+                public DestinationDeck call(DestinationDeck oldState) {
+                    return newDeck;
+                }
+            });
         }
     }
 
@@ -71,6 +126,12 @@ public class CardModel extends AuthAction implements IServerModel<Deck> {
             throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
             resourceDecks.add(newDeck);
+            PersistenceTask.save(newDeck, new IDeltaCommand<ResourceDeck>() {
+                @Override
+                public ResourceDeck call(ResourceDeck oldState) {
+                    return newDeck;
+                }
+            });
         }
     }
 

@@ -213,15 +213,15 @@ public class SQLDAO {
     }
 
     /**
-     * gets a single delta from the database based on a string personID and password
+     * gets a single delta from the database based on a UUID
      * @return
      * @throws DatabaseException
      */
-    /*public Delta getSingleDelta(String personID, String password) throws DatabaseException {
+    /*public List<Serializable> getDeltas(UUID id) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
             ResultSet rs = null;
-            Delta user = null;
+            Serializable delta = null;
 
             try {
                 //this makes sure the password and username match and are correct
@@ -238,8 +238,8 @@ public class SQLDAO {
                     String lastName = rs.getString(6);
                     String gender = rs.getString(7);
 
-                    user = new Delta(userName, userID2, password2,
-                            email, firstName, lastName, gender);
+                    delta = new Serializable() {
+                    };
                 }
 
             } finally {
@@ -250,7 +250,7 @@ public class SQLDAO {
                     stmt.close();
                 }
             }
-            return user;
+            return delta;
 
         } catch (SQLException e) {
             throw new DatabaseException("loadDelta failed", e);

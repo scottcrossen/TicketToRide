@@ -140,14 +140,14 @@ public class SQLDAO {
      * @param delta Adds a serializable delta to database
      * @return
      */
-    public boolean addDelta(Serializable delta, UUID objectID, int order) throws DatabaseException {
+    public boolean addDelta(Serializable delta, UUID objectID, int order_num) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
             try {
                 String sql = "INSERT INTO DELTA (object_id," +
-                        "order,delta_command) values ( " +
+                        "order_num,delta_command) values ( " +
                         objectID + "\",\"" +
-                        order + "\",\"" +
+                        order_num + "\",\"" +
                         delta + "\")";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
 
@@ -279,24 +279,24 @@ public class SQLDAO {
     private static final String SELECT_ALL_DELTAS = "select * from DELTA";
     private static final String DELETE_DELTA_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS DELTA";
     private static final String CREATE_DELTA_TABLE =
-            "CREATE TABLE DELTA " +
-                    "(" +
-                    "   hidden_id BIGINT AUTOINCREMENT NOT NULL," +
-                    "   object_id BINARY(16) NOT NULL FOREIGN KEY REFERENCES Object(id)," +
-                    "   order INTEGER NOT NULL," +
-                    "   delta_command TEXT NOT NULL," +
-                    "   PRIMARY KEY (hidden_id)" +
-                    ")";
+    "CREATE TABLE DELTA (" +
+            "                       hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+            "                       object_id BINARY(16) NOT NULL,\n" +
+            "                       order_num INTEGER NOT NULL,\n" +
+            "                       delta_command TEXT NOT NULL,\n" +
+            "\n" +
+            "                       FOREIGN KEY (object_id) REFERENCES Object (id)\n" +
+            "                    )";
+
 
     private static final String SELECT_ALL_OBJECTS = "select * from OBJECT";
     private static final String DELETE_OBJECT_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS OBJECT";
     private static final String CREATE_OBJECT_TABLE =
             "CREATE TABLE OBJECT " +
                     "(" +
-                    "   hidden_id BIGINT AUTOINCREMENT NOT NULL," +
+                    "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     "   id BINARY(16) UNIQUE NOT NULL," +
                     "   object TEXT NOT NULL," +
-                    "   type TINYINT NOT NULL," +
-                    "   PRIMARY KEY (hidden_id)" +
+                    "   type TINYINT NOT NULL" +
                     ")";
 }

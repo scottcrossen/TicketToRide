@@ -39,7 +39,9 @@ import teamseth.cs340.common.models.server.carts.CartSet;
 import teamseth.cs340.common.models.server.chat.ChatRoom;
 import teamseth.cs340.common.models.server.history.CommandHistory;
 import teamseth.cs340.common.models.server.users.User;
+import teamseth.cs340.common.persistence.IDeltaCommand;
 import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.RouteCalculator;
 import teamseth.cs340.common.util.auth.AuthAction;
@@ -77,6 +79,12 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         User user = ServerModelRoot.getInstance().users.getById(userId);
         game.addPlayer(user);
         games.add(game);
+        PersistenceTask.save(game, new IDeltaCommand<Game>() {
+            @Override
+            public Game call(Game oldState) {
+                return game;
+            }
+        });
         return game;
     }
 
@@ -88,6 +96,16 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         Game game = this.get(gameId);
         if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
         game.addPlayer(user);
+        PersistenceTask.save(game, new IDeltaCommand<Game>() {
+            @Override
+            public Game call(Game oldState) {
+                try {
+                    oldState.addPlayer(user);
+                } catch (ModelActionException e) {
+                }
+                return oldState;
+            }
+        });
     }
 
     public void start(UUID gameId, AuthToken token) throws ResourceNotFoundException, ModelActionException, UnauthorizedException {
@@ -113,6 +131,22 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         game.setHistory(history.getId());
         game.setRoutes(routes.getId());
         game.setCarts(cartSet.getId());
+        PersistenceTask.save(game, new IDeltaCommand<Game>() {
+            @Override
+            public Game call(Game oldState) {
+                try {
+                    oldState.startGameHasLock();
+                    oldState.setChatRoom(newRoom.getId());
+                    oldState.setDestinationDeck(newDestDeck.getId());
+                    oldState.setResourceDeck(newResDeck.getId());
+                    oldState.setHistory(history.getId());
+                    oldState.setRoutes(routes.getId());
+                    oldState.setCarts(cartSet.getId());
+                } catch (ModelActionException e) {
+                }
+                return oldState;
+            }
+        });
         ServerModelRoot.history.forceAddCommandToHistory(history.getId(), new SeedFaceUpCardsCommand(newResDeck.getFaceUp(), game.getPlayers(), token.getUser()), token);
         seedGame(game, token);
     }
@@ -143,6 +177,17 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         if (!game.getState().equals(GameState.PREGAME)) throw new ModelActionException();
         game.removePlayer(token.getUser());
         if (game.getPlayers().size() == 0) game.setState(GameState.DELETED);
+        PersistenceTask.save(game, new IDeltaCommand<Game>() {
+            @Override
+            public Game call(Game oldState) {
+                try {
+                    oldState.removePlayer(token.getUser());
+                    if (oldState.getPlayers().size() == 0) game.setState(GameState.DELETED);
+                } catch (Exception e) {
+                }
+                return oldState;
+            }
+        });
     }
 
     public boolean attemptPlayGame(UUID gameId, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
@@ -159,6 +204,16 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         if (success) {
             try {
                 game.playGameHasLock();
+                PersistenceTask.save(game, new IDeltaCommand<Game>() {
+                    @Override
+                    public Game call(Game oldState) {
+                        try {
+                            oldState.playGameHasLock();
+                        } catch (Exception e) {
+                        }
+                        return oldState;
+                    }
+                });
                 return true;
             } catch (ModelActionException e) {
                 return false;
@@ -239,6 +294,13 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         }
         ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new SetPlayerLongestPathCommand(game.getPlayers(), longestPathPlayer), token);
         game.setState(GameState.FINISHED);
+        PersistenceTask.save(game, new IDeltaCommand<Game>() {
+            @Override
+            public Game call(Game oldState) {
+                oldState.setState(GameState.FINISHED);
+                return oldState;
+            }
+        });
         ServerModelRoot.getInstance().history.forceAddCommandToHistory(historyId, new SetGameStateCommand(GameState.FINISHED, game.getPlayers(), token.getUser()), token);
     }
 
@@ -273,7 +335,15 @@ public class GameModel extends AuthAction implements IServerModel<Game> {
         } catch (Exception e) {
             Logger.error("Problem checking end-game conditions");
         }
-        get(gameId).nextTurn();
+        Game game = get(gameId);
+        game.nextTurn();
+        PersistenceTask.save(game, new IDeltaCommand<Game>() {
+            @Override
+            public Game call(Game oldState) {
+                oldState.nextTurn();
+                return oldState;
+            }
+        });
     }
 
     public Optional<UUID> getWhosTurnItIs(UUID gameId) throws ResourceNotFoundException {

@@ -37,23 +37,23 @@ public class ServerCommunicator {
             return;
         }
 
-        server.setExecutor(null);
+        Logger.info("Loading Config");
+        Config.getInstance();
+
+        Logger.info("Setting Execution Context");
+        server.setExecutor(Config.getInstance().getExecutionContext(Config.ContextType.GLOBAL));
 
         Logger.info("Creating models and globals");
-
-        Config config = Config.getInstance();
-        ServerModelRoot serverFacade = ServerModelRoot.getInstance();
+        ServerModelRoot.getInstance();
         PersistenceAccess.getInstance().initialize(args);
 
         Logger.info("Loading persistent state");
         ServerModelRoot.loadDataFromPersistence();
 
         Logger.info("Creating contexts");
-
         server.createContext("/command", new CommandHandler());
 
         Logger.info("Starting server");
-
         server.start();
 
         Logger.info("Server started");

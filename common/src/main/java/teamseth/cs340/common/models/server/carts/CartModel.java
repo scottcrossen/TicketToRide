@@ -10,7 +10,9 @@ import teamseth.cs340.common.exceptions.ResourceNotFoundException;
 import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.models.server.IServerModel;
 import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.persistence.IDeltaCommand;
 import teamseth.cs340.common.persistence.PersistenceAccess;
+import teamseth.cs340.common.persistence.PersistenceTask;
 import teamseth.cs340.common.util.auth.AuthAction;
 import teamseth.cs340.common.util.auth.AuthToken;
 
@@ -61,22 +63,44 @@ public class CartModel extends AuthAction implements IServerModel {
     public void decrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
         AuthAction.user(token);
         UUID playerId = token.getUser();
-        getCartSet(cartId).decrementPlayerCarts(playerId, carts);
+        CartSet cartSet = getCartSet(cartId);
+        cartSet.decrementPlayerCarts(playerId, carts);
+        PersistenceTask.save(cartSet, new IDeltaCommand<CartSet>() {
+            @Override
+            public CartSet call(CartSet oldState) {
+                oldState.decrementPlayerCarts(playerId, carts);
+                return oldState;
+            }
+        });
     }
 
     public void incrementPlayerCarts(UUID cartId, int carts, AuthToken token) throws ResourceNotFoundException, UnauthorizedException {
         AuthAction.user(token);
         UUID playerId = token.getUser();
-        getCartSet(cartId).incrementPlayerCarts(playerId, carts);
+        CartSet cartSet = getCartSet(cartId);
+        cartSet.incrementPlayerCarts(playerId, carts);
+        PersistenceTask.save(cartSet, new IDeltaCommand<CartSet>() {
+            @Override
+            public CartSet call(CartSet oldState) {
+                oldState.incrementPlayerCarts(playerId, carts);
+                return oldState;
+            }
+        });
     }
 
-    public void upsert(CartSet newDeck, AuthToken token) throws UnauthorizedException, ModelActionException {
+    public void upsert(CartSet newSet, AuthToken token) throws UnauthorizedException, ModelActionException {
         AuthAction.user(token);
         try {
-            getCartSet(newDeck.getId());
+            getCartSet(newSet.getId());
             throw new ModelActionException();
         } catch (ResourceNotFoundException e) {
-            cartSets.add(newDeck);
+            cartSets.add(newSet);
+            PersistenceTask.save(newSet, new IDeltaCommand<CartSet>() {
+                @Override
+                public CartSet call(CartSet oldState) {
+                    return newSet;
+                }
+            });
         }
     }
 }

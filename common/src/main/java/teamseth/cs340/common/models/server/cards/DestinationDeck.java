@@ -1,6 +1,7 @@
 package teamseth.cs340.common.models.server.cards;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,5 +64,14 @@ public class DestinationDeck implements Deck<DestinationCard>, IStorable {
     }
     public UUID getId() {
         return this.id;
+    }
+    protected void removeCard(DestinationCard card) {
+        Iterator<DestinationCard> iterator = deck.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(card)) {
+                iterator.remove();
+                break;
+            }
+        }
     }
 }

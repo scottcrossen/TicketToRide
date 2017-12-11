@@ -98,4 +98,13 @@ public class ResourceDeck implements Deck<ResourceColor>, IStorable {
             return new LinkedList<>();
         }
     }
+    protected void removeCard(ResourceColor card) {
+        Iterator<ResourceColor> iterator = deck.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(card)) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
 }

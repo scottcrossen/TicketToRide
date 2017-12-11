@@ -1,9 +1,13 @@
 package teamseth.cs340.mongo_plugin;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.DBCollection;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +31,8 @@ public class PluginMongo implements IPersistenceProvider {
         } catch (Exception e) {
             Logger.error("Mongo provider could not be initialized: " + e.getMessage());
         }
+        if(!db.collectionExists("stateObjects")) db.createCollection("stateObjects", null);
+        if(!db.collectionExists("stateDeltas")) db.createCollection("stateDeltas", null);
     }
 
     @Override
@@ -41,11 +47,27 @@ public class PluginMongo implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
+        DBCollection deltas = db.getCollection("stateDeltas");
+        DBCollection objects = db.getCollection("stateObjects");
+        BasicDBObject deltaDoc = new BasicDBObject("UUID", ObjectId)
+                .append("delta", delta);
+        deltas.insert(deltaDoc);
+        BasicDBObject deltaQuery = new BasicDBObject("UUID", ObjectId);
+        DBCursor deltaCursor = deltas.find(deltaQuery);
+        if(deltaCursor.count() >= deltasBeforeUpdate){
+            deltas.remove(deltaQuery);
+            objects.remove(deltaQuery);
+            BasicDBObject objectDoc = new BasicDBObject("UUID", ObjectId)
+                    .append("Object", newObjectState)
+                    .append("Type", type);
+            objects.insert(objectDoc);
+        }
         return CompletableFuture.supplyAsync(() -> false);
     }
 
     @Override
     public CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type) {
+
         return CompletableFuture.supplyAsync(() -> new LinkedList<MaybeTuple<Serializable, List<Serializable>>>());
     }
 }

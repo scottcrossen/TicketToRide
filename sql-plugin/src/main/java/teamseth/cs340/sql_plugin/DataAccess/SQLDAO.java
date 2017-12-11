@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.server.ModelObjectType;
+import teamseth.cs340.common.util.MaybeTuple;
 
 /**
  * Created by Seth on 12/8/2017.
@@ -213,35 +216,52 @@ public class SQLDAO {
     }
 
     /**
-     * gets a single delta from the database based on a UUID
+     * gets all deltas from the database based on a type
      * @return
      * @throws DatabaseException
      */
-    /*public List<Serializable> getDeltas(UUID id) throws DatabaseException {
+    public List<MaybeTuple<Serializable, List<Serializable>>> getDeltas(ModelObjectType type) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
             ResultSet rs = null;
-            Serializable delta = null;
-
+            Serializable object = null;
+            List<MaybeTuple<Serializable, List<Serializable>>> deltas =
+                    new LinkedList<>();
             try {
-                //this makes sure the password and username match and are correct
-                String sql = SELECT_ALL_DELTAS + " WHERE username=\'" + username + "\' AND password=\'" + password + "\'";
+                String sql = SELECT_ALL_OBJECTS + " WHERE type=\'" + type + "\'";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
                 rs = stmt.executeQuery();
+                MaybeTuple objectCommands = null;
                 while(rs.next())
                 {
-                    String userID2 = rs.getString(2);
-                    String userName = rs.getString(1);
-                    String password2 = rs.getString(3);
-                    String email = rs.getString(4);
-                    String firstName = rs.getString(5);
-                    String lastName = rs.getString(6);
-                    String gender = rs.getString(7);
+                    int objectID = rs.getInt(2);
+                    object = rs.getString(3);
+                    List<Serializable> deltaCommands =
+                            new LinkedList<>();
+                    try {
+                        sql = SELECT_ALL_DELTAS + " WHERE object_id=\'" + objectID + "\'";
+                        stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                        rs = stmt.executeQuery();
 
-                    delta = new Serializable() {
-                    };
+                        //adds the Serializable delta based on the object serializable
+                        while(rs.next())
+                        {
+                            Serializable userID2 = rs.getString(4);
+                            deltaCommands.add(userID2);
+                        }
+                    } finally {
+                        if (rs != null) {
+                            rs.close();
+                        }
+                        if (stmt != null) {
+                            stmt.close();
+                        }
+                        objectCommands.set1(object);
+                        objectCommands.set2(deltaCommands);
+                    }
+
+                    deltas.add(objectCommands);
                 }
-
             } finally {
                 if (rs != null) {
                     rs.close();
@@ -250,12 +270,11 @@ public class SQLDAO {
                     stmt.close();
                 }
             }
-            return delta;
-
+            return deltas;
         } catch (SQLException e) {
-            throw new DatabaseException("loadDelta failed", e);
+            throw new DatabaseException("getDeltas failed", e);
         }
-    }*/
+    }
 
     private static final String SELECT_ALL_DELTAS = "select * from DELTA";
     private static final String DELETE_DELTA_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS DELTA";

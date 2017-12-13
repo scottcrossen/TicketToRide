@@ -14,6 +14,7 @@ import teamseth.cs340.common.exceptions.UnauthorizedException;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.Result;
 import teamseth.cs340.common.util.client.Login;
+import teamseth.cs340.tickettoride.util.PlayerTurnTracker;
 import teamseth.cs340.tickettoride.util.Toaster;
 
 /**
@@ -57,6 +58,7 @@ public class CommandTask extends AsyncTask<ICommand, Void, String> {
                 } catch (UnauthorizedException e) {
                     Logger.error("An error occurred while executing command " + currentCommand.toString());
                     if (Login.getInstance().getToken() != null) {
+                        PlayerTurnTracker.getInstance().safeExit(this.context);
                         Login.getInstance().logout();
                         currentObject = new Exception("Error: Token expired.");
                     } else {
@@ -65,6 +67,7 @@ public class CommandTask extends AsyncTask<ICommand, Void, String> {
                     }
                 } catch (ConnectException e) {
                     Logger.error("An error occurred while executing command " + currentCommand.toString());
+                    PlayerTurnTracker.getInstance().safeExit(this.context);
                     Login.getInstance().logout();
                     currentObject = new Exception("Error: Cannot access server");
                 } catch (Exception e) {

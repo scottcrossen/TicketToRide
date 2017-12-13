@@ -47,50 +47,22 @@ public class PluginSQL implements IPersistenceProvider {
     @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
         return CompletableFuture.supplyAsync(() -> {
-            if (orderMap.get(ObjectId) == null) {
-                orderMap.put(ObjectId, 1);
-                try {
-                    sqlDAO.SINGLETON.addObject(newObjectState,ObjectId,type);
-                    return true;
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-            int count = orderMap.get(ObjectId);
             try {
-                sqlDAO.SINGLETON.addDelta(delta, ObjectId, count);
+                if (orderMap.get(ObjectId) == null || orderMap.get(ObjectId) >= deltasBeforeUpdate) {
+                    orderMap.put(ObjectId, 0);
+                    //insert into object here based on uuid objecttype
+                    sqlDAO.SINGLETON.addObject(newObjectState, ObjectId, type);
+                    //remove deltas based on uuid
+                    sqlDAO.SINGLETON.removeDeltasBasedOnGame(ObjectId);
+                } else {
+                    sqlDAO.SINGLETON.addDelta(delta, ObjectId, orderMap.get(ObjectId) + 1);
+                    orderMap.put(ObjectId, orderMap.get(ObjectId) + 1);
+                }
+                return true;
             } catch (DatabaseException e) {
                 e.printStackTrace();
                 return false;
             }
-            if (count >= deltasBeforeUpdate) {
-                orderMap.put(ObjectId, 1);
-                try {
-                    sqlDAO.SINGLETON.clearDeltas();
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                //insert into object here based on uuid objecttype
-                try {
-                    sqlDAO.SINGLETON.addObject(newObjectState, ObjectId, type);
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                //remove deltas based on uuid
-                try {
-                    sqlDAO.SINGLETON.removeDeltasBasedOnGame(ObjectId);
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            } else {
-                count++;
-                orderMap.put(ObjectId, count);
-            }
-            return true;
         }).thenApply((Boolean output) -> {
             try {
                 Connection.SINGLETON.conn.commit();

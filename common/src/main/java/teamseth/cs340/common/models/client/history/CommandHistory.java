@@ -41,6 +41,8 @@ public class CommandHistory extends Observable {
         } finally {
             writers.release();
         }
+        readers = new Semaphore(100);
+        writers = new Semaphore(1);
         setChanged();
         notifyObservers();
     }

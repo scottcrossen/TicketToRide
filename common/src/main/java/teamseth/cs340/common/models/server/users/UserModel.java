@@ -58,9 +58,10 @@ public class UserModel implements IServerModel<User> {
             User user = new User(credentials);
             users.add(user);
             PersistenceTask.save(user, new IDeltaCommand<User>() {
+                User newUser = user;
                 @Override
                 public User call(User oldState) {
-                    return user;
+                    return newUser;
                 }
             });
             AuthToken token = new AuthToken(user);

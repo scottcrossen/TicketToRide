@@ -17,7 +17,7 @@ final public class Result<A> implements Serializable {
         try {
             this.underlying = resFunc.call();
             this.error = null;
-        } catch (Exception e) {
+        } catch (Exception e) { //////EXCEPTION HERE
             this.underlying = null;
             this.error = e;
         }

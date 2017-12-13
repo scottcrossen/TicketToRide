@@ -20,6 +20,7 @@ import teamseth.cs340.common.models.server.cards.ResourceColor;
 import teamseth.cs340.common.models.server.chat.Message;
 import teamseth.cs340.common.models.server.games.Game;
 import teamseth.cs340.common.models.server.users.UserCreds;
+import teamseth.cs340.common.util.OptionWrapper;
 import teamseth.cs340.common.util.auth.AuthToken;
 
 /**
@@ -121,7 +122,7 @@ public final class ServerFacade implements IServer {
 
     // Board methods
     public int claimRoute(UUID routeSetId, CityName city1, CityName city2, List<ResourceColor> colors, Optional<ResourceColor> routeColor, AuthToken token) throws ModelActionException, UnauthorizedException, ResourceNotFoundException {
-        return model.board.claimRoute(routeSetId, city1, city2, colors, routeColor, token);
+        return model.board.claimRoute(routeSetId, city1, city2, colors, new OptionWrapper(routeColor), token);
     }
 
     // Cart methods

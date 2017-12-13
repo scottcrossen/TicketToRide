@@ -155,7 +155,7 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
     private void claimRoute(Route route) {
         CityName city1 = route.getCity1();
         CityName city2 = route.getCity2();
-        route.getClaimedPlayer().map((UUID playerId) -> {
+        route.getClaimedPlayer().getOption().map((UUID playerId) -> {
             try {
                 PlayerColor color = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(playerId);
                 ImageView startCity = convertCityNametoImageView(city1);
@@ -215,7 +215,7 @@ public class MapFragment extends Fragment implements IUpdatableFragment {
         }
         Set<Route> newRoutes = ClientModelRoot.board.getAllClaimedRoutes().stream().filter((Route route) -> {
             boolean alreadyExists = allClaimedRoutes.stream().filter((Route drawn) -> {
-                return route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().equals(drawn.getClaimedPlayer());
+                return route.compareCitiesAndColor(drawn) && route.getClaimedPlayer().getOption().equals(drawn.getClaimedPlayer().getOption());
             }).count() > 0;
             return !alreadyExists;
         }).collect(Collectors.toSet());

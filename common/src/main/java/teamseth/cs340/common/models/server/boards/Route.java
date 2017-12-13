@@ -2,11 +2,11 @@ package teamseth.cs340.common.models.server.boards;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import teamseth.cs340.common.models.server.cards.CityName;
 import teamseth.cs340.common.models.server.cards.ResourceColor;
+import teamseth.cs340.common.util.OptionWrapper;
 
 /**
  * @author Scott Leland Crossen
@@ -90,7 +90,7 @@ public class Route implements Serializable {
         this.offsetEndY = offsetEndY;
     }
 
-    public Optional<UUID> getClaimedPlayer() { return Optional.ofNullable(this.claimedBy); }
+    public OptionWrapper<UUID> getClaimedPlayer() { return new OptionWrapper(this.claimedBy); }
 
     public int getLength() { return this.length;}
 
@@ -118,10 +118,17 @@ public class Route implements Serializable {
 
 
     public String toString() {
-        return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString() + getClaimedPlayer().map((UUID playerId) -> " and claimed by player " + playerId.toString()).orElseGet(() -> "");
+        return city1.toString() + " to " + city2.toString() + " of length " + Integer.toString(length) + " and color " + color.toString() + getClaimedPlayer().getOption().map((UUID playerId) -> " and claimed by player " + playerId.toString()).orElseGet(() -> "");
     }
 
     public boolean hasCity(CityName city) {
         return (getCity1().equals(city) || getCity2().equals(city));
+    }
+
+    public Route copy() {
+        Route output = new Route(this.city1, this.city2, this.color, this.length, this.offsetStartX, this.offsetEndX, this.offsetStartY, this.offsetEndY);
+        output.isOwned = this.isOwned;
+        output.claimedBy = this.claimedBy;
+        return output;
     }
 }

@@ -44,15 +44,15 @@ public class DrawView extends View {
         this.route = rt;
         paint.setColor(convertColorFromEnum(rt.getColor()));
 
-        if(route.getClaimedPlayer().isPresent()) {
+        if(route.getClaimedPlayer().getOption().isPresent()) {
             //draw solid line if route is claimed
             PlayerColor colo = PlayerColor.BLACK;
             paint.setStrokeWidth(7);
             paint.setPathEffect(new DashPathEffect(new float[] {80,0}, 0));
             try {
                 Map<UUID, PlayerColor> coooooo = ClientModelRoot.getInstance().games.getActive().getPlayerColors();
-                UUID testID = rt.getClaimedPlayer().get();
-                colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(rt.getClaimedPlayer().get());
+                UUID testID = rt.getClaimedPlayer().getOption().get();
+                colo = ClientModelRoot.getInstance().games.getActive().getPlayerColors().get(rt.getClaimedPlayer().getOption().get());
             } catch (ResourceNotFoundException e) {
                 e.printStackTrace();
             }

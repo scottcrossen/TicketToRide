@@ -41,15 +41,13 @@ public class CommandHistory extends Observable {
         } finally {
             writers.release();
         }
-        readers = new Semaphore(100);
-        writers = new Semaphore(1);
         setChanged();
         notifyObservers();
     }
 
     public void add(IHistoricalCommand command) {
         try {
-            writers.tryAcquire();
+            writers.acquire();
             history.add(command);
         } catch (Exception e) {
             e.printStackTrace();

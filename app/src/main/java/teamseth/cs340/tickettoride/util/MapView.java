@@ -62,7 +62,7 @@ public class MapView extends View {
             rectLine.moveTo(centerOnX - 30, centerOnY - 30);
             rectLine.moveTo(centerOnX + 30, centerOnY + 30);
             RectF rectF = new RectF(centerOnX - 30, centerOnY + 30, centerOnX + 30, centerOnY - 30);
-            if(!dr.getRoute().getClaimedPlayer().isPresent()) {
+            if(!dr.getRoute().getClaimedPlayer().getOption().isPresent()) {
                 // only draws dashed line if route is unclaimed
                 rectFList.put(dr.getRoute(), rectF);
                 //canvas.drawRect(rectF,paint);

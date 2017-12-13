@@ -105,7 +105,8 @@ public class PersistenceAccess {
                 return queryResult.stream().map((MaybeTuple<Serializable, List<Serializable>> singleObject) -> {
                     return singleObject.get2().map((List<Serializable> deltas) -> {
                         try {
-                            return (A) DeltaCompose.compose(singleObject.get1(), deltas);
+                            A output = (A) DeltaCompose.compose(singleObject.get1(), deltas);
+                            return output;
                         } catch (Exception e) {
                             Logger.error("Object found in state does not match requested type");
                             return null;

@@ -216,9 +216,23 @@ public class SQLDAO {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                if (stmt.executeUpdate() != 1) {
-                    throw new DatabaseException("addObject failed: Could not insert object");
+                try {
+                    if (stmt.executeUpdate() != 1) {
+                        throw new DatabaseException("addObject failed: Could not insert object");
+                    }
+                } catch (Exception e) {
+                    removeObject(objectID);
+                    stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                    try {
+                        stmt.setString(1, objectID.toString());
+                        write(object,stmt, 2);
+                        stmt.setInt(3, typeIn);
+                    } catch (IOException e2) {
+                        e2.printStackTrace();
+                    }
+                    if (stmt.executeUpdate() != 1) {
+                        throw new DatabaseException("addObject failed: Could not insert object");
+                    }
                 }
             } finally {
                 if (stmt != null) {
@@ -237,6 +251,10 @@ public class SQLDAO {
             ResultSet rs = null;
             try {
                 String sql = "DELETE FROM Delta WHERE object_id=\'" + objectID.toString() + "\'";
+                stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                if (stmt.executeUpdate() != 1) {
+                    return true;
+                }
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -245,6 +263,27 @@ public class SQLDAO {
             return true;
         } catch (SQLException e) {
             throw new DatabaseException("delete deltas based on object failed", e);
+        }
+    }
+
+    public boolean removeObject(UUID objectID) throws DatabaseException {
+        try {
+            PreparedStatement stmt = null;
+            ResultSet rs = null;
+            try {
+                String sql = "DELETE FROM OBJECT WHERE id=\'" + objectID.toString() + "\'";
+                stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                if (stmt.executeUpdate() != 1) {
+                    return true;
+                }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            return true;
+        } catch (SQLException e) {
+            throw new DatabaseException("delete object based on id failed", e);
         }
     }
 
@@ -321,7 +360,7 @@ public class SQLDAO {
         }
     }
 
-    private static final String SELECT_ALL_DELTAS = "select * from DELTA";
+    private static final String SELECT_ALL_DELTAS = "SELECT * from DELTA";
     private static final String DELETE_DELTA_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS DELTA";
     private static final String CREATE_DELTA_TABLE =
     "CREATE TABLE DELTA (" +

@@ -22,6 +22,11 @@ public class LoginActivity extends FragmentActivity implements Observer {
 
     private LoginFragment loginFragment;
 
+    public LoginActivity() {
+        //PlayerTurnTracker.getInstance().safeExit(this.getApplicationContext());
+        Login.getInstance().logout();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

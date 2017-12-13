@@ -32,7 +32,6 @@ public class User implements Serializable, Comparable<User>, IStorable {
         return this.id.compareTo(user.id);
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

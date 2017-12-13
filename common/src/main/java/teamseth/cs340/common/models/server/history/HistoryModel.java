@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.history;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +28,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class HistoryModel extends AuthAction implements IServerModel<CommandHistory> {
+public class HistoryModel extends AuthAction implements IServerModel<CommandHistory>, Serializable {
     private static HistoryModel instance;
 
     public static HistoryModel getInstance() {

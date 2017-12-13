@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.chat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class ChatModel extends AuthAction implements IServerModel<ChatRoom> {
+public class ChatModel extends AuthAction implements IServerModel<ChatRoom>, Serializable {
     private static ChatModel instance;
 
     public static ChatModel getInstance() {

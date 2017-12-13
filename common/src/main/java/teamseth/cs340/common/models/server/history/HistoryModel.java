@@ -12,6 +12,7 @@ import teamseth.cs340.common.commands.client.ChangeTurnCommand;
 import teamseth.cs340.common.commands.client.IHistoricalCommand;
 import teamseth.cs340.common.commands.client.ILogoutOkayCommand;
 import teamseth.cs340.common.commands.client.InitialChooseDestinationCardCommand;
+import teamseth.cs340.common.commands.client.SetGameStateCommand;
 import teamseth.cs340.common.exceptions.ModelActionException;
 import teamseth.cs340.common.exceptions.NotYourTurnException;
 import teamseth.cs340.common.exceptions.ResourceNotFoundException;
@@ -115,6 +116,12 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
             for (lastPlayerTurnChangePos = history.size() - 1; lastPlayerTurnChangePos >= 0; lastPlayerTurnChangePos--) {
                 IHistoricalCommand currentCommand = history.get(lastPlayerTurnChangePos);
                 if (currentCommand instanceof ChangeTurnCommand) {
+                    if (((ChangeTurnCommand) currentCommand).getPlayerTurn().equals(playerId)) {
+                        break;
+                    } else {
+                        return true;
+                    }
+                } else if (currentCommand instanceof SetGameStateCommand) {
                     if (((ChangeTurnCommand) currentCommand).getPlayerTurn().equals(playerId)) {
                         break;
                     } else {

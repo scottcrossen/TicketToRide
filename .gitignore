@@ -9,3 +9,5 @@
 .externalNativeBuild
 .idea/
 TicketToRide.zip
+tickettoridedata.sqlite-journal
+tickettoridedata.sqlite

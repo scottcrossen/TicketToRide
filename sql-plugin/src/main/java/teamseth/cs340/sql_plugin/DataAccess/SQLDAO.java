@@ -256,20 +256,20 @@ public class SQLDAO {
     public List<MaybeTuple<Serializable, List<Serializable>>> getDeltas(ModelObjectType type) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
-            ResultSet rs = null;
             Serializable object = null;
             int typeOut = type.ordinal();
+            ResultSet rs1 = null;
             List<MaybeTuple<Serializable, List<Serializable>>> deltas =
                     new LinkedList<>();
             try {
                 String sql = SELECT_ALL_OBJECTS + " WHERE type=\'" + typeOut + "\'";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-                rs = stmt.executeQuery();
-                while(rs.next())
+                rs1 = stmt.executeQuery();
+                while(rs1.next())
                 {
-                    int objectID = rs.getInt(2);
+                    int objectID = rs1.getInt(2);
                     try {
-                        object = read(rs, 3);
+                        object = read(rs1, 3);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (ClassNotFoundException e) {
@@ -277,17 +277,18 @@ public class SQLDAO {
                     }
                     List<Serializable> deltaCommands =
                             new LinkedList<>();
+                    ResultSet rs2 = null;
                     try {
                         sql = SELECT_ALL_DELTAS + " WHERE object_id=\'" + objectID + "\'";
                         stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-                        rs = stmt.executeQuery();
+                        rs2 = stmt.executeQuery();
 
                         //adds the Serializable delta based on the object serializable
-                        while(rs.next())
+                        while(rs2.next())
                         {
                             Serializable userID2 = null;
                             try {
-                                userID2 = read(rs,4);
+                                userID2 = read(rs2,4);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (ClassNotFoundException e) {
@@ -296,8 +297,8 @@ public class SQLDAO {
                             deltaCommands.add(userID2);
                         }
                     } finally {
-                        if (rs != null) {
-                            rs.close();
+                        if (rs2 != null) {
+                            rs2.close();
                         }
                         if (stmt != null) {
                             stmt.close();
@@ -307,8 +308,8 @@ public class SQLDAO {
                     }
                 }
             } finally {
-                if (rs != null) {
-                    rs.close();
+                if (rs1 != null) {
+                    rs1.close();
                 }
                 if (stmt != null) {
                     stmt.close();
@@ -316,7 +317,7 @@ public class SQLDAO {
             }
             return deltas;
         } catch (SQLException e) {
-            return null;
+            return new LinkedList<>();
         }
     }
 

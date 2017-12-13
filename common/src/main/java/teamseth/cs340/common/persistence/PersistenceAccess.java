@@ -73,7 +73,10 @@ public class PersistenceAccess {
         int deltasBeforeUpdate = getDeltasBeforeUpdate(objectType);
         List<CompletableFuture<Boolean>> futures = providers.stream().map((IPersistenceProvider provider) -> provider.upsertObject(storable, command, storable.getId(), objectType, deltasBeforeUpdate)).collect(Collectors.toList());
         CompletableFuture<List<Boolean>> output = sequence(futures);
-        return output.thenApply((List<Boolean> results) -> results.stream().reduce(true, (Boolean val1, Boolean val2) -> val1 != null & val2 != null && val1 && val2));
+        return output.thenApply((List<Boolean> results) -> results.stream().reduce(true, (Boolean val1, Boolean val2) -> val1 != null & val2 != null && val1 && val2)).thenApply((Boolean finalOutput) -> {
+            Logger.debug("Successfully saved object of type " + getTypeFromStorable(storable) + " in persistence");
+            return finalOutput;
+        });
     }
 
     public static <A> CompletableFuture<List<A>> getObjects(ModelObjectType type) {

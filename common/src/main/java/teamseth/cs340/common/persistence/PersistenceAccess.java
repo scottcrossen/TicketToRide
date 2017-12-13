@@ -61,6 +61,11 @@ public class PersistenceAccess {
             providers.forEach((IPersistenceProvider provider) -> provider.initialize());
             Logger.info("Persistence providers initialized");
         }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--clear-data") || args[i].equals("-c")) {
+                providers.stream().forEach((IPersistenceProvider provider) -> provider.clearData());
+            }
+        }
     }
 
     public static int getAmountOfProviders() {

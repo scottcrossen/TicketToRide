@@ -113,4 +113,18 @@ public class PluginSQL implements IPersistenceProvider {
             }
         });
     }
+
+    @Override
+    public CompletableFuture<Boolean> clearData() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                sqlDAO.SINGLETON.clearDeltas();
+                sqlDAO.SINGLETON.clearObjects();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        });
+    }
 }

@@ -7,8 +7,16 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.UnknownHostException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +54,26 @@ public class PluginMongo implements IPersistenceProvider {
     public void finalize() {
 
     }
+    public static byte[] write(Serializable obj) throws IOException {
+        //Blob newData = new SerialBlob();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oout = new ObjectOutputStream(baos);
+        oout.writeObject(obj);
+        oout.flush();
+        oout.close();
+        byte[] output = baos.toByteArray();
+        return output;
+    }
+    public static Serializable read(DBObject obj, String get)
+            throws IOException, ClassNotFoundException {
+        byte[] buf = (byte[]) obj.get(get);
+        if (buf != null) {
+            ObjectInputStream objectIn = new ObjectInputStream(
+                    new ByteArrayInputStream(buf));
+            return (Serializable) objectIn.readObject();
+        }
+        return null;
+    }
 
     @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
@@ -57,18 +85,28 @@ public class PluginMongo implements IPersistenceProvider {
         db = mongoClient.getDB("TicketToRide");
         DBCollection deltas = db.getCollection("stateDeltas");
         DBCollection objects = db.getCollection("stateObjects");
-        BasicDBObject deltaDoc = new BasicDBObject("UUID", ObjectId.toString())
-                .append("delta", delta.toString())
-                .append("type", type.toString());
+        BasicDBObject deltaDoc = null;
+        try {
+            deltaDoc = new BasicDBObject("UUID", ObjectId.toString())
+                    .append("delta", write(delta))
+                    .append("type", type.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         deltas.insert(deltaDoc);
         BasicDBObject deltaQuery = new BasicDBObject("UUID", ObjectId.toString());
         DBCursor deltaCursor = deltas.find(deltaQuery);
         if(deltaCursor.count() >= deltasBeforeUpdate){
             deltas.remove(deltaQuery);
             objects.remove(deltaQuery);
-            BasicDBObject objectDoc = new BasicDBObject("UUID", ObjectId.toString())
-                    .append("Object", newObjectState.toString())
-                    .append("Type", type.toString());
+            BasicDBObject objectDoc = null;
+            try {
+                objectDoc = new BasicDBObject("UUID", ObjectId.toString())
+                        .append("Object", write(newObjectState))
+                        .append("type", type.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             objects.insert(objectDoc);
         }
         return CompletableFuture.supplyAsync(() -> false);
@@ -91,12 +129,12 @@ public class PluginMongo implements IPersistenceProvider {
             while (objectCursor.hasNext()){
                 DBObject object = objectCursor.next();
                 BasicDBObject deltaQuery = new BasicDBObject("UUID", object.get("UUID"));
-                Serializable stateObject = (Serializable) object.get("Object");
+                Serializable stateObject = read(object, "Object");
                 DBCursor deltaCursor = deltas.find(deltaQuery);
                 List<Serializable> deltaList = new LinkedList<>();
                 try {
                     while (deltaCursor.hasNext()) {
-                        deltaList.add((Serializable) deltaCursor.next().get("delta"));
+                        deltaList.add(read(deltaCursor.next(), "delta"));
                     }
                 } finally {
                     deltaCursor.close();
@@ -105,6 +143,10 @@ public class PluginMongo implements IPersistenceProvider {
                 MaybeTuple<Serializable, List<Serializable>> tuple = new MaybeTuple<Serializable, List<Serializable>>(stateObject, deltaList);
                 completableFuture.add(tuple);
             }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             objectCursor.close();
         }

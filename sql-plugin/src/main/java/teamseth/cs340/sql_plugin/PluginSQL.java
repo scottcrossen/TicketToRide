@@ -45,7 +45,7 @@ public class PluginSQL implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
-        if(orderMap.get(ObjectId).equals(null)) {
+        if(orderMap.get(ObjectId) == null) {
             orderMap.put(ObjectId, 1);
         }
         int count = orderMap.get(ObjectId);
@@ -54,7 +54,7 @@ public class PluginSQL implements IPersistenceProvider {
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
-        if(count == deltasBeforeUpdate) {
+        if(count >= deltasBeforeUpdate) {
             orderMap.put(ObjectId, 1);
             try {
                 sqlDAO.SINGLETON.clearDeltas();

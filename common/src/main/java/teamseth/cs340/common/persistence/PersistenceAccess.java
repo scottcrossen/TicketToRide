@@ -68,6 +68,7 @@ public class PersistenceAccess {
     }
 
     public static CompletableFuture<Boolean> save(IStorable storable, IDeltaCommand command) {
+        Logger.debug("Saving object of type " + getTypeFromStorable(storable) + " to persistence");
         ModelObjectType objectType = getTypeFromStorable(storable);
         int deltasBeforeUpdate = getDeltasBeforeUpdate(objectType);
         List<CompletableFuture<Boolean>> futures = providers.stream().map((IPersistenceProvider provider) -> provider.upsertObject(storable, command, storable.getId(), objectType, deltasBeforeUpdate)).collect(Collectors.toList());
@@ -93,6 +94,9 @@ public class PersistenceAccess {
                         }
                     }).orElseGet(() -> (A) singleObject);
                 }).filter(object -> object != null).collect(Collectors.toList());
+            }).thenApply((List<A> data) -> {
+                Logger.debug("Loading " + Integer.toString(data.size()) + " objects of type " + type + " from persistence");
+                return data;
             });
         }
     }

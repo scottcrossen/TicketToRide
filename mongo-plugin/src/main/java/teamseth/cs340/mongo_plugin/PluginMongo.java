@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 import java.io.Serializable;
@@ -84,30 +85,46 @@ public class PluginMongo implements IPersistenceProvider {
         DBCollection deltas = db.getCollection("stateDeltas");
         DBCollection objects = db.getCollection("stateObjects");
         BasicDBObject query = new BasicDBObject("type", type.toString());
-        List<Serializable> deltaList = new LinkedList<>();
-        Serializable object = null;
-        DBCursor deltaCursor = deltas.find(query);
-        try {
-            while (deltaCursor.hasNext()) {
-                deltaList.add((Serializable) deltaCursor.next().get("delta"));
-            }
-        } finally {
-            deltaCursor.close();
-        }
         DBCursor objectCursor = objects.find(query);
+        LinkedList<MaybeTuple<Serializable, List<Serializable>>> completableFuture = new LinkedList<MaybeTuple<Serializable, List<Serializable>>>();
         try {
-            if(objectCursor.hasNext()) object = (Serializable) objectCursor.next().get("Object");
+            while (objectCursor.hasNext()){
+                DBObject object = objectCursor.next();
+                BasicDBObject deltaQuery = new BasicDBObject("UUID", object.get("UUID"));
+                Serializable stateObject = (Serializable) object.get("Object");
+                DBCursor deltaCursor = deltas.find(deltaQuery);
+                List<Serializable> deltaList = new LinkedList<>();
+                try {
+                    while (deltaCursor.hasNext()) {
+                        deltaList.add((Serializable) deltaCursor.next().get("delta"));
+                    }
+                } finally {
+                    deltaCursor.close();
+                }
+
+                MaybeTuple<Serializable, List<Serializable>> tuple = new MaybeTuple<Serializable, List<Serializable>>(stateObject, deltaList);
+                completableFuture.add(tuple);
+            }
         } finally {
             objectCursor.close();
         }
-        MaybeTuple<Serializable, List<Serializable>> tuple = new MaybeTuple<Serializable, List<Serializable>>(object, deltaList);
-        LinkedList<MaybeTuple<Serializable, List<Serializable>>> completableFuture = new LinkedList<MaybeTuple<Serializable, List<Serializable>>>();
-        completableFuture.add(tuple);
         return CompletableFuture.supplyAsync(() -> completableFuture);
     }
 
     @Override
     public CompletableFuture<Boolean> clearData() {
+        try {
+            mongoClient = new MongoClient( "localhost" , 27017 );
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        db = mongoClient.getDB("TicketToRide");
+        DBCollection states = db.getCollection("stateObjects");
+        states.drop();
+        DBCollection deltas = db.getCollection("stateDeltas");
+        deltas.drop();
+        db.createCollection("stateObjects", null);
+        db.createCollection("stateDeltas", null);
         return CompletableFuture.completedFuture(false);
     }
 }

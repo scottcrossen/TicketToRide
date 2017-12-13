@@ -161,6 +161,10 @@ public class Game implements Serializable, Comparable<Game>, IStorable {
         }
     }
 
+    public UUID getFirstPlayerId() {
+        return playerTurns.get(0);
+    }
+
     public synchronized void startGameHasLock() throws ModelActionException {
         if (!getState().equals(GameState.PREGAME)) throw new ModelActionException();
         setState(GameState.START);

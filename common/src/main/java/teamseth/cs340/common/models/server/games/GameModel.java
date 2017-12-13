@@ -355,7 +355,7 @@ public class GameModel extends AuthAction implements IServerModel<Game>, Seriali
         AuthAction.user(token);
         UUID playerId = token.getUser();
         games.stream().filter(game -> game.hasPlayer(playerId)).forEach((Game game) -> {
-            if (game.getWhosTurnItIs().map((UUID playerTurn) -> playerTurn.equals(playerId)).orElseGet(() -> false) && !ServerModelRoot.history.logoutStateOkay(game.getHistory(), playerId)) {
+            if (game.getWhosTurnItIs().map((UUID playerTurn) -> playerTurn.equals(playerId)).orElseGet(() -> false) && !ServerModelRoot.history.logoutStateOkay(game.getHistory(), playerId, game.getFirstPlayerId())) {
                 try {
                     nextPlayerTurn(game.getId(), token);
                     ServerModelRoot.history.forceAddCommandToHistory(game.getHistory(), new ChangeTurnCommand(game.getPlayers(), playerId, game.getWhosTurnItIs().get()), token);

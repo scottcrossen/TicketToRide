@@ -7,6 +7,8 @@ import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 
 import java.io.Serializable;
+import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -46,20 +48,26 @@ public class PluginMongo implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
+        try {
+            mongoClient = new MongoClient( "localhost" , 27017 );
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        db = mongoClient.getDB("TicketToRide");
         DBCollection deltas = db.getCollection("stateDeltas");
         DBCollection objects = db.getCollection("stateObjects");
-        BasicDBObject deltaDoc = new BasicDBObject("UUID", ObjectId)
-                .append("delta", delta)
-                .append("type", type);
+        BasicDBObject deltaDoc = new BasicDBObject("UUID", ObjectId.toString())
+                .append("delta", delta.toString())
+                .append("type", type.toString());
         deltas.insert(deltaDoc);
-        BasicDBObject deltaQuery = new BasicDBObject("UUID", ObjectId);
+        BasicDBObject deltaQuery = new BasicDBObject("UUID", ObjectId.toString());
         DBCursor deltaCursor = deltas.find(deltaQuery);
         if(deltaCursor.count() >= deltasBeforeUpdate){
             deltas.remove(deltaQuery);
             objects.remove(deltaQuery);
-            BasicDBObject objectDoc = new BasicDBObject("UUID", ObjectId)
-                    .append("Object", newObjectState)
-                    .append("Type", type);
+            BasicDBObject objectDoc = new BasicDBObject("UUID", ObjectId.toString())
+                    .append("Object", newObjectState.toString())
+                    .append("Type", type.toString());
             objects.insert(objectDoc);
         }
         return CompletableFuture.supplyAsync(() -> false);
@@ -67,22 +75,28 @@ public class PluginMongo implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type) {
+        try {
+            mongoClient = new MongoClient( "localhost" , 27017 );
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        db = mongoClient.getDB("TicketToRide");
         DBCollection deltas = db.getCollection("stateDeltas");
         DBCollection objects = db.getCollection("stateObjects");
-        BasicDBObject query = new BasicDBObject("type", type);
+        BasicDBObject query = new BasicDBObject("type", type.toString());
         List<Serializable> deltaList = new LinkedList<>();
         Serializable object = null;
         DBCursor deltaCursor = deltas.find(query);
         try {
             while (deltaCursor.hasNext()) {
-                deltaList.add((Serializable) deltaCursor.next());
+                deltaList.add((Serializable) deltaCursor.next().get("delta"));
             }
         } finally {
             deltaCursor.close();
         }
         DBCursor objectCursor = objects.find(query);
         try {
-            object = (Serializable) objectCursor.next();
+            if(objectCursor.hasNext()) object = (Serializable) objectCursor.next().get("Object");
         } finally {
             objectCursor.close();
         }

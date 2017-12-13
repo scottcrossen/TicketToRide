@@ -55,6 +55,6 @@ public interface IPersistenceProvider {
      */
     CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type); // No need to include object Id.
 
-    // User-tables methods are redundant. Users passed in just like any other object.
+    CompletableFuture<Boolean> clearData();
 }
 

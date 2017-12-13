@@ -65,6 +65,16 @@ public class PersistenceAccess {
             if (args[i].equals("--clear-data") || args[i].equals("-c")) {
                 providers.stream().forEach((IPersistenceProvider provider) -> provider.clearData());
             }
+            if (args[i].equals("--delta-amount") && i < args.length - 1) {
+                deltasBeforeUpdate.put(ModelObjectType.USER, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.HISTORY, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.GAME, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.CHAT, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.CARTS, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.DESTINATIONDECK, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.RESOURCEDECK, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.ROUTES, Integer.parseInt(args[i+1]));
+            }
         }
     }
 

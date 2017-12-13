@@ -49,8 +49,7 @@ public class SQLDAO {
             return true;
         }
         catch (SQLException e) {
-
-            throw new DatabaseException("Delete Deltas failed", e);
+            return false;
         }
     }
 

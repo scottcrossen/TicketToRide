@@ -1,5 +1,10 @@
 package teamseth.cs340.sql_plugin.DataAccess;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,7 +106,6 @@ public class SQLDAO {
                 }
                 Connection.SINGLETON.conn.commit();
             } catch (SQLException e1) {
-                throw new DatabaseException("createDeltaTable failed", e1);
             }
         }
         try {
@@ -131,7 +135,6 @@ public class SQLDAO {
                 }
                 Connection.SINGLETON.conn.commit();
             } catch (SQLException e1) {
-                throw new DatabaseException("createObjectTable failed", e1);
             }
         }
     }
@@ -146,7 +149,7 @@ public class SQLDAO {
             try {
                 String sql = "INSERT INTO DELTA (object_id," +
                         "order_num,delta_command) values ( " +
-                        "\"" + objectID + "\",\"" +
+                        "\"" + objectID.toString() + "\",\"" +
                         order_num + "\",\"" +
                         delta + "\")";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
@@ -165,6 +168,26 @@ public class SQLDAO {
         }
     }
 
+    public static void write(
+            Object obj, PreparedStatement stmt, int i)
+            throws SQLException, IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oout = new ObjectOutputStream(baos);
+        oout.writeObject(obj);
+        oout.close();
+        stmt.setBytes(i, baos.toByteArray());
+    }
+    public static Object read(ResultSet rs, String column)
+            throws SQLException, IOException, ClassNotFoundException {
+        byte[] buf = rs.getBytes(column);
+        if (buf != null) {
+            ObjectInputStream objectIn = new ObjectInputStream(
+                    new ByteArrayInputStream(buf));
+            return objectIn.readObject();
+        }
+        return null;
+    }
+
     /**
      * @param object Adds a serializable object to database
      * @return
@@ -173,12 +196,19 @@ public class SQLDAO {
         try {
             PreparedStatement stmt = null;
             try {
+
+                int typeIn = type.ordinal() ;
                 String sql = "INSERT INTO OBJECT (id," +
                         "object,type) values ( " +
-                        "\"" + objectID + "\",\"" +
-                        object + "\",\"" +
-                        type + "\")";
+                        "\"" + objectID.toString() + "\",\"" +
+                        "?" + "\",\"" +
+                        typeIn + "\")";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                try {
+                    write(object,stmt,2);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 if (stmt.executeUpdate() != 1) {
                     throw new DatabaseException("addObject failed: Could not insert object");
@@ -199,7 +229,7 @@ public class SQLDAO {
             PreparedStatement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "DELETE FROM Delta WHERE object_id=\'" + objectID + "\'";
+                String sql = "DELETE FROM Delta WHERE object_id=\'" + objectID.toString() + "\'";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
                 if (stmt.executeUpdate() != 1) {
                     throw new DatabaseException("delete deltas failed: Could not delete deltas based on object");
@@ -225,13 +255,13 @@ public class SQLDAO {
             PreparedStatement stmt = null;
             ResultSet rs = null;
             Serializable object = null;
+            int typeOut = type.ordinal();
             List<MaybeTuple<Serializable, List<Serializable>>> deltas =
                     new LinkedList<>();
             try {
-                String sql = SELECT_ALL_OBJECTS + " WHERE type=\'" + type + "\'";
+                String sql = SELECT_ALL_OBJECTS + " WHERE type=\'" + typeOut + "\'";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
                 rs = stmt.executeQuery();
-                MaybeTuple objectCommands = null;
                 while(rs.next())
                 {
                     int objectID = rs.getInt(2);
@@ -256,11 +286,9 @@ public class SQLDAO {
                         if (stmt != null) {
                             stmt.close();
                         }
-                        objectCommands.set1(object);
-                        objectCommands.set2(deltaCommands);
+                        MaybeTuple<Serializable,List<Serializable>> objectCommands= new MaybeTuple(object,deltaCommands);
+                        deltas.add(objectCommands);
                     }
-
-                    deltas.add(objectCommands);
                 }
             } finally {
                 if (rs != null) {
@@ -272,7 +300,7 @@ public class SQLDAO {
             }
             return deltas;
         } catch (SQLException e) {
-            throw new DatabaseException("getDeltas failed", e);
+            return null;
         }
     }
 
@@ -281,7 +309,7 @@ public class SQLDAO {
     private static final String CREATE_DELTA_TABLE =
     "CREATE TABLE DELTA (" +
             "                       hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
-            "                       object_id BINARY(16) NOT NULL,\n" +
+            "                       object_id STRING NOT NULL,\n" +
             "                       order_num INTEGER NOT NULL,\n" +
             "                       delta_command TEXT NOT NULL,\n" +
             "\n" +
@@ -295,7 +323,7 @@ public class SQLDAO {
             "CREATE TABLE OBJECT " +
                     "(" +
                     "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    "   id BINARY(16) UNIQUE NOT NULL," +
+                    "   id STRING UNIQUE NOT NULL," +
                     "   object TEXT NOT NULL," +
                     "   type TINYINT NOT NULL" +
                     ")";

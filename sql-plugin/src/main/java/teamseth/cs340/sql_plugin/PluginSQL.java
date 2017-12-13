@@ -1,6 +1,7 @@
 package teamseth.cs340.sql_plugin;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,17 +79,23 @@ public class PluginSQL implements IPersistenceProvider {
             count++;
             orderMap.put(ObjectId, count);
         }
+        try {
+            Connection.SINGLETON.conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return CompletableFuture.supplyAsync(() -> false);
     }
 
     @Override
     public CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type) {
-        //get every object and delta based on the object (Serializable)
-        try {
-            sqlDAO.SINGLETON.getDeltas(type);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        return CompletableFuture.supplyAsync(() -> new LinkedList<MaybeTuple<Serializable, List<Serializable>>>());
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return sqlDAO.SINGLETON.getDeltas(type);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+                return new LinkedList<MaybeTuple<Serializable, List<Serializable>>>();
+            }
+        });
     }
 }

@@ -146,7 +146,7 @@ public class SQLDAO {
             try {
                 String sql = "INSERT INTO DELTA (object_id," +
                         "order_num,delta_command) values ( " +
-                        objectID + "\",\"" +
+                        "\"" + objectID + "\",\"" +
                         order_num + "\",\"" +
                         delta + "\")";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
@@ -175,7 +175,7 @@ public class SQLDAO {
             try {
                 String sql = "INSERT INTO OBJECT (id," +
                         "object,type) values ( " +
-                        objectID + "\",\"" +
+                        "\"" + objectID + "\",\"" +
                         object + "\",\"" +
                         type + "\")";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);

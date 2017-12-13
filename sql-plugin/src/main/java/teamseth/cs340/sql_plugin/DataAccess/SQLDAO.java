@@ -148,12 +148,19 @@ public class SQLDAO {
         try {
             PreparedStatement stmt = null;
             try {
-                String sql = "INSERT INTO DELTA (object_id," +
-                        "order_num,delta_command) values ( " +
-                        "\"" + objectID.toString() + "\",\"" +
-                        order_num + "\",\"" +
-                        delta + "\")";
+                String sql = "INSERT INTO DELTA (object_id, order_num, delta_command) VALUES (?, ?, ?)";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                try {
+                    stmt.setString(1, objectID.toString());
+                    stmt.setInt(2, order_num);
+                    write(delta,stmt,3);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (stmt.executeUpdate() != 1) {
+                    throw new DatabaseException("addDelta failed: Could not insert delta");
+                }
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -279,7 +286,14 @@ public class SQLDAO {
                         //adds the Serializable delta based on the object serializable
                         while(rs.next())
                         {
-                            Serializable userID2 = rs.getString(4);
+                            Serializable userID2 = null;
+                            try {
+                                userID2 = read(rs,4);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                             deltaCommands.add(userID2);
                         }
                     } finally {
@@ -314,7 +328,7 @@ public class SQLDAO {
             "                       hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
             "                       object_id STRING NOT NULL,\n" +
             "                       order_num INTEGER NOT NULL,\n" +
-            "                       delta_command TEXT NOT NULL,\n" +
+            "                       delta_command BLOB NOT NULL,\n" +
             "\n" +
             "                       FOREIGN KEY (object_id) REFERENCES Object (id)\n" +
             "                    )";

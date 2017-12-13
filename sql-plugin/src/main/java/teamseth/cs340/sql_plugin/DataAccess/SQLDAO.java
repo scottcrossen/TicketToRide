@@ -73,7 +73,7 @@ public class SQLDAO {
             return true;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Delete Objects failed", e);
+            return false;
         }
     }
 

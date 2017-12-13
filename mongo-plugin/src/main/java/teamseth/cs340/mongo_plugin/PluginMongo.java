@@ -3,6 +3,7 @@ package teamseth.cs340.mongo_plugin;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.DBCollection;
 
@@ -50,7 +51,8 @@ public class PluginMongo implements IPersistenceProvider {
         DBCollection deltas = db.getCollection("stateDeltas");
         DBCollection objects = db.getCollection("stateObjects");
         BasicDBObject deltaDoc = new BasicDBObject("UUID", ObjectId)
-                .append("delta", delta);
+                .append("delta", delta)
+                .append("type", type);
         deltas.insert(deltaDoc);
         BasicDBObject deltaQuery = new BasicDBObject("UUID", ObjectId);
         DBCursor deltaCursor = deltas.find(deltaQuery);
@@ -67,7 +69,28 @@ public class PluginMongo implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type) {
-
-        return CompletableFuture.supplyAsync(() -> new LinkedList<MaybeTuple<Serializable, List<Serializable>>>());
+        DBCollection deltas = db.getCollection("stateDeltas");
+        DBCollection objects = db.getCollection("stateObjects");
+        BasicDBObject query = new BasicDBObject("type", type);
+        List<Serializable> deltaList = new LinkedList<>();
+        Serializable object = null;
+        DBCursor deltaCursor = deltas.find(query);
+        try {
+            while (deltaCursor.hasNext()) {
+                deltaList.add((Serializable) deltaCursor.next());
+            }
+        } finally {
+            deltaCursor.close();
+        }
+        DBCursor objectCursor = objects.find(query);
+        try {
+            object = (Serializable) objectCursor.next();
+        } finally {
+            objectCursor.close();
+        }
+        MaybeTuple<Serializable, List<Serializable>> tuple = new MaybeTuple<Serializable, List<Serializable>>(object, deltaList);
+        LinkedList<MaybeTuple<Serializable, List<Serializable>>> completableFuture = new LinkedList<MaybeTuple<Serializable, List<Serializable>>>();
+        completableFuture.add(tuple);
+        return CompletableFuture.supplyAsync(() -> completableFuture);
     }
 }

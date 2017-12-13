@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.games;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +52,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class GameModel extends AuthAction implements IServerModel<Game> {
+public class GameModel extends AuthAction implements IServerModel<Game>, Serializable {
     private static GameModel instance;
 
     public static GameModel getInstance() {

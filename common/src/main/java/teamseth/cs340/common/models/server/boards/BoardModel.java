@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.boards;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class BoardModel extends AuthAction implements IServerModel<Routes> {
+public class BoardModel extends AuthAction implements IServerModel<Routes>, Serializable {
     private static BoardModel instance;
 
     public static BoardModel getInstance() {

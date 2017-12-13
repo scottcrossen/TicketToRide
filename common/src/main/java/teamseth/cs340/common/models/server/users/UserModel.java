@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.users;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class UserModel implements IServerModel<User> {
+public class UserModel implements IServerModel<User>, Serializable {
     private static UserModel instance;
 
     public static UserModel getInstance() {

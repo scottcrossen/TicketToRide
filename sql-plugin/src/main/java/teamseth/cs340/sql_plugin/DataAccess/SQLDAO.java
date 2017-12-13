@@ -1,5 +1,10 @@
 package teamseth.cs340.sql_plugin.DataAccess;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +49,7 @@ public class SQLDAO {
             return true;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Delete Deltas failed", e);
+            return false;
         }
     }
 
@@ -68,7 +73,7 @@ public class SQLDAO {
             return true;
         }
         catch (SQLException e) {
-            throw new DatabaseException("Delete Objects failed", e);
+            return false;
         }
     }
 
@@ -101,7 +106,6 @@ public class SQLDAO {
                 }
                 Connection.SINGLETON.conn.commit();
             } catch (SQLException e1) {
-                throw new DatabaseException("createDeltaTable failed", e1);
             }
         }
         try {
@@ -131,7 +135,6 @@ public class SQLDAO {
                 }
                 Connection.SINGLETON.conn.commit();
             } catch (SQLException e1) {
-                throw new DatabaseException("createObjectTable failed", e1);
             }
         }
     }
@@ -144,12 +147,15 @@ public class SQLDAO {
         try {
             PreparedStatement stmt = null;
             try {
-                String sql = "INSERT INTO DELTA (object_id," +
-                        "order_num,delta_command) values ( " +
-                        objectID + "\",\"" +
-                        order_num + "\",\"" +
-                        delta + "\")";
+                String sql = "INSERT INTO DELTA (object_id, order_num, delta_command) VALUES (?, ?, ?)";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                try {
+                    stmt.setString(1, objectID.toString());
+                    stmt.setInt(2, order_num);
+                    write(delta,stmt,3);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 if (stmt.executeUpdate() != 1) {
                     throw new DatabaseException("addDelta failed: Could not insert delta");
@@ -165,6 +171,33 @@ public class SQLDAO {
         }
     }
 
+    public static void write(
+            Serializable obj, PreparedStatement stmt, int i)
+            throws SQLException, IOException {
+        //Blob newData = new SerialBlob();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oout = new ObjectOutputStream(baos);
+        oout.writeObject(obj);
+        oout.flush();
+        oout.close();
+        byte[] output = baos.toByteArray();
+        try {
+            stmt.setBytes(i, output);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static Serializable read(ResultSet rs, int column)
+            throws SQLException, IOException, ClassNotFoundException {
+        byte[] buf = rs.getBytes(column);
+        if (buf != null) {
+            ObjectInputStream objectIn = new ObjectInputStream(
+                    new ByteArrayInputStream(buf));
+            return (Serializable) objectIn.readObject();
+        }
+        return null;
+    }
+
     /**
      * @param object Adds a serializable object to database
      * @return
@@ -173,12 +206,16 @@ public class SQLDAO {
         try {
             PreparedStatement stmt = null;
             try {
-                String sql = "INSERT INTO OBJECT (id," +
-                        "object,type) values ( " +
-                        objectID + "\",\"" +
-                        object + "\",\"" +
-                        type + "\")";
+                int typeIn = type.ordinal() ;
+                String sql = "INSERT INTO OBJECT (id, object, type) VALUES (?, ?, ?)";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
+                try {
+                    stmt.setString(1, objectID.toString());
+                    write(object,stmt, 2);
+                    stmt.setInt(3, typeIn);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 if (stmt.executeUpdate() != 1) {
                     throw new DatabaseException("addObject failed: Could not insert object");
@@ -199,11 +236,7 @@ public class SQLDAO {
             PreparedStatement stmt = null;
             ResultSet rs = null;
             try {
-                String sql = "DELETE FROM Delta WHERE object_id=\'" + objectID + "\'";
-                stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-                if (stmt.executeUpdate() != 1) {
-                    throw new DatabaseException("delete deltas failed: Could not delete deltas based on object");
-                }
+                String sql = "DELETE FROM Delta WHERE object_id=\'" + objectID.toString() + "\'";
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -223,48 +256,60 @@ public class SQLDAO {
     public List<MaybeTuple<Serializable, List<Serializable>>> getDeltas(ModelObjectType type) throws DatabaseException {
         try {
             PreparedStatement stmt = null;
-            ResultSet rs = null;
             Serializable object = null;
+            int typeOut = type.ordinal();
+            ResultSet rs1 = null;
             List<MaybeTuple<Serializable, List<Serializable>>> deltas =
                     new LinkedList<>();
             try {
-                String sql = SELECT_ALL_OBJECTS + " WHERE type=\'" + type + "\'";
+                String sql = SELECT_ALL_OBJECTS + " WHERE type=\'" + typeOut + "\'";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-                rs = stmt.executeQuery();
-                MaybeTuple objectCommands = null;
-                while(rs.next())
+                rs1 = stmt.executeQuery();
+                while(rs1.next())
                 {
-                    int objectID = rs.getInt(2);
-                    object = rs.getString(3);
+                    String objectID = rs1.getString(2);
+                    try {
+                        object = read(rs1, 3);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     List<Serializable> deltaCommands =
                             new LinkedList<>();
+                    ResultSet rs2 = null;
                     try {
                         sql = SELECT_ALL_DELTAS + " WHERE object_id=\'" + objectID + "\'";
                         stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-                        rs = stmt.executeQuery();
+                        rs2 = stmt.executeQuery();
 
                         //adds the Serializable delta based on the object serializable
-                        while(rs.next())
+                        while(rs2.next())
                         {
-                            Serializable userID2 = rs.getString(4);
+                            Serializable userID2 = null;
+                            try {
+                                userID2 = read(rs2,4);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                             deltaCommands.add(userID2);
                         }
                     } finally {
-                        if (rs != null) {
-                            rs.close();
+                        if (rs2 != null) {
+                            rs2.close();
                         }
                         if (stmt != null) {
                             stmt.close();
                         }
-                        objectCommands.set1(object);
-                        objectCommands.set2(deltaCommands);
+                        MaybeTuple<Serializable,List<Serializable>> objectCommands= new MaybeTuple(object,deltaCommands);
+                        deltas.add(objectCommands);
                     }
-
-                    deltas.add(objectCommands);
                 }
             } finally {
-                if (rs != null) {
-                    rs.close();
+                if (rs1 != null) {
+                    rs1.close();
                 }
                 if (stmt != null) {
                     stmt.close();
@@ -272,7 +317,7 @@ public class SQLDAO {
             }
             return deltas;
         } catch (SQLException e) {
-            throw new DatabaseException("getDeltas failed", e);
+            return new LinkedList<>();
         }
     }
 
@@ -281,9 +326,9 @@ public class SQLDAO {
     private static final String CREATE_DELTA_TABLE =
     "CREATE TABLE DELTA (" +
             "                       hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
-            "                       object_id BINARY(16) NOT NULL,\n" +
+            "                       object_id STRING NOT NULL,\n" +
             "                       order_num INTEGER NOT NULL,\n" +
-            "                       delta_command TEXT NOT NULL,\n" +
+            "                       delta_command BLOB NOT NULL,\n" +
             "\n" +
             "                       FOREIGN KEY (object_id) REFERENCES Object (id)\n" +
             "                    )";
@@ -294,9 +339,9 @@ public class SQLDAO {
     private static final String CREATE_OBJECT_TABLE =
             "CREATE TABLE OBJECT " +
                     "(" +
-                    "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    "   id BINARY(16) UNIQUE NOT NULL," +
-                    "   object TEXT NOT NULL," +
-                    "   type TINYINT NOT NULL" +
+                    "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                    "   id STRING UNIQUE NOT NULL,\n" +
+                    "   object BLOB NOT NULL,\n" +
+                    "   type TINYINT NOT NULL\n" +
                     ")";
 }

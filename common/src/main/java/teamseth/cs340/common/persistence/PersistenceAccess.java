@@ -61,6 +61,21 @@ public class PersistenceAccess {
             providers.forEach((IPersistenceProvider provider) -> provider.initialize());
             Logger.info("Persistence providers initialized");
         }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--clear-data") || args[i].equals("-c")) {
+                providers.stream().forEach((IPersistenceProvider provider) -> provider.clearData());
+            }
+            if (args[i].equals("--delta-amount") && i < args.length - 1) {
+                deltasBeforeUpdate.put(ModelObjectType.USER, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.HISTORY, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.GAME, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.CHAT, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.CARTS, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.DESTINATIONDECK, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.RESOURCEDECK, Integer.parseInt(args[i+1]));
+                deltasBeforeUpdate.put(ModelObjectType.ROUTES, Integer.parseInt(args[i+1]));
+            }
+        }
     }
 
     public static int getAmountOfProviders() {
@@ -73,7 +88,10 @@ public class PersistenceAccess {
         int deltasBeforeUpdate = getDeltasBeforeUpdate(objectType);
         List<CompletableFuture<Boolean>> futures = providers.stream().map((IPersistenceProvider provider) -> provider.upsertObject(storable, command, storable.getId(), objectType, deltasBeforeUpdate)).collect(Collectors.toList());
         CompletableFuture<List<Boolean>> output = sequence(futures);
-        return output.thenApply((List<Boolean> results) -> results.stream().reduce(true, (Boolean val1, Boolean val2) -> val1 != null & val2 != null && val1 && val2));
+        return output.thenApply((List<Boolean> results) -> results.stream().reduce(true, (Boolean val1, Boolean val2) -> val1 != null & val2 != null && val1 && val2)).thenApply((Boolean finalOutput) -> {
+            Logger.debug("Successfully saved object of type " + getTypeFromStorable(storable) + " in persistence");
+            return finalOutput;
+        });
     }
 
     public static <A> CompletableFuture<List<A>> getObjects(ModelObjectType type) {

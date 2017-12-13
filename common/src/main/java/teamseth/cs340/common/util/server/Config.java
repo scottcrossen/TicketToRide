@@ -33,7 +33,7 @@ public class Config {
         //Logger.setVerbosity(6);
     }
 
-    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.empty();
+    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.empty(); //Optional.of(IPersistenceProvider.ProviderType.SQL);
 
     public Optional<IPersistenceProvider.ProviderType> getPersistanceType() { return persistanceType; }
 

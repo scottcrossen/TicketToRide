@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.carts;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @copyright (C) Copyright 2017 Scott Leland Crossen
  */
-public class CartModel extends AuthAction implements IServerModel {
+public class CartModel extends AuthAction implements IServerModel, Serializable {
     private static CartModel instance;
 
     public static CartModel getInstance() {

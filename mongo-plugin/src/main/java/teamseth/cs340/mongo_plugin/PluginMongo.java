@@ -2,10 +2,9 @@ package teamseth.cs340.mongo_plugin;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.MongoClient;
 
 import java.io.Serializable;
 import java.net.UnknownHostException;
@@ -105,5 +104,10 @@ public class PluginMongo implements IPersistenceProvider {
         LinkedList<MaybeTuple<Serializable, List<Serializable>>> completableFuture = new LinkedList<MaybeTuple<Serializable, List<Serializable>>>();
         completableFuture.add(tuple);
         return CompletableFuture.supplyAsync(() -> completableFuture);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> clearData() {
+        return CompletableFuture.completedFuture(false);
     }
 }

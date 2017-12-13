@@ -1,5 +1,6 @@
 package teamseth.cs340.common.models.server.cards;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @author Scott Leland Crossen
  * @Copyright 2017 Scott Leland Crossen
  */
-public class CardModel extends AuthAction implements IServerModel<Deck> {
+public class CardModel extends AuthAction implements IServerModel<Deck>, Serializable {
     private static CardModel instance;
 
     public static CardModel getInstance() {

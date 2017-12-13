@@ -9,6 +9,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
+import teamseth.cs340.common.util.Logger;
 
 /**
  * @author Scott Leland Crossen
@@ -30,10 +31,10 @@ public class Config {
         } catch (Exception e) {
             this.secretKey = null;
         }
-        //Logger.setVerbosity(6);
+        Logger.setVerbosity(6);
     }
 
-    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.empty();
+    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.of(IPersistenceProvider.ProviderType.SQL);
 
     public Optional<IPersistenceProvider.ProviderType> getPersistanceType() { return persistanceType; }
 

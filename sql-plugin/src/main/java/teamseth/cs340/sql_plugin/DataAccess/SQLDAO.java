@@ -184,13 +184,13 @@ public class SQLDAO {
             e.printStackTrace();
         }
     }
-    public static Object read(ResultSet rs, String column)
+    public static Serializable read(ResultSet rs, int column)
             throws SQLException, IOException, ClassNotFoundException {
         byte[] buf = rs.getBytes(column);
         if (buf != null) {
             ObjectInputStream objectIn = new ObjectInputStream(
                     new ByteArrayInputStream(buf));
-            return objectIn.readObject();
+            return (Serializable) objectIn.readObject();
         }
         return null;
     }
@@ -204,12 +204,12 @@ public class SQLDAO {
             PreparedStatement stmt = null;
             try {
                 int typeIn = type.ordinal() ;
-                String sql = "INSERT INTO OBJECT (object, id, type) VALUES (?, ?, ?)";
+                String sql = "INSERT INTO OBJECT (id, object, type) VALUES (?, ?, ?)";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
                 try {
                     stmt.setString(1, objectID.toString());
+                    write(object,stmt, 2);
                     stmt.setInt(3, typeIn);
-                    write(object,stmt,2);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -269,7 +269,13 @@ public class SQLDAO {
                 while(rs.next())
                 {
                     int objectID = rs.getInt(2);
-                    object = rs.getString(3);
+                    try {
+                        object = read(rs, 3);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     List<Serializable> deltaCommands =
                             new LinkedList<>();
                     try {

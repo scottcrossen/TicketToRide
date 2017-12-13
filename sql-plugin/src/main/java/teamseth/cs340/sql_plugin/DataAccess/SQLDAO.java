@@ -267,7 +267,7 @@ public class SQLDAO {
                 rs1 = stmt.executeQuery();
                 while(rs1.next())
                 {
-                    int objectID = rs1.getInt(2);
+                    String objectID = rs1.getString(2);
                     try {
                         object = read(rs1, 3);
                     } catch (IOException e) {

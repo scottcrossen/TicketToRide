@@ -27,6 +27,8 @@ import teamseth.cs340.common.models.server.ModelObjectType;
 import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
 import teamseth.cs340.common.util.Logger;
 import teamseth.cs340.common.util.MaybeTuple;
+import teamseth.cs340.mongo_plugin.DataAccess.DatabaseException;
+import teamseth.cs340.mongo_plugin.DataAccess.MongoDAO;
 
 public class PluginMongo implements IPersistenceProvider {
     MongoClient mongoClient;
@@ -155,18 +157,12 @@ public class PluginMongo implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<Boolean> clearData() {
+        boolean wasCleared = false;
         try {
-            mongoClient = new MongoClient( "localhost" , 27017 );
-        } catch (UnknownHostException e) {
+            wasCleared = MongoDAO.SINGLETON.clearData();
+        } catch (DatabaseException e) {
             e.printStackTrace();
         }
-        db = mongoClient.getDB("TicketToRide");
-        DBCollection states = db.getCollection("stateObjects");
-        states.drop();
-        DBCollection deltas = db.getCollection("stateDeltas");
-        deltas.drop();
-        db.createCollection("stateObjects", null);
-        db.createCollection("stateDeltas", null);
-        return CompletableFuture.completedFuture(false);
+        return CompletableFuture.completedFuture(wasCleared);
     }
 }

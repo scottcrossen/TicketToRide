@@ -339,9 +339,9 @@ public class SQLDAO {
     private static final String CREATE_OBJECT_TABLE =
             "CREATE TABLE OBJECT " +
                     "(" +
-                    "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    "   id STRING UNIQUE NOT NULL," +
-                    "   object BLOB NOT NULL," +
-                    "   type TINYINT NOT NULL" +
+                    "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                    "   id STRING UNIQUE NOT NULL,\n" +
+                    "   object BLOB NOT NULL,\n" +
+                    "   type TINYINT NOT NULL\n" +
                     ")";
 }

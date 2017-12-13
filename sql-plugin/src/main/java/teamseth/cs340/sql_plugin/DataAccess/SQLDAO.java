@@ -169,13 +169,20 @@ public class SQLDAO {
     }
 
     public static void write(
-            Object obj, PreparedStatement stmt, int i)
+            Serializable obj, PreparedStatement stmt, int i)
             throws SQLException, IOException {
+        //Blob newData = new SerialBlob();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oout = new ObjectOutputStream(baos);
         oout.writeObject(obj);
+        oout.flush();
         oout.close();
-        stmt.setBytes(i, baos.toByteArray());
+        byte[] output = baos.toByteArray();
+        try {
+            stmt.setBytes(i, output);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static Object read(ResultSet rs, String column)
             throws SQLException, IOException, ClassNotFoundException {
@@ -196,15 +203,12 @@ public class SQLDAO {
         try {
             PreparedStatement stmt = null;
             try {
-
                 int typeIn = type.ordinal() ;
-                String sql = "INSERT INTO OBJECT (id," +
-                        "object,type) values ( " +
-                        "\"" + objectID.toString() + "\",\"" +
-                        "?" + "\",\"" +
-                        typeIn + "\")";
+                String sql = "INSERT INTO OBJECT (object, id, type) VALUES (?, ?, ?)";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
                 try {
+                    stmt.setString(1, objectID.toString());
+                    stmt.setInt(3, typeIn);
                     write(object,stmt,2);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -324,7 +328,7 @@ public class SQLDAO {
                     "(" +
                     "   hidden_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                     "   id STRING UNIQUE NOT NULL," +
-                    "   object TEXT NOT NULL," +
+                    "   object BLOB NOT NULL," +
                     "   type TINYINT NOT NULL" +
                     ")";
 }

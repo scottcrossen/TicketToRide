@@ -49,6 +49,13 @@ public class PluginSQL implements IPersistenceProvider {
         return CompletableFuture.supplyAsync(() -> {
             if (orderMap.get(ObjectId) == null) {
                 orderMap.put(ObjectId, 1);
+                try {
+                    sqlDAO.SINGLETON.addObject(newObjectState,ObjectId,type);
+                    return true;
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
             int count = orderMap.get(ObjectId);
             try {

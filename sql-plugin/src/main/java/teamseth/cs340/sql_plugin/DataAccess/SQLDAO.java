@@ -49,6 +49,7 @@ public class SQLDAO {
             return true;
         }
         catch (SQLException e) {
+
             throw new DatabaseException("Delete Deltas failed", e);
         }
     }
@@ -153,10 +154,6 @@ public class SQLDAO {
                         order_num + "\",\"" +
                         delta + "\")";
                 stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-
-                if (stmt.executeUpdate() != 1) {
-                    throw new DatabaseException("addDelta failed: Could not insert delta");
-                }
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -234,10 +231,6 @@ public class SQLDAO {
             ResultSet rs = null;
             try {
                 String sql = "DELETE FROM Delta WHERE object_id=\'" + objectID.toString() + "\'";
-                stmt = Connection.SINGLETON.conn.prepareStatement(sql);
-                if (stmt.executeUpdate() != 1) {
-                    throw new DatabaseException("delete deltas failed: Could not delete deltas based on object");
-                }
             } finally {
                 if (stmt != null) {
                     stmt.close();

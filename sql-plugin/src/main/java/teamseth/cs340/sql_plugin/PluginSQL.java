@@ -46,45 +46,51 @@ public class PluginSQL implements IPersistenceProvider {
 
     @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
-        if(orderMap.get(ObjectId) == null) {
-            orderMap.put(ObjectId, 1);
-        }
-        int count = orderMap.get(ObjectId);
-        try {
-            sqlDAO.SINGLETON.addDelta(delta, ObjectId, count);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        if(count >= deltasBeforeUpdate) {
-            orderMap.put(ObjectId, 1);
+        return CompletableFuture.supplyAsync(() -> {
+            if (orderMap.get(ObjectId) == null) {
+                orderMap.put(ObjectId, 1);
+            }
+            int count = orderMap.get(ObjectId);
             try {
-                sqlDAO.SINGLETON.clearDeltas();
+                sqlDAO.SINGLETON.addDelta(delta, ObjectId, count);
             } catch (DatabaseException e) {
                 e.printStackTrace();
+                return false;
             }
-            //insert into object here based on uuid objecttype
+            if (count >= deltasBeforeUpdate) {
+                orderMap.put(ObjectId, 1);
+                try {
+                    sqlDAO.SINGLETON.clearDeltas();
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                //insert into object here based on uuid objecttype
+                try {
+                    sqlDAO.SINGLETON.addObject(newObjectState, ObjectId, type);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                //remove deltas based on uuid
+                try {
+                    sqlDAO.SINGLETON.removeDeltasBasedOnGame(ObjectId);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } else {
+                count++;
+                orderMap.put(ObjectId, count);
+            }
             try {
-                sqlDAO.SINGLETON.addObject(newObjectState, ObjectId, type);
-            } catch (DatabaseException e) {
+                Connection.SINGLETON.conn.commit();
+            } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
             }
-            //remove deltas based on uuid
-            try {
-                sqlDAO.SINGLETON.removeDeltasBasedOnGame(ObjectId);
-            } catch (DatabaseException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            count++;
-            orderMap.put(ObjectId, count);
-        }
-        try {
-            Connection.SINGLETON.conn.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return CompletableFuture.supplyAsync(() -> false);
+            return true;
+        });
     }
 
     @Override

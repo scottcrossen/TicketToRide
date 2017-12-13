@@ -30,6 +30,8 @@ import teamseth.cs340.common.util.auth.AuthToken;
  * @Copyright 2017 Scott Leland Crossen
  */
 public class HistoryModel extends AuthAction implements IServerModel<CommandHistory>, Serializable {
+    private static final long serialVersionUID = -7624780184952787237L;
+
     private static HistoryModel instance;
 
     public static HistoryModel getInstance() {
@@ -109,7 +111,7 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
         }
     }
 
-    public boolean logoutStateOkay(UUID historyId, UUID playerId) {
+    public boolean logoutStateOkay(UUID historyId, UUID playerId, UUID initialPlayerTurn) {
         try {
             List<IHistoricalCommand> history = get(historyId).getAll();
             int lastPlayerTurnChangePos;
@@ -122,7 +124,7 @@ public class HistoryModel extends AuthAction implements IServerModel<CommandHist
                         return true;
                     }
                 } else if (currentCommand instanceof SetGameStateCommand) {
-                    if (((ChangeTurnCommand) currentCommand).getPlayerTurn().equals(playerId)) {
+                    if (initialPlayerTurn.equals(playerId)) {
                         break;
                     } else {
                         return true;

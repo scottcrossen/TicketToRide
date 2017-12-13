@@ -83,13 +83,15 @@ public class PluginSQL implements IPersistenceProvider {
                 count++;
                 orderMap.put(ObjectId, count);
             }
+            return true;
+        }).thenApply((Boolean output) -> {
             try {
                 Connection.SINGLETON.conn.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
                 return false;
             }
-            return true;
+            return output;
         });
     }
 

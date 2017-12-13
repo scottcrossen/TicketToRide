@@ -55,6 +55,10 @@ public interface IPersistenceProvider {
      */
     CompletableFuture<List<MaybeTuple<Serializable, List<Serializable>>>> getAllOfType(ModelObjectType type); // No need to include object Id.
 
+    /**
+     * Clears all tables
+     * @return      Whether or not it was succesful
+     */
     CompletableFuture<Boolean> clearData();
 }
 

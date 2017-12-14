@@ -5,5 +5,5 @@ package teamseth.cs340.common.util.auth;
  * @Copyright 2017 Scott Leland Crossen
  */
 public enum AuthType {
-    user, admin
+    user, admin, system
 }

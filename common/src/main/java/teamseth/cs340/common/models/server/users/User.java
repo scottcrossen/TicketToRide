@@ -19,6 +19,10 @@ public class User implements Serializable, Comparable<User>, IStorable {
     public User(UserCreds credentials) {
         this.credentials = credentials;
     }
+    public User(AuthType type) { // Users are only server-side so this probably wont be bad.
+        this.credentials = null;
+        this.privilege = type;
+    }
 
     @Override
     public int hashCode() {

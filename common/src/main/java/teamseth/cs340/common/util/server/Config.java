@@ -8,7 +8,10 @@ import java.util.concurrent.Executors;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import teamseth.cs340.common.models.server.users.User;
 import teamseth.cs340.common.persistence.plugin.IPersistenceProvider;
+import teamseth.cs340.common.util.auth.AuthToken;
+import teamseth.cs340.common.util.auth.AuthType;
 
 /**
  * @author Scott Leland Crossen
@@ -33,7 +36,7 @@ public class Config {
         //Logger.setVerbosity(6);
     }
 
-    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.empty(); // Optional.of(IPersistenceProvider.ProviderType.SQL);
+    private Optional<IPersistenceProvider.ProviderType> persistanceType = Optional.empty(); //Optional.of(IPersistenceProvider.ProviderType.SQL);
 
     public Optional<IPersistenceProvider.ProviderType> getPersistanceType() { return persistanceType; }
 
@@ -57,5 +60,9 @@ public class Config {
     }
 
     public enum ContextType {GLOBAL, PERSISTENCE}
+
+    public AuthToken getSystemToken() {
+        return new AuthToken(new User(AuthType.system));
+    }
 
 }

@@ -40,11 +40,6 @@ public class PluginSQL implements IPersistenceProvider {
     }
 
     @Override
-    public void finalize() {
-
-    }
-
-    @Override
     public CompletableFuture<Boolean> upsertObject(Serializable newObjectState, Serializable delta, UUID ObjectId, ModelObjectType type, int deltasBeforeUpdate) {
         return CompletableFuture.supplyAsync(() -> {
             try {

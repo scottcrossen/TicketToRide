@@ -25,11 +25,6 @@ public interface IPersistenceProvider {
     void initialize();
 
     /**
-     * Included as part of the plugin lifecycle. May not always be called on terminate.
-     */
-    void finalize();
-
-    /**
      * Query for the plugin to return what type it is.
      * @return
      */

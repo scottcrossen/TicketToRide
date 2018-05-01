@@ -54,7 +54,7 @@ adb -s [device-name] uninstall teamseth.cs340.tickettoride
 ### Contributors
 
 1. Scott Leland Crossen  
-<http://scottcrossen42.com>  
+<http://scottcrossen.com>  
 <scottcrossen42@gmail.com>
 
 2. Seth Johnson
